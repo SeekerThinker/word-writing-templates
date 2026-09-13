@@ -39,7 +39,7 @@ def make(platform):
     ]
     for s in steps: txt(c,x,y,s,11); y-=8*mm
     y-=2*mm
-    txt(c,x,y,'想要前言 / 摘要 / 页码 / 页眉等更接近成稿的骨架？进入“带常用结构”子文件夹。',9); y-=11*mm
+    txt(c,x,y,'需要更接近成稿？“带常用结构”版还带页码；书籍版另含章节自动换页与双面打印设置。',9); y-=11*mm
     txt(c,x,y,'常用快捷键',14); y-=9*mm
     pre='Ctrl + Alt +' if iswin else 'Command + Option +'
     rows=[('一级标题',pre+' 1'),('二级标题',pre+' 2'),('三级标题',pre+' 3'),('四级标题',pre+' 4'),('正文',pre+' Z'),('表格文字',pre+' B'),('引用',pre+' Q'),('插入脚注',pre+' F')]
@@ -53,7 +53,7 @@ def make(platform):
     for name,ex in MATRIX:
         txt(c,x,y,name,10); txt(c,x+46*mm,y,ex,10); y-=7.5*mm
     y-=4*mm
-    txt(c,x,y,'目录、导航窗格、拖动整章、多窗口等进阶功能，不会也不影响开始写作。',9)
+    txt(c,x,y,'目录、页眉页码、双面打印、导航窗格等进阶功能，不会也不影响开始写作。',9)
     c.showPage(); c.save(); print(out)
 
 for p in ('windows','macos'): make(p)
