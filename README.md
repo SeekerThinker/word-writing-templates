@@ -98,6 +98,14 @@
 
 模板打开后只有非常少的占位内容：标题、一级标题和第一段正文。直接把它们改成自己的内容即可。
 
+### 第一次打开时，只需要认识三样东西
+
+- **标题**：把“在这里输入书名 / 文章标题”替换掉。
+- **一级标题**：把“在这里输入章标题 / 一级标题”替换掉，编号会自动出现。
+- **正文**：把“从这里开始写作”替换成自己的第一段。
+
+后面需要新章节时，使用 Word 的“标题 1 / 标题 2 / 标题 3 / 标题 4”样式即可。快捷键只是更快，不是必需条件。
+
 ## 写长文时还可以这样用
 
 - 四级标题自动编号
@@ -108,7 +116,17 @@
 - 大纲视图与 Web 版式辅助长文写作
 - Windows 与 macOS 分平台优化字体与快捷键
 
-更多说明见 [`docs/快速开始.md`](docs/快速开始.md)、[`docs/模板选择指南.md`](docs/模板选择指南.md)、[`docs/Windows使用说明.md`](docs/Windows使用说明.md)、[`docs/macOS使用说明.md`](docs/macOS使用说明.md)、[`docs/进阶使用.md`](docs/进阶使用.md) 和 [`docs/常见问题.md`](docs/常见问题.md)。如果只是想开始写，前面的选择向导或“30 秒开始”已经足够。
+这些都不是开始写作的前置条件。先写，等文档变长以后再用也完全可以。
+
+## 兼容性与测试
+
+项目会对 12 个成品模板做自动结构检查，并在 GitHub Actions 的 **Windows、macOS 和 Linux** 环境中重复验证：模板包可读取、四级编号存在、平台字体设置正确、快捷键映射存在、中文路径可读取，并且不包含 VBA 宏。
+
+自动化检查不会启动真正的 Microsoft Word，因此不会把“结构检查通过”夸大成“所有 Word 版本和所有系统快捷键都已真机验证”。如果某个快捷键被操作系统、输入法或 Word 插件占用，仍然可以直接使用 Word 的“样式”区域，不影响模板的编号和结构功能。
+
+详细范围见 [`docs/兼容性与测试.md`](docs/兼容性与测试.md)。
+
+更多说明见 [`docs/快速开始.md`](docs/快速开始.md)、[`docs/模板选择指南.md`](docs/模板选择指南.md)、[`docs/Windows使用说明.md`](docs/Windows使用说明.md)、[`docs/macOS使用说明.md`](docs/macOS使用说明.md)、[`docs/进阶使用.md`](docs/进阶使用.md)、[`docs/常见问题.md`](docs/常见问题.md) 和 [`docs/兼容性与测试.md`](docs/兼容性与测试.md)。如果只是想开始写，前面的选择向导或“30 秒开始”已经足够。
 
 ## 给维护者
 
@@ -121,15 +139,16 @@ word-writing-templates/
 ├── docs/assets/previews/      # 自动生成：6 张模板预览图
 ├── docs/                      # 普通用户说明
 ├── scripts/                   # 模板生成、预览、校验
-└── .github/workflows/         # 自动构建与发布
+└── .github/workflows/         # 自动构建与跨平台检查
 ```
 
-本地生成：
+本地生成与校验：
 
 ```bash
 pip install -r requirements-dev.txt
 python scripts/build_templates.py
 python scripts/verify_templates.py
+python scripts/compatibility_check.py
 python scripts/make_quickstart.py
 python scripts/make_previews.py   # 需要 LibreOffice + Noto CJK 字体
 ```
