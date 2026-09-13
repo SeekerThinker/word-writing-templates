@@ -6,6 +6,12 @@
 
 > 支持 Microsoft Word for Windows 与 Microsoft Word for macOS。两个平台分别提供成品模板，以减少字体和快捷键差异带来的问题。
 
+## 不知道该选哪个？
+
+**[打开在线模板选择向导 →](https://seekerthinker.github.io/toolbox/word-writing-templates/)**
+
+只回答 3 个问题：**写书还是写文章 → 喜欢哪种编号 → Windows 还是 MacBook**。向导会直接给你最合适的模板下载按钮，不需要了解任何 Word 排版术语。
+
 ## 30 秒开始
 
 ### 1. 下载与你的电脑对应的模板包
@@ -69,7 +75,7 @@
 </tr>
 </table>
 
-拿不准时：**写书优先选“书籍｜中文传统”，写文章优先选“文章｜中文论文”**。以后可以随时换成其他编号风格。
+拿不准时：**写书优先选“书籍｜中文传统”，写文章优先选“文章｜中文论文”**。或者直接使用上面的在线选择向导。
 
 ## 快捷键
 
@@ -102,7 +108,7 @@
 - 大纲视图与 Web 版式辅助长文写作
 - Windows 与 macOS 分平台优化字体与快捷键
 
-更多说明见 [`docs/快速开始.md`](docs/快速开始.md)、[`docs/模板选择指南.md`](docs/模板选择指南.md)、[`docs/Windows使用说明.md`](docs/Windows使用说明.md)、[`docs/macOS使用说明.md`](docs/macOS使用说明.md)、[`docs/进阶使用.md`](docs/进阶使用.md) 和 [`docs/常见问题.md`](docs/常见问题.md)。如果只是想开始写，前面的“30 秒开始”已经足够。
+更多说明见 [`docs/快速开始.md`](docs/快速开始.md)、[`docs/模板选择指南.md`](docs/模板选择指南.md)、[`docs/Windows使用说明.md`](docs/Windows使用说明.md)、[`docs/macOS使用说明.md`](docs/macOS使用说明.md)、[`docs/进阶使用.md`](docs/进阶使用.md) 和 [`docs/常见问题.md`](docs/常见问题.md)。如果只是想开始写，前面的选择向导或“30 秒开始”已经足够。
 
 ## 给维护者
 
