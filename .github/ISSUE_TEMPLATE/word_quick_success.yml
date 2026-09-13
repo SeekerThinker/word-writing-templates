@@ -1,0 +1,43 @@
+name: Word 使用正常反馈
+description: 用几十秒记录一次正常使用结果
+title: "[Word 正常] "
+body:
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 操作系统
+      options:
+        - Windows 10 / 11
+        - macOS / MacBook
+    validations:
+      required: true
+
+  - type: input
+    id: word_version
+    attributes:
+      label: Word 版本
+      placeholder: 例如 Microsoft 365 / Word 2024 / 不清楚
+    validations:
+      required: true
+
+  - type: dropdown
+    id: template_name
+    attributes:
+      label: 测试模板
+      options:
+        - 书籍｜中文传统
+        - 书籍｜章节数字
+        - 书籍｜纯数字
+        - 文章｜中文论文
+        - 文章｜数字层级
+        - 文章｜中文简洁
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: 使用结果
+      options:
+        - label: 我已经在 Microsoft Word 桌面版中使用这个模板，目前没有发现明显问题。
+          required: true
