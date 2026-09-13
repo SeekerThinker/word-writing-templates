@@ -1,48 +1,22 @@
 ---
-name: Word 真机兼容性反馈
-about: 用几分钟反馈 Windows / Mac 上的实际 Microsoft Word 使用结果
+name: Word 兼容性反馈（旧入口）
+about: 请优先使用新版结构化表单
 title: "[Word 兼容性] "
 labels: ""
 assignees: ""
 ---
 
-谢谢你帮忙测试。**不需要懂技术，也不需要上传你的写作内容。**
+现在推荐使用新版表单，填写更快，也更容易汇总：
 
-如果方便，可以先按这份 3～5 分钟清单测试：
-https://github.com/SeekerThinker/word-writing-templates/blob/main/docs/真实Word验收.md
+- **用过且一切正常：** https://github.com/SeekerThinker/word-writing-templates/issues/new?template=word_quick_success.yml
+- **做一次完整验证：** https://github.com/SeekerThinker/word-writing-templates/issues/new?template=word_compatibility_report.yml
 
-## 你的环境
+如果你已经从这个旧入口打开，也可以继续填写下面几项：
 
-- 操作系统：<!-- 例如 Windows 11 / macOS 15 -->
-- Word 版本：<!-- Word 中“关于 Microsoft Word”里可以看到；不知道也可以写“不清楚” -->
-- 电脑类型（可选）：<!-- 例如普通 Windows 电脑 / Apple Silicon Mac / Intel Mac -->
-- 测试模板：<!-- 例如 文章-中文论文.dotx -->
-
-## 测试结果
-
-请把符合的项目改成 `[x]`；没有测试的保持 `[ ]` 即可。
-
-- [ ] 双击 `.dotx` 后正常创建新文档
-- [ ] 一级标题编号正常
-- [ ] 标题 1～4 的多级编号正常
-- [ ] 正文输入和版式正常
-- [ ] 保存为 `.docx` 后关闭并重新打开仍正常
-- [ ] 目录插入 / 更新正常
-- [ ] 导航窗格能识别标题
-- [ ] 标题快捷键正常
-- [ ] 正文快捷键正常
-- [ ] 脚注快捷键正常
-
-## 有没有异常？
-
-<!-- 没有问题可以直接写“全部正常”。如果有问题，请尽量描述“做了什么 → 看到了什么”。 -->
-
-## 快捷键如果没反应
-
-请告诉我们：从 Word 的“样式”区域手动选择对应的标题或正文样式时，是否仍然正常？
-
-<!-- 这能帮助判断是模板问题，还是系统 / 输入法 / Word 插件占用了快捷键。 -->
-
-## 截图（可选）
-
-如果截图能帮助说明问题，可以拖到这里。请先遮住任何不想公开的个人内容。
+- 操作系统：
+- Word 版本：
+- 测试模板：
+- 能否正常打开：
+- 标题 1～4 编号是否正常：
+- 保存为 `.docx` 后重新打开是否正常：
+- 其他问题（可选）：
