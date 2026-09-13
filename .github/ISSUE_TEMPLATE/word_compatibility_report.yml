@@ -120,6 +120,18 @@ body:
       required: true
 
   - type: dropdown
+    id: reference_features_result
+    attributes:
+      label: 题注 / 脚注 / 参考文献（可选测试）
+      description: 可任选一种测试：图表题注与交叉引用、脚注 / 尾注，或“参考文献条目”的悬挂缩进。使用 Zotero / EndNote 的测试结果可写在补充说明。
+      options:
+        - "✅ 正常"
+        - "❌ 有问题"
+        - "⏭️ 未测试"
+    validations:
+      required: true
+
+  - type: dropdown
     id: navigation_result
     attributes:
       label: 导航窗格（可选测试）
