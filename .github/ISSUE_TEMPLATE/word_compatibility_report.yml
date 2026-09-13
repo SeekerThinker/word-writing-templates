@@ -1,0 +1,126 @@
+name: Word 真机完整验证
+description: 用 3～5 分钟记录一次真实 Microsoft Word 使用结果
+title: "[Word 验证] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        谢谢你帮忙验证。无需技术背景。如果某一项有问题，也请照样选择“有问题”并提交。
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 操作系统
+      options:
+        - Windows 10 / 11
+        - macOS / MacBook
+    validations:
+      required: true
+
+  - type: input
+    id: word_version
+    attributes:
+      label: Word 版本
+      description: 不知道可以填写“不清楚”。
+      placeholder: 例如 Microsoft 365 版本 2508 / Word 2024 / 不清楚
+    validations:
+      required: true
+
+  - type: dropdown
+    id: template_name
+    attributes:
+      label: 测试模板
+      options:
+        - 书籍｜中文传统
+        - 书籍｜章节数字
+        - 书籍｜纯数字
+        - 文章｜中文论文
+        - 文章｜数字层级
+        - 文章｜中文简洁
+    validations:
+      required: true
+
+  - type: dropdown
+    id: open_result
+    attributes:
+      label: 打开模板
+      description: 双击 .dotx 后，Word 是否创建了一篇新文档？
+      options:
+        - "✅ 正常"
+        - "❌ 有问题"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: numbering_result
+    attributes:
+      label: 多级标题
+      description: 标题 1～4 的编号层级是否正常？
+      options:
+        - "✅ 正常"
+        - "❌ 有问题"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: body_result
+    attributes:
+      label: 正文输入
+      description: 正文输入、字体、字号和行距是否正常？
+      options:
+        - "✅ 正常"
+        - "❌ 有问题"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reopen_result
+    attributes:
+      label: 保存重开
+      description: 保存为 .docx 并重新打开后，标题和编号是否仍然正常？
+      options:
+        - "✅ 正常"
+        - "❌ 有问题"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: toc_result
+    attributes:
+      label: 目录（可选测试）
+      options:
+        - "✅ 正常"
+        - "❌ 有问题"
+        - "⏭️ 未测试"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: navigation_result
+    attributes:
+      label: 导航窗格（可选测试）
+      options:
+        - "✅ 正常"
+        - "❌ 有问题"
+        - "⏭️ 未测试"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: shortcut_result
+    attributes:
+      label: 快捷键（可选测试）
+      description: 快捷键可能受系统、输入法、插件或个人设置影响。
+      options:
+        - "✅ 正常"
+        - "❌ 有冲突或无反应"
+        - "⏭️ 未测试"
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: 补充说明（可选）
+      description: 有问题时，请尽量写清楚操作步骤和看到的现象。
+      placeholder: 全部正常可以留空。
