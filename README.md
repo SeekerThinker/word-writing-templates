@@ -124,9 +124,17 @@
 
 自动化检查不会启动真正的 Microsoft Word，因此不会把“结构检查通过”夸大成“所有 Word 版本和所有系统快捷键都已真机验证”。如果某个快捷键被操作系统、输入法或 Word 插件占用，仍然可以直接使用 Word 的“样式”区域，不影响模板的编号和结构功能。
 
-详细范围见 [`docs/兼容性与测试.md`](docs/兼容性与测试.md)。
+### 帮我们做一次真实 Word 测试
 
-更多说明见 [`docs/快速开始.md`](docs/快速开始.md)、[`docs/模板选择指南.md`](docs/模板选择指南.md)、[`docs/Windows使用说明.md`](docs/Windows使用说明.md)、[`docs/macOS使用说明.md`](docs/macOS使用说明.md)、[`docs/进阶使用.md`](docs/进阶使用.md)、[`docs/常见问题.md`](docs/常见问题.md) 和 [`docs/兼容性与测试.md`](docs/兼容性与测试.md)。如果只是想开始写，前面的选择向导或“30 秒开始”已经足够。
+如果你正在 Windows 或 MacBook 上使用 Microsoft Word，可以用 **3～5 分钟** 帮项目留下第一批真实使用记录。完全不需要技术背景，也不需要上传你的写作内容。
+
+**[打开真实 Word 验收清单 →](docs/真实Word验收.md)** ｜ **[提交兼容性反馈 →](https://github.com/SeekerThinker/word-writing-templates/issues/new?template=word_compatibility_report.md)**
+
+公开状态会记录在 [`docs/兼容性验证记录.md`](docs/兼容性验证记录.md)。只有存在可追踪的真实 Word 反馈时，项目才会把具体 Word 环境标记为“真机已验证”。
+
+详细自动检查范围见 [`docs/兼容性与测试.md`](docs/兼容性与测试.md)。
+
+更多说明见 [`docs/快速开始.md`](docs/快速开始.md)、[`docs/模板选择指南.md`](docs/模板选择指南.md)、[`docs/Windows使用说明.md`](docs/Windows使用说明.md)、[`docs/macOS使用说明.md`](docs/macOS使用说明.md)、[`docs/进阶使用.md`](docs/进阶使用.md)、[`docs/常见问题.md`](docs/常见问题.md)、[`docs/兼容性与测试.md`](docs/兼容性与测试.md)、[`docs/真实Word验收.md`](docs/真实Word验收.md) 和 [`docs/兼容性验证记录.md`](docs/兼容性验证记录.md)。如果只是想开始写，前面的选择向导或“30 秒开始”已经足够。
 
 ## 给维护者
 
@@ -137,9 +145,9 @@ word-writing-templates/
 ├── templates/                 # 自动生成：12 个 .dotx 成品模板
 ├── release/                   # 自动生成：Windows / macOS 用户 ZIP
 ├── docs/assets/previews/      # 自动生成：6 张模板预览图
-├── docs/                      # 普通用户说明
+├── docs/                      # 普通用户说明与兼容性记录
 ├── scripts/                   # 模板生成、预览、校验
-└── .github/workflows/         # 自动构建与跨平台检查
+└── .github/                   # Actions + Issue 模板
 ```
 
 本地生成与校验：
