@@ -3,10 +3,13 @@
 
 Six numbering schemes are generated for each platform. Every scheme has a
 minimal direct-start template plus an optional structured manuscript starter.
-The structured starters add practical finishing features without adding a new
-product choice: book templates get title/front/body sections, Roman/Arabic page
-numbering and a running header; article templates get author/date metadata and
-page numbers.
+
+v2.7 keeps the product matrix unchanged and improves the structured starters:
+- book templates use print-friendly mirrored margins + gutter;
+- book Heading 1 always starts on a new page;
+- book body uses odd/even running heads (chapter / book title) and outer page numbers;
+- article metadata spacing is tightened for a more finished first page;
+- body text uses widow/orphan control and headings stay with following content.
 """
 from __future__ import annotations
 
@@ -41,12 +44,30 @@ PLATFORMS = {
 }
 
 TEMPLATES = {
-    'book-cn-traditional': {'kind': 'books', 'label': '书籍-中文传统', 'title': '在这里输入书名', 'h1': '在这里输入章标题', 'levels': [('chineseCountingThousand', '第%1章'), ('chineseCountingThousand', '第%2节'), ('chineseCountingThousand', '%3、'), ('chineseCountingThousand', '（%4）')]},
-    'book-chapter-decimal': {'kind': 'books', 'label': '书籍-章节数字', 'title': '在这里输入书名', 'h1': '在这里输入章标题', 'levels': [('decimal', '第%1章'), ('decimal', '%1.%2'), ('decimal', '%1.%2.%3'), ('decimal', '%1.%2.%3.%4')]},
-    'book-pure-decimal': {'kind': 'books', 'label': '书籍-纯数字', 'title': '在这里输入书名', 'h1': '在这里输入章标题', 'levels': [('decimal', '%1'), ('decimal', '%1.%2'), ('decimal', '%1.%2.%3'), ('decimal', '%1.%2.%3.%4')]},
-    'article-cn-academic': {'kind': 'articles', 'label': '文章-中文论文', 'title': '在这里输入文章标题', 'h1': '在这里输入一级标题', 'levels': [('chineseCountingThousand', '%1、'), ('chineseCountingThousand', '（%2）'), ('decimal', '%3.'), ('decimal', '（%4）')]},
-    'article-decimal': {'kind': 'articles', 'label': '文章-数字层级', 'title': '在这里输入文章标题', 'h1': '在这里输入一级标题', 'levels': [('decimal', '%1'), ('decimal', '%1.%2'), ('decimal', '%1.%2.%3'), ('decimal', '%1.%2.%3.%4')]},
-    'article-cn-compact': {'kind': 'articles', 'label': '文章-中文简洁', 'title': '在这里输入文章标题', 'h1': '在这里输入一级标题', 'levels': [('chineseCountingThousand', '%1、'), ('decimal', '%2.'), ('decimal', '（%3）'), ('decimalEnclosedCircle', '%4')]},
+    'book-cn-traditional': {
+        'kind': 'books', 'label': '书籍-中文传统', 'title': '在这里输入书名', 'h1': '在这里输入章标题',
+        'levels': [('chineseCountingThousand', '第%1章'), ('chineseCountingThousand', '第%2节'), ('chineseCountingThousand', '%3、'), ('chineseCountingThousand', '（%4）')],
+    },
+    'book-chapter-decimal': {
+        'kind': 'books', 'label': '书籍-章节数字', 'title': '在这里输入书名', 'h1': '在这里输入章标题',
+        'levels': [('decimal', '第%1章'), ('decimal', '%1.%2'), ('decimal', '%1.%2.%3'), ('decimal', '%1.%2.%3.%4')],
+    },
+    'book-pure-decimal': {
+        'kind': 'books', 'label': '书籍-纯数字', 'title': '在这里输入书名', 'h1': '在这里输入章标题',
+        'levels': [('decimal', '%1'), ('decimal', '%1.%2'), ('decimal', '%1.%2.%3'), ('decimal', '%1.%2.%3.%4')],
+    },
+    'article-cn-academic': {
+        'kind': 'articles', 'label': '文章-中文论文', 'title': '在这里输入文章标题', 'h1': '在这里输入一级标题',
+        'levels': [('chineseCountingThousand', '%1、'), ('chineseCountingThousand', '（%2）'), ('decimal', '%3.'), ('decimal', '（%4）')],
+    },
+    'article-decimal': {
+        'kind': 'articles', 'label': '文章-数字层级', 'title': '在这里输入文章标题', 'h1': '在这里输入一级标题',
+        'levels': [('decimal', '%1'), ('decimal', '%1.%2'), ('decimal', '%1.%2.%3'), ('decimal', '%1.%2.%3.%4')],
+    },
+    'article-cn-compact': {
+        'kind': 'articles', 'label': '文章-中文简洁', 'title': '在这里输入文章标题', 'h1': '在这里输入一级标题',
+        'levels': [('chineseCountingThousand', '%1、'), ('decimal', '%2.'), ('decimal', '（%3）'), ('decimalEnclosedCircle', '%4')],
+    },
 }
 
 KEYMAP_XML = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -87,19 +108,19 @@ def set_font(style, family, size=None, bold=None):
         rfonts.set(qn(f'w:{attr}'), family)
 
 
-def set_run_font(run, family, size=9, bold=False, color=None):
-    run.font.name = family
-    run.font.size = Pt(size)
-    run.font.bold = bold
-    if color is not None:
-        run.font.color.rgb = RGBColor(*color)
-    rpr = run._r.get_or_add_rPr()
-    rfonts = rpr.rFonts
-    if rfonts is None:
-        rfonts = OxmlElement('w:rFonts')
-        rpr.insert(0, rfonts)
+def add_run_properties(run_el, family, size=9, bold=False, color=None):
+    rpr = OxmlElement('w:rPr')
+    rfonts = OxmlElement('w:rFonts')
     for attr in ('ascii', 'eastAsia', 'hAnsi', 'cs'):
         rfonts.set(qn(f'w:{attr}'), family)
+    rpr.append(rfonts)
+    sz = OxmlElement('w:sz'); sz.set(qn('w:val'), str(int(size * 2))); rpr.append(sz)
+    szcs = OxmlElement('w:szCs'); szcs.set(qn('w:val'), str(int(size * 2))); rpr.append(szcs)
+    if bold:
+        rpr.append(OxmlElement('w:b'))
+    if color:
+        c = OxmlElement('w:color'); c.set(qn('w:val'), '%02X%02X%02X' % color); rpr.append(c)
+    run_el.append(rpr)
 
 
 def mark_quick_style(style):
@@ -121,12 +142,8 @@ def get_or_add_numpr(ppr, ilvl, num_id='1'):
     for old in ppr.findall(qn('w:numPr')):
         ppr.remove(old)
     numpr = OxmlElement('w:numPr')
-    il = OxmlElement('w:ilvl')
-    il.set(qn('w:val'), str(ilvl))
-    numpr.append(il)
-    ni = OxmlElement('w:numId')
-    ni.set(qn('w:val'), str(num_id))
-    numpr.append(ni)
+    il = OxmlElement('w:ilvl'); il.set(qn('w:val'), str(ilvl)); numpr.append(il)
+    ni = OxmlElement('w:numId'); ni.set(qn('w:val'), str(num_id)); numpr.append(ni)
     ppr.insert(0, numpr)
 
 
@@ -141,8 +158,7 @@ def make_numbering_xml(spec, fonts):
     families = [fonts['heading'], fonts['heading'], fonts['quote'], fonts['body']]
     sizes = [28, 26, 24, 24]
     for i, ((fmt, text), sid, family, size) in enumerate(zip(spec['levels'], style_ids, families, sizes)):
-        lvl = etree.SubElement(abstract, Q(W, 'lvl'))
-        lvl.set(Q(W, 'ilvl'), str(i))
+        lvl = etree.SubElement(abstract, Q(W, 'lvl')); lvl.set(Q(W, 'ilvl'), str(i))
         etree.SubElement(lvl, Q(W, 'start')).set(Q(W, 'val'), '1')
         if i > 0:
             etree.SubElement(lvl, Q(W, 'lvlRestart')).set(Q(W, 'val'), str(i))
@@ -152,17 +168,14 @@ def make_numbering_xml(spec, fonts):
         etree.SubElement(lvl, Q(W, 'lvlText')).set(Q(W, 'val'), text)
         etree.SubElement(lvl, Q(W, 'lvlJc')).set(Q(W, 'val'), 'left')
         ppr = etree.SubElement(lvl, Q(W, 'pPr'))
-        ind = etree.SubElement(ppr, Q(W, 'ind'))
-        ind.set(Q(W, 'left'), str(i * 284))
-        ind.set(Q(W, 'firstLine'), '0')
+        ind = etree.SubElement(ppr, Q(W, 'ind')); ind.set(Q(W, 'left'), str(i * 284)); ind.set(Q(W, 'firstLine'), '0')
         rpr = etree.SubElement(lvl, Q(W, 'rPr'))
         rf = etree.SubElement(rpr, Q(W, 'rFonts'))
         for attr in ('ascii', 'eastAsia', 'hAnsi', 'cs'):
             rf.set(Q(W, attr), family)
         etree.SubElement(rpr, Q(W, 'sz')).set(Q(W, 'val'), str(size))
         etree.SubElement(rpr, Q(W, 'szCs')).set(Q(W, 'val'), str(size))
-    num = etree.SubElement(root, Q(W, 'num'))
-    num.set(Q(W, 'numId'), '1')
+    num = etree.SubElement(root, Q(W, 'num')); num.set(Q(W, 'numId'), '1')
     etree.SubElement(num, Q(W, 'abstractNumId')).set(Q(W, 'val'), '1')
     return etree.tostring(root, xml_declaration=True, encoding='UTF-8', standalone=True)
 
@@ -177,29 +190,25 @@ def ensure_style(doc, name):
 def style_doc(doc, platform):
     f = PLATFORMS[platform]['fonts']
     sec = doc.sections[0]
-    sec.page_width = Mm(210)
-    sec.page_height = Mm(297)
-    sec.top_margin = Mm(25.4)
-    sec.bottom_margin = Mm(25.4)
-    sec.left_margin = Mm(25.4)
-    sec.right_margin = Mm(25.4)
-    sec.header_distance = Mm(12.5)
-    sec.footer_distance = Mm(12.5)
+    configure_section_page(sec)
 
     normal = doc.styles['Normal']
     set_font(normal, f['body'], 12)
     normal.paragraph_format.line_spacing = 1.5
+    normal.paragraph_format.widow_control = True
 
     body = doc.styles['Body Text']
     set_font(body, f['body'], 12)
     body.paragraph_format.line_spacing = 1.5
     body.paragraph_format.first_line_indent = Mm(8)
     body.paragraph_format.space_after = Pt(4)
+    body.paragraph_format.widow_control = True
 
     title = doc.styles['Title']
     set_font(title, f['title'], 20, True)
     title.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
     title.paragraph_format.space_after = Pt(8)
+    title.paragraph_format.keep_with_next = True
 
     for i, (size, before, after, family) in enumerate(
         [(14, 12, 8, f['heading']), (13, 8, 5, f['heading']), (12, 6, 4, f['quote']), (12, 4, 2, f['body'])],
@@ -210,6 +219,8 @@ def style_doc(doc, platform):
         st.paragraph_format.space_before = Pt(before)
         st.paragraph_format.space_after = Pt(after)
         st.paragraph_format.line_spacing = 1.5
+        st.paragraph_format.keep_with_next = True
+        st.paragraph_format.widow_control = True
         get_or_add_numpr(st.element.get_or_add_pPr(), i - 1, '1')
 
     quote = ensure_style(doc, 'AC')
@@ -245,6 +256,7 @@ def style_doc(doc, platform):
     toc_title.paragraph_format.space_before = Pt(12)
     toc_title.paragraph_format.space_after = Pt(8)
     toc_title.paragraph_format.first_line_indent = Mm(0)
+    toc_title.paragraph_format.keep_with_next = True
 
     abstract = ensure_style(doc, '摘要')
     abstract.base_style = normal
@@ -252,13 +264,14 @@ def style_doc(doc, platform):
     abstract.paragraph_format.first_line_indent = Mm(0)
     abstract.paragraph_format.line_spacing = 1.5
     abstract.paragraph_format.space_after = Pt(5)
+    abstract.paragraph_format.widow_control = True
     mark_quick_style(abstract)
 
     keywords = ensure_style(doc, '关键词')
     keywords.base_style = normal
     set_font(keywords, f['body'], 11)
     keywords.paragraph_format.first_line_indent = Mm(0)
-    keywords.paragraph_format.space_after = Pt(8)
+    keywords.paragraph_format.space_after = Pt(10)
 
     refs = ensure_style(doc, '参考文献')
     refs.base_style = normal
@@ -267,6 +280,7 @@ def style_doc(doc, platform):
     refs.paragraph_format.first_line_indent = Mm(-7)
     refs.paragraph_format.line_spacing = 1.25
     refs.paragraph_format.space_after = Pt(3)
+    refs.paragraph_format.widow_control = True
     mark_quick_style(refs)
 
     note = ensure_style(doc, '模板提示')
@@ -281,7 +295,8 @@ def style_doc(doc, platform):
     set_font(author, f['body'], 11)
     author.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
     author.paragraph_format.first_line_indent = Mm(0)
-    author.paragraph_format.space_after = Pt(3)
+    author.paragraph_format.space_after = Pt(2)
+    author.paragraph_format.keep_with_next = True
     mark_quick_style(author)
 
     date = ensure_style(doc, '日期')
@@ -290,7 +305,7 @@ def style_doc(doc, platform):
     date.font.color.rgb = RGBColor(80, 80, 80)
     date.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
     date.paragraph_format.first_line_indent = Mm(0)
-    date.paragraph_format.space_after = Pt(10)
+    date.paragraph_format.space_after = Pt(12)
     mark_quick_style(date)
 
 
@@ -305,10 +320,12 @@ def add_toc(paragraph):
     paragraph._p.append(fld)
 
 
-def add_field(paragraph, instruction, placeholder):
+def add_field(paragraph, instruction, placeholder, family=None, size=9, color=(95, 95, 95)):
     fld = OxmlElement('w:fldSimple')
     fld.set(qn('w:instr'), instruction)
     run = OxmlElement('w:r')
+    if family:
+        add_run_properties(run, family, size=size, color=color)
     text = OxmlElement('w:t')
     text.text = placeholder
     run.append(text)
@@ -325,6 +342,15 @@ def enable_field_updates(doc):
     current.set(qn('w:val'), 'true')
 
 
+def enable_book_print_settings(doc):
+    # Word mirrors left/right margins for facing pages and reserves the gutter on
+    # the inside edge. Odd/even headers are then used for book/chapter running heads.
+    doc.settings.odd_and_even_pages_header_footer = True
+    settings = doc.settings.element
+    if settings.find(qn('w:mirrorMargins')) is None:
+        settings.append(OxmlElement('w:mirrorMargins'))
+
+
 def set_page_numbering(section, fmt='decimal', start=None):
     sectPr = section._sectPr
     current = sectPr.find(qn('w:pgNumType'))
@@ -338,31 +364,17 @@ def set_page_numbering(section, fmt='decimal', start=None):
         del current.attrib[qn('w:start')]
 
 
-def configure_footer(section, platform, page_placeholder='1'):
-    f = PLATFORMS[platform]['fonts']
-    section.footer.is_linked_to_previous = False
-    p = section.footer.paragraphs[0]
+def clear_story(story):
+    p = story.paragraphs[0]
     p.clear()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    add_field(p, 'PAGE', page_placeholder)
-    for run in p.runs:
-        set_run_font(run, f['body'], 9, color=(95, 95, 95))
-    pPr = p._p.get_or_add_pPr()
-    spacing = pPr.find(qn('w:spacing'))
-    if spacing is None:
-        spacing = OxmlElement('w:spacing')
-        pPr.append(spacing)
-    spacing.set(qn('w:after'), '0')
+    return p
 
 
-def configure_book_header(section, platform):
-    f = PLATFORMS[platform]['fonts']
-    section.header.is_linked_to_previous = False
-    p = section.header.paragraphs[0]
-    p.clear()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    add_field(p, 'STYLEREF "Title"', '在这里输入书名')
-    pPr = p._p.get_or_add_pPr()
+def add_bottom_rule(paragraph):
+    ppr = paragraph._p.get_or_add_pPr()
+    old = ppr.find(qn('w:pBdr'))
+    if old is not None:
+        ppr.remove(old)
     borders = OxmlElement('w:pBdr')
     bottom = OxmlElement('w:bottom')
     bottom.set(qn('w:val'), 'single')
@@ -370,20 +382,91 @@ def configure_book_header(section, platform):
     bottom.set(qn('w:space'), '3')
     bottom.set(qn('w:color'), 'BFBFBF')
     borders.append(bottom)
-    pPr.append(borders)
-    r = p.add_run('')
-    set_run_font(r, f['body'], 9, color=(95, 95, 95))
+    ppr.append(borders)
 
 
-def configure_section_page(section):
+def configure_center_footer(story, platform, placeholder='1'):
+    f = PLATFORMS[platform]['fonts']
+    p = clear_story(story)
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    add_field(p, 'PAGE', placeholder, family=f['body'])
+
+
+def configure_outer_footer(story, platform, alignment, placeholder='1'):
+    f = PLATFORMS[platform]['fonts']
+    p = clear_story(story)
+    p.alignment = alignment
+    add_field(p, 'PAGE', placeholder, family=f['body'])
+
+
+def configure_book_body_headers(section, platform):
+    f = PLATFORMS[platform]['fonts']
+    section.header.is_linked_to_previous = False
+    section.even_page_header.is_linked_to_previous = False
+
+    # Odd/right pages: current chapter. Even/left pages: book title.
+    odd = clear_story(section.header)
+    odd.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    add_field(odd, 'STYLEREF "Heading 1"', '在这里输入章标题', family=f['body'])
+    add_bottom_rule(odd)
+
+    even = clear_story(section.even_page_header)
+    even.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    add_field(even, 'STYLEREF "Title"', '在这里输入书名', family=f['body'])
+    add_bottom_rule(even)
+
+
+def configure_book_body_footers(section, platform):
+    section.footer.is_linked_to_previous = False
+    section.even_page_footer.is_linked_to_previous = False
+    configure_outer_footer(section.footer, platform, WD_ALIGN_PARAGRAPH.RIGHT, '1')
+    configure_outer_footer(section.even_page_footer, platform, WD_ALIGN_PARAGRAPH.LEFT, '2')
+
+
+def configure_front_footers(section, platform):
+    section.footer.is_linked_to_previous = False
+    section.even_page_footer.is_linked_to_previous = False
+    configure_center_footer(section.footer, platform, 'i')
+    configure_center_footer(section.even_page_footer, platform, 'ii')
+
+
+def configure_section_page(section, print_book=False):
     section.page_width = Mm(210)
     section.page_height = Mm(297)
-    section.top_margin = Mm(25.4)
-    section.bottom_margin = Mm(25.4)
-    section.left_margin = Mm(25.4)
-    section.right_margin = Mm(25.4)
+    if print_book:
+        section.top_margin = Mm(24)
+        section.bottom_margin = Mm(24)
+        section.left_margin = Mm(23)
+        section.right_margin = Mm(23)
+        section.gutter = Mm(4)
+    else:
+        section.top_margin = Mm(25.4)
+        section.bottom_margin = Mm(25.4)
+        section.left_margin = Mm(25.4)
+        section.right_margin = Mm(25.4)
+        section.gutter = Mm(0)
     section.header_distance = Mm(12.5)
     section.footer_distance = Mm(12.5)
+
+
+def tune_structured_book_styles(doc):
+    h1 = doc.styles['Heading 1']
+    h1.paragraph_format.page_break_before = True
+    h1.paragraph_format.keep_with_next = True
+    h1.paragraph_format.space_before = Pt(0)
+    title = doc.styles['Title']
+    title.paragraph_format.space_before = Pt(54)
+    title.paragraph_format.space_after = Pt(14)
+
+
+def tune_structured_article_styles(doc):
+    title = doc.styles['Title']
+    title.font.size = Pt(22)
+    title.paragraph_format.space_before = Pt(10)
+    title.paragraph_format.space_after = Pt(12)
+    doc.styles['作者信息'].paragraph_format.space_after = Pt(1)
+    doc.styles['日期'].paragraph_format.space_after = Pt(14)
+    doc.styles['Heading 1'].paragraph_format.space_before = Pt(14)
 
 
 def add_minimal_content(doc, spec):
@@ -393,16 +476,29 @@ def add_minimal_content(doc, spec):
 
 
 def add_structured_book(doc, spec, platform):
+    enable_book_print_settings(doc)
+    tune_structured_book_styles(doc)
+
+    title_sec = doc.sections[0]
+    configure_section_page(title_sec, print_book=True)
+    title_sec.header.is_linked_to_previous = False
+    title_sec.even_page_header.is_linked_to_previous = False
+    title_sec.footer.is_linked_to_previous = False
+    title_sec.even_page_footer.is_linked_to_previous = False
+    clear_story(title_sec.header); clear_story(title_sec.even_page_header)
+    clear_story(title_sec.footer); clear_story(title_sec.even_page_footer)
+
     doc.add_paragraph(spec['title'], style='Title')
     doc.add_paragraph('作者：在这里填写作者（可选）', style='作者信息')
-    doc.add_paragraph('这是一页独立书名页；不需要时可以删除作者行。', style='模板提示')
+    doc.add_paragraph('独立书名页；正文按双面打印预留装订空间。', style='模板提示')
 
     front = doc.add_section(WD_SECTION.NEW_PAGE)
-    configure_section_page(front)
+    configure_section_page(front, print_book=True)
     front.header.is_linked_to_previous = False
-    front.footer.is_linked_to_previous = False
+    front.even_page_header.is_linked_to_previous = False
+    clear_story(front.header); clear_story(front.even_page_header)
     set_page_numbering(front, 'lowerRoman', 1)
-    configure_footer(front, platform, 'i')
+    configure_front_footers(front, platform)
 
     doc.add_paragraph('前言（可选）', style='结构标题')
     doc.add_paragraph('在这里写前言；不需要前言时，可以直接删除这一节。', style='Body Text')
@@ -411,13 +507,13 @@ def add_structured_book(doc, spec, platform):
     add_toc(toc)
 
     body = doc.add_section(WD_SECTION.NEW_PAGE)
-    configure_section_page(body)
+    configure_section_page(body, print_book=True)
     set_page_numbering(body, 'decimal', 1)
-    configure_book_header(body, platform)
-    configure_footer(body, platform, '1')
+    configure_book_body_headers(body, platform)
+    configure_book_body_footers(body, platform)
 
     doc.add_paragraph(spec['h1'], style='Heading 1')
-    doc.add_paragraph('从这里开始写正文。需要新章节时，继续使用“标题 1”即可。', style='Body Text')
+    doc.add_paragraph('从这里开始写正文。以后每个“标题 1”都会自动另起新页。', style='Body Text')
     doc.add_page_break()
     doc.add_paragraph('附录（可选）', style='结构标题')
     doc.add_paragraph('需要附录时从这里开始；不需要可以删除这一节。', style='Body Text')
@@ -426,9 +522,11 @@ def add_structured_book(doc, spec, platform):
 
 
 def add_structured_article(doc, spec, platform):
+    tune_structured_article_styles(doc)
     sec = doc.sections[0]
     set_page_numbering(sec, 'decimal', 1)
-    configure_footer(sec, platform, '1')
+    sec.footer.is_linked_to_previous = False
+    configure_center_footer(sec.footer, platform, '1')
 
     doc.add_paragraph(spec['title'], style='Title')
     doc.add_paragraph('作者：在这里填写作者', style='作者信息')

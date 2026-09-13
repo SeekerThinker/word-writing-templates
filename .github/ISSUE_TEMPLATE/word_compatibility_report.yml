@@ -110,8 +110,8 @@ body:
   - type: dropdown
     id: manuscript_layout_result
     attributes:
-      label: 页码 / 页眉（可选测试）
-      description: v2.6 的带常用结构版建议测试。书籍可看罗马页码、正文从 1 重启和书名页眉；文章可看页码。
+      label: 成稿 / 打印版式（可选测试）
+      description: 带常用结构版建议测试。书籍可看罗马页码、正文从 1 重启、新增“标题 1”自动换页、奇偶页页眉、外侧页码和镜像页边距；文章可看页码与首页信息排布。
       options:
         - "✅ 正常"
         - "❌ 有问题"
