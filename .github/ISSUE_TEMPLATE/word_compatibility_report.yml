@@ -29,7 +29,7 @@ body:
   - type: dropdown
     id: template_name
     attributes:
-      label: 测试模板
+      label: 编号方案
       options:
         - 书籍｜中文传统
         - 书籍｜章节数字
@@ -37,6 +37,17 @@ body:
         - 文章｜中文论文
         - 文章｜数字层级
         - 文章｜中文简洁
+    validations:
+      required: true
+
+  - type: dropdown
+    id: starter_variant
+    attributes:
+      label: 模板版本
+      description: 第一层文件是“直接开始版”；“带常用结构”子文件夹里的文件是“带常用结构版”。
+      options:
+        - 直接开始版
+        - 带常用结构版
     validations:
       required: true
 
@@ -88,6 +99,7 @@ body:
     id: toc_result
     attributes:
       label: 目录（可选测试）
+      description: 带常用结构的书籍模板建议测试这一项。
       options:
         - "✅ 正常"
         - "❌ 有问题"

@@ -18,7 +18,7 @@
 
 [**下载 Windows 版**](https://github.com/SeekerThinker/word-writing-templates/releases/latest/download/Word-Writing-Templates-Windows.zip) ｜ [**下载 macOS / MacBook 版**](https://github.com/SeekerThinker/word-writing-templates/releases/latest/download/Word-Writing-Templates-macOS.zip)
 
-下载 ZIP 后解压，进入“书籍模板”或“文章模板”，**双击 `.dotx` 文件**。Word 会基于模板创建一个新文档，原模板不会被改坏。
+下载 ZIP 后解压，进入“书籍模板”或“文章模板”。**拿不准时，直接双击文件夹第一层的 `.dotx` 文件。** Word 会基于模板创建一个新文档，原模板不会被改坏。
 
 ### 2. 看效果，选模板
 
@@ -77,6 +77,17 @@
 
 拿不准时：**写书优先选“书籍｜中文传统”，写文章优先选“文章｜中文论文”**。或者直接使用上面的在线选择向导。
 
+## 想要前言、摘要、目录、参考文献这些现成骨架？
+
+每一种编号都同时提供两个版本：
+
+- **直接开始版（默认）**：只有标题、一级标题、正文，打开就写；
+- **带常用结构版（可选）**：书籍预置前言、自动目录、附录、参考文献；文章预置摘要、关键词、参考文献。
+
+下载 ZIP 后，“直接开始版”仍然放在“书籍模板 / 文章模板”第一层；只有需要现成骨架时才进入其中的 **“带常用结构”** 子文件夹。不需要的可选区块直接删除即可。
+
+详细说明见 [`docs/常用结构版.md`](docs/常用结构版.md)。
+
 ## 快捷键
 
 不会快捷键也没关系，可以直接从 Word 的“样式”区域选择标题和正文。熟悉后再用快捷键会更快。
@@ -96,7 +107,7 @@
 
 `.dotx` 是 Word 的模板格式。双击模板时，Word 会创建一个新的文档，而不是让你直接修改模板本身。因此不需要“先复制一份模板再删除示例内容”。
 
-模板打开后只有非常少的占位内容：标题、一级标题和第一段正文。直接把它们改成自己的内容即可。
+默认的“直接开始版”打开后只有非常少的占位内容：标题、一级标题和第一段正文。直接把它们改成自己的内容即可。带常用结构版只是额外放入可删除的常见区块。
 
 ### 第一次打开时，只需要认识三样东西
 
@@ -115,12 +126,13 @@
 - 长文档多窗口对照编辑
 - 大纲视图与 Web 版式辅助长文写作
 - Windows 与 macOS 分平台优化字体与快捷键
+- 使用“结构标题 / 摘要 / 参考文献”等预置样式继续扩展文档结构
 
 这些都不是开始写作的前置条件。先写，等文档变长以后再用也完全可以。
 
 ## 兼容性与测试
 
-项目会对 12 个成品模板做自动结构检查，并在 GitHub Actions 的 **Windows、macOS 和 Linux** 环境中重复验证：模板包可读取、四级编号存在、平台字体设置正确、快捷键映射存在、中文路径可读取，并且不包含 VBA 宏。
+项目会对 **24 个成品模板**（12 个直接开始版 + 12 个带常用结构版）做自动结构检查，并在 GitHub Actions 的 **Windows、macOS 和 Linux** 环境中重复验证：模板包可读取、四级编号存在、平台字体设置正确、快捷键映射存在、中文路径可读取，并且不包含 VBA 宏。构建流程还会用 LibreOffice 把全部 24 个模板转换为 PDF 做布局冒烟检查。
 
 自动化检查不会启动真正的 Microsoft Word，因此不会把“结构检查通过”夸大成“所有 Word 版本和所有系统快捷键都已真机验证”。如果某个快捷键被操作系统、输入法或 Word 插件占用，仍然可以直接使用 Word 的“样式”区域，不影响模板的编号和结构功能。
 
@@ -135,7 +147,7 @@
 
 两类反馈会分开记录。轻量反馈不会冒充完整验证；完整验证即使发现问题也可以照常提交。公开汇总见 [`docs/兼容性验证记录.md`](docs/兼容性验证记录.md)，测试步骤见 [`docs/真实Word验收.md`](docs/真实Word验收.md)。
 
-更多说明见 [`docs/快速开始.md`](docs/快速开始.md)、[`docs/模板选择指南.md`](docs/模板选择指南.md)、[`docs/Windows使用说明.md`](docs/Windows使用说明.md)、[`docs/macOS使用说明.md`](docs/macOS使用说明.md)、[`docs/进阶使用.md`](docs/进阶使用.md)、[`docs/常见问题.md`](docs/常见问题.md)、[`docs/兼容性与测试.md`](docs/兼容性与测试.md)、[`docs/真实Word验收.md`](docs/真实Word验收.md) 和 [`docs/兼容性验证记录.md`](docs/兼容性验证记录.md)。如果只是想开始写，前面的选择向导或“30 秒开始”已经足够。
+更多说明见 [`docs/快速开始.md`](docs/快速开始.md)、[`docs/模板选择指南.md`](docs/模板选择指南.md)、[`docs/常用结构版.md`](docs/常用结构版.md)、[`docs/Windows使用说明.md`](docs/Windows使用说明.md)、[`docs/macOS使用说明.md`](docs/macOS使用说明.md)、[`docs/进阶使用.md`](docs/进阶使用.md)、[`docs/常见问题.md`](docs/常见问题.md)、[`docs/兼容性与测试.md`](docs/兼容性与测试.md)、[`docs/真实Word验收.md`](docs/真实Word验收.md) 和 [`docs/兼容性验证记录.md`](docs/兼容性验证记录.md)。如果只是想开始写，前面的选择向导或“30 秒开始”已经足够。
 
 ## 给维护者
 
@@ -143,9 +155,9 @@
 
 ```text
 word-writing-templates/
-├── templates/                 # 自动生成：12 个 .dotx 成品模板
+├── templates/                 # 自动生成：24 个 .dotx 成品模板
 ├── release/                   # 自动生成：Windows / macOS 用户 ZIP
-├── docs/assets/previews/      # 自动生成：6 张模板预览图
+├── docs/assets/previews/      # 自动生成：6 张编号方案预览图
 ├── docs/                      # 普通用户说明与兼容性记录
 ├── scripts/                   # 模板生成、预览、校验
 └── .github/workflows/         # 自动构建与跨平台检查
