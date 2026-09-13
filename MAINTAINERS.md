@@ -18,10 +18,23 @@
 pip install -r requirements-dev.txt
 python scripts/build_templates.py
 python scripts/verify_templates.py
+python scripts/compatibility_check.py
 python scripts/make_quickstart.py
 ```
 
 GitHub Actions 会在 `main` 的维护文件发生变化后自动执行生成、校验、打包，并更新 GitHub Release。
+
+## 跨平台检查
+
+`compatibility_check.py` 只使用 Python 标准库，因此会在 GitHub Actions 的 Windows、macOS 与 Linux runner 上运行同一套检查，主要覆盖：
+
+- `.dotx` OOXML 包结构与中文路径；
+- 四级标题编号；
+- Windows / macOS 平台字体；
+- 快捷键映射；
+- 宏文件缺失检查。
+
+这属于**结构兼容性检查**，不会启动 Microsoft Word。不要在文档或 Release 说明中把它描述成“所有版本 Word 真机测试通过”。真实 Word 版本、输入法、插件和系统快捷键冲突仍应通过实际使用反馈补充验证。
 
 ## 快捷键内部逻辑
 
@@ -34,4 +47,4 @@ Word 的逻辑修饰键在 Windows 与 macOS 中分别对应 Ctrl/Alt 与 Comman
 
 ## 发布版本
 
-当前版本号写在根目录 `version.txt`。发布新版本时，先修改该文件，再更新 `CHANGELOG.md`。
+当前版本号写在根目录 `version.txt`。发布新版本时，先更新 `CHANGELOG.md` 与相关说明，再修改 `version.txt` 触发最终构建和 Release。
