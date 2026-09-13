@@ -7,6 +7,7 @@ on:
       - 'templates/**'
       - 'release/**'
       - 'docs/开始使用-*.pdf'
+      - 'docs/assets/previews/**'
   workflow_dispatch:
 
 permissions:
@@ -25,6 +26,11 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install system dependencies for previews
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libreoffice-writer fonts-noto-cjk
+
       - name: Install build dependencies
         run: pip install -r requirements-dev.txt
 
@@ -36,6 +42,9 @@ jobs:
 
       - name: Build quick-start PDFs
         run: python scripts/make_quickstart.py
+
+      - name: Build README preview images
+        run: python scripts/make_previews.py
 
       - name: Package Windows and macOS downloads
         shell: bash
@@ -61,15 +70,15 @@ jobs:
             (cd build && zip -qr "../release/${folder}.zip" "$folder")
           done
 
-      - name: Commit generated downloads
+      - name: Commit generated downloads and previews
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add templates release docs/开始使用-windows.pdf docs/开始使用-macos.pdf
+          git add templates release docs/开始使用-windows.pdf docs/开始使用-macos.pdf docs/assets/previews
           if git diff --cached --quiet; then
             echo "No generated changes to commit."
           else
-            git commit -m "build: refresh generated templates and downloads"
+            git commit -m "build: refresh templates, previews and downloads"
             git push
           fi
 
@@ -81,8 +90,10 @@ jobs:
           TAG="v${VERSION}"
           WIN="release/Word结构化写作模板-Windows-v${VERSION}.zip"
           MAC="release/Word结构化写作模板-macOS-v${VERSION}.zip"
+          cp "$WIN" Word-Writing-Templates-Windows.zip
+          cp "$MAC" Word-Writing-Templates-macOS.zip
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "$WIN" "$MAC" --clobber
+            gh release upload "$TAG" Word-Writing-Templates-Windows.zip Word-Writing-Templates-macOS.zip --clobber
           else
-            gh release create "$TAG" "$WIN" "$MAC" --target main --title "$TAG" --notes "面向普通 Word 用户的 Windows / macOS 成品模板包。下载对应系统的 ZIP，解压后双击 .dotx 模板即可开始写作。"
+            gh release create "$TAG" Word-Writing-Templates-Windows.zip Word-Writing-Templates-macOS.zip --target main --title "$TAG" --notes "面向普通 Word 用户的 Windows / macOS 成品模板包。下载对应系统的 ZIP，解压后双击 .dotx 模板即可开始写作。"
           fi
