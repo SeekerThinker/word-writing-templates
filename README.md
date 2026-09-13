@@ -10,7 +10,7 @@
 
 - **Windows：** [下载 Windows 模板包](release/Word结构化写作模板-Windows-v2.0.0.zip?raw=1)
 - **MacBook / macOS：** [下载 macOS 模板包](release/Word结构化写作模板-macOS-v2.0.0.zip?raw=1)
-- 也可以到 [Releases](../../releases/latest) 下载最新版。
+- 也可以到 [Releases](https://github.com/SeekerThinker/word-writing-templates/releases/latest) 下载最新版。
 
 下载 ZIP 后解压，先看 `00-开始使用.pdf`，或者直接进入“书籍模板 / 文章模板”，**双击 `.dotx` 文件**。Word 会基于模板新建文档，原模板不会被改坏。
 
@@ -65,7 +65,7 @@
 - 大纲视图与 Web 版式辅助长文写作
 - Windows 与 macOS 分平台优化字体与快捷键
 
-更多说明见 [`docs/`](docs/)。
+更多说明见 [`docs/快速开始.md`](docs/快速开始.md)、[`docs/模板选择指南.md`](docs/模板选择指南.md)、[`docs/Windows使用说明.md`](docs/Windows使用说明.md)、[`docs/macOS使用说明.md`](docs/macOS使用说明.md)、[`docs/进阶使用.md`](docs/进阶使用.md) 和 [`docs/常见问题.md`](docs/常见问题.md)。
 
 ## 给维护者
 
@@ -88,6 +88,8 @@ python scripts/build_templates.py
 python scripts/verify_templates.py
 python scripts/make_quickstart.py
 ```
+
+详细维护说明见 [`MAINTAINERS.md`](MAINTAINERS.md)，贡献说明见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
 
 ## 开源许可
 
