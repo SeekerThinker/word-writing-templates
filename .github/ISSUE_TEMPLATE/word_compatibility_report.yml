@@ -108,6 +108,18 @@ body:
       required: true
 
   - type: dropdown
+    id: manuscript_layout_result
+    attributes:
+      label: 页码 / 页眉（可选测试）
+      description: v2.6 的带常用结构版建议测试。书籍可看罗马页码、正文从 1 重启和书名页眉；文章可看页码。
+      options:
+        - "✅ 正常"
+        - "❌ 有问题"
+        - "⏭️ 未测试"
+    validations:
+      required: true
+
+  - type: dropdown
     id: navigation_result
     attributes:
       label: 导航窗格（可选测试）
