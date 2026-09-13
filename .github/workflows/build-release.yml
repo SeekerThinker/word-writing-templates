@@ -42,6 +42,19 @@ jobs:
           python scripts/verify_templates.py
           python scripts/compatibility_check.py
 
+      - name: Render all templates for layout smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf build/render-smoke
+          while IFS= read -r -d '' f; do
+            rel="${f#templates/}"
+            out="build/render-smoke/$(dirname "$rel")"
+            mkdir -p "$out"
+            libreoffice --headless --convert-to pdf --outdir "$out" "$f" >/dev/null
+          done < <(find templates -name '*.dotx' -print0)
+          test "$(find build/render-smoke -name '*.pdf' | wc -l)" -eq 24
+
       - name: Build quick-start PDFs
         run: python scripts/make_quickstart.py
 
@@ -64,26 +77,31 @@ jobs:
               shortcut="Command + Option"
             fi
             folder="Word结构化写作模板-${label}-v${VERSION}"
-            mkdir -p "build/${folder}/书籍模板" "build/${folder}/文章模板"
+            mkdir -p \
+              "build/${folder}/书籍模板/带常用结构" \
+              "build/${folder}/文章模板/带常用结构"
             cp templates/${platform}/books/*.dotx "build/${folder}/书籍模板/"
             cp templates/${platform}/articles/*.dotx "build/${folder}/文章模板/"
+            cp templates/${platform}/structured/books/*.dotx "build/${folder}/书籍模板/带常用结构/"
+            cp templates/${platform}/structured/articles/*.dotx "build/${folder}/文章模板/带常用结构/"
             cp "docs/开始使用-${platform}.pdf" "build/${folder}/00-开始使用.pdf"
             printf '%s\n' \
               "Word 结构化写作模板集 - ${label}" \
               "" \
               "你不需要会 Word 排版。最简单的用法只有 3 步：" \
               "1. 进入“书籍模板”或“文章模板”。" \
-              "2. 双击一个 .dotx 文件。" \
+              "2. 直接双击文件夹第一层的 .dotx 文件。" \
               "3. Word 会新建文档，把“在这里输入……”和“从这里开始写作”换成自己的内容。" \
+              "" \
+              "如果你希望文档一开始就带常用结构：" \
+              "- 书籍：进入“书籍模板/带常用结构”，会预置前言、自动目录、附录和参考文献。" \
+              "- 文章：进入“文章模板/带常用结构”，会预置摘要、关键词和参考文献。" \
+              "- 这些区块都是可选的，不需要时直接删除即可。" \
               "" \
               "第一次打开模板时，只需要记住：" \
               "- 需要新章节：可以在 Word 的“样式”区域选择“标题 1 / 标题 2 / 标题 3 / 标题 4”。" \
               "- 也可以用快捷键；本平台快捷键前缀是：${shortcut}" \
               "- 快捷键没反应也没关系，直接用“样式”即可，标题编号仍会正常工作。" \
-              "" \
-              "写到长文时再学这两个功能：" \
-              "- 导航窗格：按标题浏览全文，也可以拖动标题整体移动章节。" \
-              "- 目录：需要时再插入；内容变化后用“更新目录 / 更新域”刷新。" \
               "" \
               "不知道该选哪个模板？" \
               "https://seekerthinker.github.io/toolbox/word-writing-templates/" \
@@ -115,7 +133,7 @@ jobs:
           MAC="release/Word结构化写作模板-macOS-v${VERSION}.zip"
           cp "$WIN" Word-Writing-Templates-Windows.zip
           cp "$MAC" Word-Writing-Templates-macOS.zip
-          NOTES="面向普通 Word 用户的 Windows / macOS 成品模板包。下载对应系统的 ZIP，解压后双击 .dotx 模板即可开始写作。压缩包内含零基础开始说明；模板同时经过跨平台 OOXML 结构检查。"
+          NOTES="面向普通 Word 用户的 Windows / macOS 成品模板包。每个平台包含 6 种章节编号的直接开始模板，以及对应的 6 个常用结构版本：书籍可预置前言、自动目录、附录和参考文献；文章可预置摘要、关键词和参考文献。下载 ZIP、解压、双击 .dotx 即可开始写作，无需宏或额外配置。"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" Word-Writing-Templates-Windows.zip Word-Writing-Templates-macOS.zip --clobber
           else
