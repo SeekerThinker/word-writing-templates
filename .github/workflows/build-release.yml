@@ -37,11 +37,15 @@ jobs:
       - name: Build Word templates
         run: python scripts/build_templates.py
 
+      - name: Add caption and reference defaults
+        run: python scripts/reference_support.py
+
       - name: Verify generated templates
         run: |
           python scripts/verify_templates.py
           python scripts/compatibility_check.py
           python scripts/manuscript_check.py
+          python scripts/reference_check.py
 
       - name: Render all templates for layout smoke test
         shell: bash
@@ -99,6 +103,10 @@ jobs:
               "- 文章：进入“文章模板/带常用结构”，会预置作者/单位/日期、摘要、关键词、页码和参考文献，并优化首页信息间距。" \
               "- 这些区块都是可选的，不需要时直接删除即可。" \
               "" \
+              "图表与交叉引用：" \
+              "- Word 的“引用 → 插入题注”已经预置“图 / 表”标签。书籍按一级章编号，文章连续编号。" \
+              "- 文中引用图表时，用“引用 → 交叉引用”，不要手打编号；增删图表后更新域即可。" \
+              "" \
               "第一次打开模板时，只需要记住：" \
               "- 需要新章节：可以在 Word 的“样式”区域选择“标题 1 / 标题 2 / 标题 3 / 标题 4”。" \
               "- 也可以用快捷键；本平台快捷键前缀是：${shortcut}" \
@@ -134,7 +142,7 @@ jobs:
           MAC="release/Word结构化写作模板-macOS-v${VERSION}.zip"
           cp "$WIN" Word-Writing-Templates-Windows.zip
           cp "$MAC" Word-Writing-Templates-macOS.zip
-          NOTES="面向普通 Word 用户的 Windows / macOS 成品模板包。每个平台包含 6 种章节编号的直接开始模板，以及对应的 6 个常用结构版本。v2.7 在不增加模板数量的前提下继续打磨成稿与打印体验：书籍结构版让一级章节自动另起新页，加入镜像页边距与装订线，正文奇数页显示章节页眉、偶数页显示书名，并使用外侧页码；文章结构版优化标题、作者、单位与日期的首页间距。下载 ZIP、解压、双击 .dotx 即可开始写作，无需宏或额外配置。"
+          NOTES="面向普通 Word 用户的 Windows / macOS 成品模板包。每个平台包含 6 种章节编号的直接开始模板，以及对应的 6 个常用结构版本。v2.8 为全部 24 个模板加入 Word 原生图表题注与交叉引用支持：在“引用 → 插入题注”中预置中文“图 / 表”标签，书籍默认按一级章编号并使用连字符分隔，文章使用连续编号；同时统一题注与图表来源样式。文中引用图表可直接使用 Word“交叉引用”，无需宏或手工维护编号。"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" Word-Writing-Templates-Windows.zip Word-Writing-Templates-macOS.zip --clobber
           else
