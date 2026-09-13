@@ -1,0 +1,30 @@
+name: Cross-platform template checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'templates/**'
+      - 'scripts/compatibility_check.py'
+      - '.github/workflows/compatibility.yml'
+  pull_request:
+    paths:
+      - 'templates/**'
+      - 'scripts/compatibility_check.py'
+      - '.github/workflows/compatibility.yml'
+  workflow_dispatch:
+
+jobs:
+  structural-compatibility:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify templates on ${{ matrix.os }}
+        run: python scripts/compatibility_check.py
