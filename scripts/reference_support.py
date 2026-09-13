@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Add Word-native Chinese figure/table caption defaults to generated templates.
+"""Add Word-native caption, note, and bibliography defaults to generated templates.
 
 This is intentionally a post-generation OOXML pass. It keeps the core template
-builder focused on writing structure while registering document-level caption
-labels that Microsoft Word's References > Insert Caption command understands.
-No macros, add-ins, or runtime dependencies are added to the templates.
+builder focused on writing structure while registering document-level reference
+features that Microsoft Word understands. No macros, add-ins, or runtime
+packages are embedded in the templates.
+
+v2.8: Chinese figure/table caption labels and caption/source styles.
+v2.9: footnote/endnote styles plus bibliography/reference-entry styles that
+       remain friendly to Word citation fields and third-party citation tools.
 """
 from __future__ import annotations
 
@@ -31,6 +35,12 @@ def set_child(parent, tag, val=None, **attrs):
     return child
 
 
+def remove_child(parent, tag):
+    child = parent.find(Q(tag))
+    if child is not None:
+        parent.remove(child)
+
+
 def set_fonts(rpr, family):
     rfonts = rpr.find(Q('rFonts'))
     if rfonts is None:
@@ -40,12 +50,10 @@ def set_fonts(rpr, family):
         rfonts.set(Q(attr), family)
 
 
-def clean_run_style(rpr, family, size_half_points, color):
+def clean_run_style(rpr, family, size_half_points, color='000000'):
     set_fonts(rpr, family)
     for tag in ('b', 'bCs', 'i', 'iCs'):
-        node = rpr.find(Q(tag))
-        if node is not None:
-            rpr.remove(node)
+        remove_child(rpr, tag)
     c = set_child(rpr, 'color', color)
     for attr in ('themeColor', 'themeTint', 'themeShade'):
         c.attrib.pop(Q(attr), None)
@@ -53,23 +61,53 @@ def clean_run_style(rpr, family, size_half_points, color):
     set_child(rpr, 'szCs', size_half_points)
 
 
-def style_caption(styles, family):
-    style = styles.find(".//w:style[@w:styleId='Caption']", NS)
+def style_by_name(styles, name):
+    for style in styles.findall('w:style', NS):
+        node = style.find('w:name', NS)
+        if node is not None and node.get(Q('val')) == name:
+            return style
+    return None
+
+
+def ensure_style(styles, style_id, name, style_type='paragraph', based_on=None, next_style=None):
+    style = styles.find(f".//w:style[@w:styleId='{style_id}']", NS)
     if style is None:
         style = etree.SubElement(styles, Q('style'))
-        style.set(Q('type'), 'paragraph')
-        style.set(Q('styleId'), 'Caption')
-        set_child(style, 'name', 'caption')
-        set_child(style, 'basedOn', 'Normal')
-        set_child(style, 'next', 'Normal')
-    semi = style.find(Q('semiHidden'))
-    if semi is not None:
-        style.remove(semi)
+        style.set(Q('type'), style_type)
+        style.set(Q('styleId'), style_id)
+    set_child(style, 'name', name)
+    if based_on:
+        set_child(style, 'basedOn', based_on)
+    if next_style and style_type == 'paragraph':
+        set_child(style, 'next', next_style)
+    return style
+
+
+def make_quick_style(style):
+    remove_child(style, 'semiHidden')
+    remove_child(style, 'unhideWhenUsed')
     if style.find(Q('qFormat')) is None:
         style.append(etree.Element(Q('qFormat')))
+
+
+def paragraph_props(style):
     ppr = style.find(Q('pPr'))
     if ppr is None:
         ppr = etree.SubElement(style, Q('pPr'))
+    return ppr
+
+
+def run_props(style):
+    rpr = style.find(Q('rPr'))
+    if rpr is None:
+        rpr = etree.SubElement(style, Q('rPr'))
+    return rpr
+
+
+def style_caption(styles, family):
+    style = ensure_style(styles, 'Caption', 'caption', based_on='Normal', next_style='Normal')
+    make_quick_style(style)
+    ppr = paragraph_props(style)
     set_child(ppr, 'jc', 'center')
     set_child(ppr, 'spacing', before='80', after='120', line='300', lineRule='auto')
     set_child(ppr, 'keepLines')
@@ -77,33 +115,16 @@ def style_caption(styles, family):
     ind = ppr.find(Q('ind'))
     if ind is not None:
         ind.set(Q('firstLine'), '0')
-    rpr = style.find(Q('rPr'))
-    if rpr is None:
-        rpr = etree.SubElement(style, Q('rPr'))
-    clean_run_style(rpr, family, '21', '000000')
+    clean_run_style(run_props(style), family, '21')
 
 
 def style_source(styles, family):
-    existing = None
-    for style in styles.findall('w:style', NS):
-        name = style.find('w:name', NS)
-        if name is not None and name.get(Q('val')) == '图表来源':
-            existing = style
-            break
-    style = existing
+    style = style_by_name(styles, '图表来源')
     if style is None:
-        style = etree.SubElement(styles, Q('style'))
-        style.set(Q('type'), 'paragraph')
-        style.set(Q('styleId'), 'FigureTableSource')
-        set_child(style, 'name', '图表来源')
-        set_child(style, 'basedOn', 'Normal')
-        set_child(style, 'next', 'Normal')
+        style = ensure_style(styles, 'FigureTableSource', '图表来源', based_on='Normal', next_style='Normal')
         set_child(style, 'uiPriority', '50')
-    if style.find(Q('qFormat')) is None:
-        style.append(etree.Element(Q('qFormat')))
-    ppr = style.find(Q('pPr'))
-    if ppr is None:
-        ppr = etree.SubElement(style, Q('pPr'))
+    make_quick_style(style)
+    ppr = paragraph_props(style)
     set_child(ppr, 'jc', 'center')
     set_child(ppr, 'spacing', before='0', after='160', line='276', lineRule='auto')
     set_child(ppr, 'keepLines')
@@ -111,10 +132,62 @@ def style_source(styles, family):
     if ind is None:
         ind = etree.SubElement(ppr, Q('ind'))
     ind.set(Q('firstLine'), '0')
-    rpr = style.find(Q('rPr'))
-    if rpr is None:
-        rpr = etree.SubElement(style, Q('rPr'))
-    clean_run_style(rpr, family, '18', '5F5F5F')
+    clean_run_style(run_props(style), family, '18', '5F5F5F')
+
+
+def style_note_text(styles, family, style_id, name):
+    style = ensure_style(styles, style_id, name, based_on='Normal', next_style=style_id)
+    ppr = paragraph_props(style)
+    set_child(ppr, 'spacing', before='0', after='0', line='240', lineRule='auto')
+    set_child(ppr, 'widowControl')
+    ind = ppr.find(Q('ind'))
+    if ind is None:
+        ind = etree.SubElement(ppr, Q('ind'))
+    for attr in ('left', 'right', 'firstLine', 'hanging'):
+        ind.attrib.pop(Q(attr), None)
+    ind.set(Q('firstLine'), '0')
+    clean_run_style(run_props(style), family, '18')
+
+
+def style_note_reference(styles, family, style_id, name):
+    style = ensure_style(styles, style_id, name, style_type='character', based_on='DefaultParagraphFont')
+    rpr = run_props(style)
+    clean_run_style(rpr, family, '16')
+    set_child(rpr, 'vertAlign', 'superscript')
+
+
+def style_bibliography(styles, family):
+    style = ensure_style(styles, 'Bibliography', 'Bibliography', based_on='Normal', next_style='Bibliography')
+    make_quick_style(style)
+    set_child(style, 'uiPriority', '45')
+    ppr = paragraph_props(style)
+    set_child(ppr, 'spacing', before='0', after='80', line='300', lineRule='auto')
+    set_child(ppr, 'widowControl')
+    ind = ppr.find(Q('ind'))
+    if ind is None:
+        ind = etree.SubElement(ppr, Q('ind'))
+    ind.set(Q('left'), '420')
+    ind.set(Q('hanging'), '420')
+    ind.attrib.pop(Q('firstLine'), None)
+    clean_run_style(run_props(style), family, '21')
+
+
+def style_reference_entry(styles, family):
+    style = style_by_name(styles, '参考文献条目')
+    if style is None:
+        style = ensure_style(styles, 'ReferenceEntry', '参考文献条目', based_on='Bibliography', next_style='ReferenceEntry')
+        set_child(style, 'uiPriority', '46')
+    make_quick_style(style)
+    ppr = paragraph_props(style)
+    set_child(ppr, 'spacing', before='0', after='80', line='300', lineRule='auto')
+    set_child(ppr, 'widowControl')
+    ind = ppr.find(Q('ind'))
+    if ind is None:
+        ind = etree.SubElement(ppr, Q('ind'))
+    ind.set(Q('left'), '420')
+    ind.set(Q('hanging'), '420')
+    ind.attrib.pop(Q('firstLine'), None)
+    clean_run_style(run_props(style), family, '21')
 
 
 def caption_defaults(settings, kind):
@@ -154,6 +227,12 @@ def patch(path: Path):
     settings = etree.fromstring(files['word/settings.xml'])
     style_caption(styles, family)
     style_source(styles, family)
+    style_note_text(styles, family, 'FootnoteText', 'footnote text')
+    style_note_reference(styles, family, 'FootnoteReference', 'footnote reference')
+    style_note_text(styles, family, 'EndnoteText', 'endnote text')
+    style_note_reference(styles, family, 'EndnoteReference', 'endnote reference')
+    style_bibliography(styles, family)
+    style_reference_entry(styles, family)
     caption_defaults(settings, kind)
     files['word/styles.xml'] = etree.tostring(styles, xml_declaration=True, encoding='UTF-8', standalone=True)
     files['word/settings.xml'] = etree.tostring(settings, xml_declaration=True, encoding='UTF-8', standalone=True)

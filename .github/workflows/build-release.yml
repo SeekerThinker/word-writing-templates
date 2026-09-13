@@ -37,7 +37,7 @@ jobs:
       - name: Build Word templates
         run: python scripts/build_templates.py
 
-      - name: Add caption and reference defaults
+      - name: Add caption, note and bibliography defaults
         run: python scripts/reference_support.py
 
       - name: Verify generated templates
@@ -107,6 +107,11 @@ jobs:
               "- Word 的“引用 → 插入题注”已经预置“图 / 表”标签。书籍按一级章编号，文章连续编号。" \
               "- 文中引用图表时，用“引用 → 交叉引用”，不要手打编号；增删图表后更新域即可。" \
               "" \
+              "脚注与参考文献：" \
+              "- 插入脚注可以用 ${shortcut} + F；模板已统一脚注 / 尾注的字体与字号。" \
+              "- 手工参考文献可选“参考文献条目”样式，自动使用悬挂缩进。" \
+              "- 使用 Zotero / EndNote 时让引用管理器继续管理字段和格式，模板不会要求宏，也不会主动改写引用字段。" \
+              "" \
               "第一次打开模板时，只需要记住：" \
               "- 需要新章节：可以在 Word 的“样式”区域选择“标题 1 / 标题 2 / 标题 3 / 标题 4”。" \
               "- 也可以用快捷键；本平台快捷键前缀是：${shortcut}" \
@@ -142,7 +147,7 @@ jobs:
           MAC="release/Word结构化写作模板-macOS-v${VERSION}.zip"
           cp "$WIN" Word-Writing-Templates-Windows.zip
           cp "$MAC" Word-Writing-Templates-macOS.zip
-          NOTES="面向普通 Word 用户的 Windows / macOS 成品模板包。每个平台包含 6 种章节编号的直接开始模板，以及对应的 6 个常用结构版本。v2.8 为全部 24 个模板加入 Word 原生图表题注与交叉引用支持：在“引用 → 插入题注”中预置中文“图 / 表”标签，书籍默认按一级章编号并使用连字符分隔，文章使用连续编号；同时统一题注与图表来源样式。文中引用图表可直接使用 Word“交叉引用”，无需宏或手工维护编号。"
+          NOTES="面向普通 Word 用户的 Windows / macOS 成品模板包。每个平台包含 6 种章节编号的直接开始模板，以及对应的 6 个常用结构版本。v2.9 在 v2.8 图表题注与交叉引用基础上，统一整理全部 24 个模板的脚注、尾注和参考文献样式：Footnote / Endnote 使用平台中文正文字体与上标编号；Word 内置 Bibliography 和新增的“参考文献条目”样式使用悬挂缩进。模板不内置 Zotero / EndNote，也不改写第三方引用字段；引用管理器仍负责具体引用规范和字段更新。无需宏或额外配置。"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" Word-Writing-Templates-Windows.zip Word-Writing-Templates-macOS.zip --clobber
           else

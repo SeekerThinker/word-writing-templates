@@ -48,7 +48,8 @@ def make(platform):
         xx=x+col*82*mm; yy=y-row*8*mm
         txt(c,xx,yy,a,10); txt(c,xx+28*mm,yy,b,10)
     y-=38*mm
-    txt(c,x,y,'提示：不会快捷键也没关系，可以直接在 Word 的“样式”区域选择标题和正文。',9); y-=12*mm
+    txt(c,x,y,'提示：不会快捷键也没关系，可以直接在 Word 的“样式”区域选择标题和正文。',9); y-=8*mm
+    txt(c,x,y,'脚注、图表题注和参考文献都使用 Word 原生功能；“参考文献条目”样式带悬挂缩进。',9); y-=12*mm
     txt(c,x,y,'选模板只看编号',14); y-=9*mm
     for name,ex in MATRIX:
         txt(c,x,y,name,10); txt(c,x+46*mm,y,ex,10); y-=7.5*mm
