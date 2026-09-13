@@ -4,15 +4,18 @@
 
 ## 发布矩阵
 
-6 种结构 × 2 个平台 = 12 个最终 `.dotx` 模板。
+6 种编号方案 × 2 个起步版本 × 2 个平台 = 24 个最终 `.dotx` 模板。
 
 - 书籍：中文传统 / 章节数字 / 纯数字
 - 文章：中文论文 / 数字层级 / 中文简洁
+- 起步版本：直接开始 / 带常用结构
 - 平台：Windows / macOS
+
+“直接开始版”保持最小内容；“带常用结构版”复用同一编号与平台样式，只增加常见写作骨架。因此维护时不要把它们当成两套独立源文件手工修改。
 
 ## 生成方式
 
-模板由 `python-docx + OOXML` 从代码生成。修改字体、编号、快捷键或占位内容时，只需要修改生成逻辑，再统一生成全部成品。
+模板由 `python-docx + OOXML` 从代码生成。修改字体、编号、快捷键、通用样式或占位内容时，只需要修改生成逻辑，再统一生成全部成品。
 
 ```bash
 pip install -r requirements-dev.txt
@@ -22,19 +25,44 @@ python scripts/compatibility_check.py
 python scripts/make_quickstart.py
 ```
 
-GitHub Actions 会在 `main` 的维护文件发生变化后自动执行生成、校验、打包，并更新 GitHub Release。
+GitHub Actions 会在 `main` 的维护文件发生变化后自动执行生成、校验、布局冒烟渲染、打包，并更新 GitHub Release。
+
+## 两种起步版本
+
+### 直接开始版
+
+路径保持稳定：
+
+- `templates/<platform>/books/*.dotx`
+- `templates/<platform>/articles/*.dotx`
+
+这是 README 和在线选择向导的默认下载目标，打开后只包含标题、一级标题和正文起点。
+
+### 带常用结构版
+
+路径：
+
+- `templates/<platform>/structured/books/*.dotx`
+- `templates/<platform>/structured/articles/*.dotx`
+
+书籍版预置前言、TOC 域、正文起点、附录和参考文献；文章版预置摘要、关键词、正文起点和参考文献。
+
+两个版本都包含 `结构标题`、`目录标题`、`摘要`、`关键词`、`参考文献`、`模板提示` 等辅助样式，因此用户从直接开始版写到一半也能继续扩展结构。
 
 ## 跨平台检查
 
 `compatibility_check.py` 只使用 Python 标准库，因此会在 GitHub Actions 的 Windows、macOS 与 Linux runner 上运行同一套检查，主要覆盖：
 
-- `.dotx` OOXML 包结构与中文路径；
+- 24 个 `.dotx` 的 OOXML 包结构与中文路径；
 - 四级标题编号；
 - Windows / macOS 平台字体；
 - 快捷键映射；
+- 辅助结构样式；
 - 宏文件缺失检查。
 
-这属于**结构兼容性检查**，不会启动 Microsoft Word。不要在文档或 Release 说明中把它描述成“所有版本 Word 真机测试通过”。真实 Word 版本、输入法、插件和系统快捷键冲突仍应通过实际使用反馈补充验证。
+主构建工作流还会用 LibreOffice 把全部 24 个成品模板转换为 PDF，作为布局冒烟检查。它能发现无法渲染、明显分页或字体问题，但依然不等于 Microsoft Word 真机测试。
+
+这属于**结构与布局自动检查**，不会启动 Microsoft Word。不要在文档或 Release 说明中把它描述成“所有版本 Word 真机测试通过”。真实 Word 版本、输入法、插件和系统快捷键冲突仍应通过实际使用反馈补充验证。
 
 ## 真实 Word 反馈闭环
 
@@ -43,7 +71,7 @@ v2.5.0 起，真实使用反馈分成两条路径：
 - `.github/ISSUE_TEMPLATE/word_quick_success.yml`：几十秒的轻量正常反馈；
 - `.github/ISSUE_TEMPLATE/word_compatibility_report.yml`：3～5 分钟的完整真机验证；
 - `docs/真实Word验收.md`：给普通用户看的测试步骤；
-- `docs/兼容性验证记录.md`：按平台、Word 版本和模板维护公开矩阵。
+- `docs/兼容性验证记录.md`：按平台、Word 版本、编号方案和起步版本维护公开矩阵。
 
 标题前缀作为维护时的稳定索引：
 
@@ -69,7 +97,7 @@ v2.5.0 起，真实使用反馈分成两条路径：
 收到新反馈后，可以直接让 ChatGPT：
 
 1. 查找标题以 `[Word 验证]`、`[Word 正常]` 或 `[Word 兼容性]` 开头的新 Issue；
-2. 提取操作系统、Word 版本、模板和关键结果；
+2. 提取操作系统、Word 版本、编号方案、起步版本和关键结果；
 3. 更新 `docs/兼容性验证记录.md`；
 4. 保留原 Issue 链接，确保每个结论都能回溯到公开证据。
 
