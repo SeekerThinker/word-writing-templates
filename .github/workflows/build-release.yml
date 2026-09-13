@@ -46,6 +46,7 @@ jobs:
           python scripts/compatibility_check.py
           python scripts/manuscript_check.py
           python scripts/reference_check.py
+          python scripts/stability_check.py
 
       - name: Render all templates for layout smoke test
         shell: bash
@@ -125,6 +126,9 @@ jobs:
             (cd build && zip -qr "../release/${folder}.zip" "$folder")
           done
 
+      - name: Audit user download packages
+        run: python scripts/release_audit.py
+
       - name: Commit generated downloads and previews
         run: |
           git config user.name "github-actions[bot]"
@@ -147,7 +151,7 @@ jobs:
           MAC="release/Word结构化写作模板-macOS-v${VERSION}.zip"
           cp "$WIN" Word-Writing-Templates-Windows.zip
           cp "$MAC" Word-Writing-Templates-macOS.zip
-          NOTES="面向普通 Word 用户的 Windows / macOS 成品模板包。每个平台包含 6 种章节编号的直接开始模板，以及对应的 6 个常用结构版本。v2.9 在 v2.8 图表题注与交叉引用基础上，统一整理全部 24 个模板的脚注、尾注和参考文献样式：Footnote / Endnote 使用平台中文正文字体与上标编号；Word 内置 Bibliography 和新增的“参考文献条目”样式使用悬挂缩进。模板不内置 Zotero / EndNote，也不改写第三方引用字段；引用管理器仍负责具体引用规范和字段更新。无需宏或额外配置。"
+          NOTES="v3.0 稳定版：保持 6 种编号 × 2 种起步方式 × 2 个平台，共 24 个无宏 .dotx 模板。3.x 将稳定维护现有中文文件名、公开模板路径以及 Windows / macOS 的 releases/latest 下载地址。v3.0 主要完成项目收口：统一用户与维护文档、清理历史维护临时文件、加入稳定接口检查和发布 ZIP 审计；标题编号、成稿版式、图表题注 / 交叉引用、脚注 / 尾注和参考文献能力继续保留。"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" Word-Writing-Templates-Windows.zip Word-Writing-Templates-macOS.zip --clobber
           else

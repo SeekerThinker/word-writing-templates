@@ -6,6 +6,8 @@ import sys
 import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
+from stability_check import main as stability_main
+
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATES = ROOT / "templates"
 W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
@@ -63,6 +65,7 @@ def main() -> int:
         print(f"COMPATIBILITY CHECK FAILED on {host}"); [print(f"- {error}") for error in errors]; return 1
     print(f"OK: {len(files)} templates passed structural checks on {host}")
     print("Scope: OOXML/package compatibility only; Microsoft Word itself is not launched by this test.")
+    stability_main()
     return 0
 
 if __name__ == "__main__": sys.exit(main())
