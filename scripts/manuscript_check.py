@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the manuscript-oriented features in structured Word templates."""
+"""Verify manuscript-oriented features in structured Word templates."""
 from pathlib import Path
 import zipfile
 from lxml import etree
@@ -11,16 +11,19 @@ Q = lambda tag: f'{{{W}}}{tag}'
 
 errors = []
 files = sorted((ROOT / 'templates').rglob('*.dotx'))
+structured_count = 0
 
 for path in files:
     rel = path.relative_to(ROOT / 'templates')
     if 'structured' not in rel.parts:
         continue
+    structured_count += 1
     try:
         with zipfile.ZipFile(path) as zf:
             names = set(zf.namelist())
             document = etree.fromstring(zf.read('word/document.xml'))
             styles = etree.fromstring(zf.read('word/styles.xml'))
+            settings = etree.fromstring(zf.read('word/settings.xml'))
             style_names = {
                 node.get(Q('val'))
                 for node in styles.findall('.//w:style/w:name', NS)
@@ -33,6 +36,17 @@ for path in files:
                 if len(sectprs) < 3:
                     errors.append(f'{rel}: expected title/front/body sections, got {len(sectprs)}')
 
+                if settings.find('w:evenAndOddHeaders', NS) is None:
+                    errors.append(f'{rel}: odd/even header mode missing')
+                if settings.find('w:mirrorMargins', NS) is None:
+                    errors.append(f'{rel}: mirrorMargins missing')
+
+                h1 = styles.find(".//w:style[@w:styleId='Heading1']", NS)
+                if h1 is None or h1.find('.//w:pageBreakBefore', NS) is None:
+                    errors.append(f'{rel}: Heading 1 should start on a new page')
+                if h1 is None or h1.find('.//w:keepNext', NS) is None:
+                    errors.append(f'{rel}: Heading 1 should stay with following paragraph')
+
                 pg_nodes = document.findall('.//w:sectPr/w:pgNumType', NS)
                 formats = [node.get(Q('fmt')) for node in pg_nodes]
                 starts = [node.get(Q('start')) for node in pg_nodes]
@@ -41,23 +55,32 @@ for path in files:
                 if starts.count('1') < 2:
                     errors.append(f'{rel}: expected front/body numbering to restart at 1, got {starts}')
 
+                for idx, sect in enumerate(sectprs):
+                    mar = sect.find('w:pgMar', NS)
+                    if mar is None or int(mar.get(Q('gutter'), '0')) < 200:
+                        errors.append(f'{rel}: section {idx+1} should reserve print gutter')
+
                 header_parts = [name for name in names if name.startswith('word/header') and name.endswith('.xml')]
                 footer_parts = [name for name in names if name.startswith('word/footer') and name.endswith('.xml')]
-                if not header_parts:
-                    errors.append(f'{rel}: running header missing')
-                if len(footer_parts) < 2:
-                    errors.append(f'{rel}: front/body page-number footers missing')
+                if len(header_parts) < 4:
+                    errors.append(f'{rel}: expected separate odd/even running headers')
+                if len(footer_parts) < 4:
+                    errors.append(f'{rel}: expected front/body odd/even page-number footers')
 
                 fields = []
                 for name in header_parts + footer_parts:
                     root = etree.fromstring(zf.read(name))
                     fields.extend((node.get(Q('instr')) or '') for node in root.findall('.//w:fldSimple', NS))
-                if not any('STYLEREF' in field for field in fields):
-                    errors.append(f'{rel}: running header is not linked to the Title style')
-                if sum('PAGE' in field for field in fields) < 2:
-                    errors.append(f'{rel}: page-number fields missing from front/body matter')
+                if not any('STYLEREF "Title"' in field for field in fields):
+                    errors.append(f'{rel}: even-page book-title STYLEREF missing')
+                if not any('STYLEREF "Heading 1"' in field for field in fields):
+                    errors.append(f'{rel}: odd-page chapter STYLEREF missing')
+                if sum('PAGE' in field for field in fields) < 4:
+                    errors.append(f'{rel}: PAGE fields missing from front/body odd/even footers')
                 if '作者：在这里填写作者' not in text:
                     errors.append(f'{rel}: title-page author placeholder missing')
+                if '以后每个“标题 1”都会自动另起新页' not in text:
+                    errors.append(f'{rel}: chapter page-break guidance missing')
 
             else:
                 if '作者信息' not in style_names or '日期' not in style_names:
@@ -83,10 +106,13 @@ for path in files:
     except Exception as exc:
         errors.append(f'{rel}: {exc}')
 
+if structured_count != 12:
+    errors.append(f'expected 12 structured templates, got {structured_count}')
+
 if errors:
     print('MANUSCRIPT CHECK FAILED')
     for error in errors:
         print('-', error)
     raise SystemExit(1)
 
-print('OK: structured manuscript features verified for 12 templates')
+print('OK: v2.7 manuscript features verified for 12 structured templates')
