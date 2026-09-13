@@ -41,6 +41,7 @@ jobs:
         run: |
           python scripts/verify_templates.py
           python scripts/compatibility_check.py
+          python scripts/manuscript_check.py
 
       - name: Render all templates for layout smoke test
         shell: bash
@@ -93,9 +94,9 @@ jobs:
               "2. 直接双击文件夹第一层的 .dotx 文件。" \
               "3. Word 会新建文档，把“在这里输入……”和“从这里开始写作”换成自己的内容。" \
               "" \
-              "如果你希望文档一开始就带常用结构：" \
-              "- 书籍：进入“书籍模板/带常用结构”，会预置前言、自动目录、附录和参考文献。" \
-              "- 文章：进入“文章模板/带常用结构”，会预置摘要、关键词和参考文献。" \
+              "如果你希望文档一开始就更接近成稿：" \
+              "- 书籍：进入“书籍模板/带常用结构”，会预置独立书名页、前言、自动目录、正文页码、页眉、附录和参考文献。" \
+              "- 文章：进入“文章模板/带常用结构”，会预置作者/单位/日期、摘要、关键词、页码和参考文献。" \
               "- 这些区块都是可选的，不需要时直接删除即可。" \
               "" \
               "第一次打开模板时，只需要记住：" \
@@ -133,7 +134,7 @@ jobs:
           MAC="release/Word结构化写作模板-macOS-v${VERSION}.zip"
           cp "$WIN" Word-Writing-Templates-Windows.zip
           cp "$MAC" Word-Writing-Templates-macOS.zip
-          NOTES="面向普通 Word 用户的 Windows / macOS 成品模板包。每个平台包含 6 种章节编号的直接开始模板，以及对应的 6 个常用结构版本：书籍可预置前言、自动目录、附录和参考文献；文章可预置摘要、关键词和参考文献。下载 ZIP、解压、双击 .dotx 即可开始写作，无需宏或额外配置。"
+          NOTES="面向普通 Word 用户的 Windows / macOS 成品模板包。每个平台包含 6 种章节编号的直接开始模板，以及对应的 6 个常用结构版本。v2.6 起，书籍结构版增加独立书名页、前置部分罗马页码、正文从 1 重新编号的阿拉伯页码和自动书名页眉；文章结构版增加作者、单位、日期和页码。下载 ZIP、解压、双击 .dotx 即可开始写作，无需宏或额外配置。"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" Word-Writing-Templates-Windows.zip Word-Writing-Templates-macOS.zip --clobber
           else

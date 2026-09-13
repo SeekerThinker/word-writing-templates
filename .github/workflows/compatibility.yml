@@ -7,6 +7,7 @@ on:
       - 'templates/**'
       - 'scripts/build_templates.py'
       - 'scripts/compatibility_check.py'
+      - 'scripts/manuscript_check.py'
       - 'requirements-dev.txt'
       - '.github/workflows/compatibility.yml'
   pull_request:
@@ -14,6 +15,7 @@ on:
       - 'templates/**'
       - 'scripts/build_templates.py'
       - 'scripts/compatibility_check.py'
+      - 'scripts/manuscript_check.py'
       - 'requirements-dev.txt'
       - '.github/workflows/compatibility.yml'
   workflow_dispatch:
@@ -39,4 +41,6 @@ jobs:
       - name: Generate templates on ${{ matrix.os }}
         run: python scripts/build_templates.py
       - name: Verify templates on ${{ matrix.os }}
-        run: python scripts/compatibility_check.py
+        run: |
+          python scripts/compatibility_check.py
+          python scripts/manuscript_check.py

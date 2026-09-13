@@ -39,7 +39,7 @@ def make(platform):
     ]
     for s in steps: txt(c,x,y,s,11); y-=8*mm
     y-=2*mm
-    txt(c,x,y,'想要前言 / 摘要 / 参考文献等现成骨架？进入“带常用结构”子文件夹。',9); y-=11*mm
+    txt(c,x,y,'想要前言 / 摘要 / 页码 / 页眉等更接近成稿的骨架？进入“带常用结构”子文件夹。',9); y-=11*mm
     txt(c,x,y,'常用快捷键',14); y-=9*mm
     pre='Ctrl + Alt +' if iswin else 'Command + Option +'
     rows=[('一级标题',pre+' 1'),('二级标题',pre+' 2'),('三级标题',pre+' 3'),('四级标题',pre+' 4'),('正文',pre+' Z'),('表格文字',pre+' B'),('引用',pre+' Q'),('插入脚注',pre+' F')]

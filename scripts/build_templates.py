@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """Generate Windows/macOS Word .dotx writing templates from code only.
 
-The builder creates six numbering schemes for each platform. Each scheme has:
-- a minimal starter that preserves the one-click beginner workflow;
-- a structured starter with common front/back matter for users who want it.
-
-The builder first asks python-docx to create a standards-compliant Word package,
-then patches the few OOXML pieces that python-docx does not expose directly:
-multilevel numbering, .dotx content type, and Word keyboard customizations.
+Six numbering schemes are generated for each platform. Every scheme has a
+minimal direct-start template plus an optional structured manuscript starter.
+The structured starters add practical finishing features without adding a new
+product choice: book templates get title/front/body sections, Roman/Arabic page
+numbering and a running header; article templates get author/date metadata and
+page numbers.
 """
 from __future__ import annotations
 
@@ -19,6 +18,7 @@ from pathlib import Path
 
 from lxml import etree
 from docx import Document
+from docx.enum.section import WD_SECTION
 from docx.enum.style import WD_STYLE_TYPE
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
@@ -79,6 +79,21 @@ def set_font(style, family, size=None, bold=None):
     if bold is not None:
         style.font.bold = bold
     rpr = style.element.get_or_add_rPr()
+    rfonts = rpr.rFonts
+    if rfonts is None:
+        rfonts = OxmlElement('w:rFonts')
+        rpr.insert(0, rfonts)
+    for attr in ('ascii', 'eastAsia', 'hAnsi', 'cs'):
+        rfonts.set(qn(f'w:{attr}'), family)
+
+
+def set_run_font(run, family, size=9, bold=False, color=None):
+    run.font.name = family
+    run.font.size = Pt(size)
+    run.font.bold = bold
+    if color is not None:
+        run.font.color.rgb = RGBColor(*color)
+    rpr = run._r.get_or_add_rPr()
     rfonts = rpr.rFonts
     if rfonts is None:
         rfonts = OxmlElement('w:rFonts')
@@ -168,6 +183,8 @@ def style_doc(doc, platform):
     sec.bottom_margin = Mm(25.4)
     sec.left_margin = Mm(25.4)
     sec.right_margin = Mm(25.4)
+    sec.header_distance = Mm(12.5)
+    sec.footer_distance = Mm(12.5)
 
     normal = doc.styles['Normal']
     set_font(normal, f['body'], 12)
@@ -259,6 +276,23 @@ def style_doc(doc, platform):
     note.paragraph_format.first_line_indent = Mm(0)
     note.paragraph_format.space_after = Pt(4)
 
+    author = ensure_style(doc, '作者信息')
+    author.base_style = normal
+    set_font(author, f['body'], 11)
+    author.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    author.paragraph_format.first_line_indent = Mm(0)
+    author.paragraph_format.space_after = Pt(3)
+    mark_quick_style(author)
+
+    date = ensure_style(doc, '日期')
+    date.base_style = normal
+    set_font(date, f['body'], 10.5)
+    date.font.color.rgb = RGBColor(80, 80, 80)
+    date.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    date.paragraph_format.first_line_indent = Mm(0)
+    date.paragraph_format.space_after = Pt(10)
+    mark_quick_style(date)
+
 
 def add_toc(paragraph):
     fld = OxmlElement('w:fldSimple')
@@ -266,6 +300,17 @@ def add_toc(paragraph):
     run = OxmlElement('w:r')
     text = OxmlElement('w:t')
     text.text = '目录会根据标题自动生成；如未刷新，请在目录上右键选择“更新域”。'
+    run.append(text)
+    fld.append(run)
+    paragraph._p.append(fld)
+
+
+def add_field(paragraph, instruction, placeholder):
+    fld = OxmlElement('w:fldSimple')
+    fld.set(qn('w:instr'), instruction)
+    run = OxmlElement('w:r')
+    text = OxmlElement('w:t')
+    text.text = placeholder
     run.append(text)
     fld.append(run)
     paragraph._p.append(fld)
@@ -280,20 +325,97 @@ def enable_field_updates(doc):
     current.set(qn('w:val'), 'true')
 
 
+def set_page_numbering(section, fmt='decimal', start=None):
+    sectPr = section._sectPr
+    current = sectPr.find(qn('w:pgNumType'))
+    if current is None:
+        current = OxmlElement('w:pgNumType')
+        sectPr.append(current)
+    current.set(qn('w:fmt'), fmt)
+    if start is not None:
+        current.set(qn('w:start'), str(start))
+    elif current.get(qn('w:start')) is not None:
+        del current.attrib[qn('w:start')]
+
+
+def configure_footer(section, platform, page_placeholder='1'):
+    f = PLATFORMS[platform]['fonts']
+    section.footer.is_linked_to_previous = False
+    p = section.footer.paragraphs[0]
+    p.clear()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    add_field(p, 'PAGE', page_placeholder)
+    for run in p.runs:
+        set_run_font(run, f['body'], 9, color=(95, 95, 95))
+    pPr = p._p.get_or_add_pPr()
+    spacing = pPr.find(qn('w:spacing'))
+    if spacing is None:
+        spacing = OxmlElement('w:spacing')
+        pPr.append(spacing)
+    spacing.set(qn('w:after'), '0')
+
+
+def configure_book_header(section, platform):
+    f = PLATFORMS[platform]['fonts']
+    section.header.is_linked_to_previous = False
+    p = section.header.paragraphs[0]
+    p.clear()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    add_field(p, 'STYLEREF "Title"', '在这里输入书名')
+    pPr = p._p.get_or_add_pPr()
+    borders = OxmlElement('w:pBdr')
+    bottom = OxmlElement('w:bottom')
+    bottom.set(qn('w:val'), 'single')
+    bottom.set(qn('w:sz'), '4')
+    bottom.set(qn('w:space'), '3')
+    bottom.set(qn('w:color'), 'BFBFBF')
+    borders.append(bottom)
+    pPr.append(borders)
+    r = p.add_run('')
+    set_run_font(r, f['body'], 9, color=(95, 95, 95))
+
+
+def configure_section_page(section):
+    section.page_width = Mm(210)
+    section.page_height = Mm(297)
+    section.top_margin = Mm(25.4)
+    section.bottom_margin = Mm(25.4)
+    section.left_margin = Mm(25.4)
+    section.right_margin = Mm(25.4)
+    section.header_distance = Mm(12.5)
+    section.footer_distance = Mm(12.5)
+
+
 def add_minimal_content(doc, spec):
     doc.add_paragraph(spec['title'], style='Title')
     doc.add_paragraph(spec['h1'], style='Heading 1')
     doc.add_paragraph('从这里开始写作。', style='Body Text')
 
 
-def add_structured_book(doc, spec):
+def add_structured_book(doc, spec, platform):
     doc.add_paragraph(spec['title'], style='Title')
+    doc.add_paragraph('作者：在这里填写作者（可选）', style='作者信息')
+    doc.add_paragraph('这是一页独立书名页；不需要时可以删除作者行。', style='模板提示')
+
+    front = doc.add_section(WD_SECTION.NEW_PAGE)
+    configure_section_page(front)
+    front.header.is_linked_to_previous = False
+    front.footer.is_linked_to_previous = False
+    set_page_numbering(front, 'lowerRoman', 1)
+    configure_footer(front, platform, 'i')
+
     doc.add_paragraph('前言（可选）', style='结构标题')
     doc.add_paragraph('在这里写前言；不需要前言时，可以直接删除这一节。', style='Body Text')
     doc.add_paragraph('目录', style='目录标题')
     toc = doc.add_paragraph(style='模板提示')
     add_toc(toc)
-    doc.add_page_break()
+
+    body = doc.add_section(WD_SECTION.NEW_PAGE)
+    configure_section_page(body)
+    set_page_numbering(body, 'decimal', 1)
+    configure_book_header(body, platform)
+    configure_footer(body, platform, '1')
+
     doc.add_paragraph(spec['h1'], style='Heading 1')
     doc.add_paragraph('从这里开始写正文。需要新章节时，继续使用“标题 1”即可。', style='Body Text')
     doc.add_page_break()
@@ -303,8 +425,15 @@ def add_structured_book(doc, spec):
     doc.add_paragraph('[1] 在这里填写参考文献。', style='参考文献')
 
 
-def add_structured_article(doc, spec):
+def add_structured_article(doc, spec, platform):
+    sec = doc.sections[0]
+    set_page_numbering(sec, 'decimal', 1)
+    configure_footer(sec, platform, '1')
+
     doc.add_paragraph(spec['title'], style='Title')
+    doc.add_paragraph('作者：在这里填写作者', style='作者信息')
+    doc.add_paragraph('单位：在这里填写单位（可选）', style='作者信息')
+    doc.add_paragraph('日期：在这里填写日期（可选）', style='日期')
     doc.add_paragraph('摘要（可选）', style='结构标题')
     doc.add_paragraph('在这里填写摘要；一般文章不需要时可以删除这一节。', style='摘要')
     doc.add_paragraph('关键词：在这里填写关键词。', style='关键词')
@@ -329,9 +458,9 @@ def make_docx(spec, platform, preview, path, structured=False):
         doc.add_paragraph('四级标题示例', style='Heading 4')
         doc.add_paragraph('正文示例。', style='Body Text')
     elif structured and spec['kind'] == 'books':
-        add_structured_book(doc, spec)
+        add_structured_book(doc, spec, platform)
     elif structured and spec['kind'] == 'articles':
-        add_structured_article(doc, spec)
+        add_structured_article(doc, spec, platform)
     else:
         add_minimal_content(doc, spec)
     variant = '常用结构' if structured else '直接开始'
