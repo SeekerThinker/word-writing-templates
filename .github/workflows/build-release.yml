@@ -1,0 +1,88 @@
+name: Build templates and user downloads
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'templates/**'
+      - 'release/**'
+      - 'docs/开始使用-*.pdf'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install build dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Build Word templates
+        run: python scripts/build_templates.py
+
+      - name: Verify generated templates
+        run: python scripts/verify_templates.py
+
+      - name: Build quick-start PDFs
+        run: python scripts/make_quickstart.py
+
+      - name: Package Windows and macOS downloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(cat version.txt)"
+          rm -rf build release
+          mkdir -p release
+          for platform in windows macos; do
+            if [ "$platform" = "windows" ]; then
+              label="Windows"
+              shortcut="Ctrl + Alt"
+            else
+              label="macOS"
+              shortcut="Command + Option"
+            fi
+            folder="Word结构化写作模板-${label}-v${VERSION}"
+            mkdir -p "build/${folder}/书籍模板" "build/${folder}/文章模板"
+            cp templates/${platform}/books/*.dotx "build/${folder}/书籍模板/"
+            cp templates/${platform}/articles/*.dotx "build/${folder}/文章模板/"
+            cp "docs/开始使用-${platform}.pdf" "build/${folder}/00-开始使用.pdf"
+            printf 'Word 结构化写作模板集\n\n最简单的用法：\n1. 进入“书籍模板”或“文章模板”。\n2. 双击一个 .dotx 文件。\n3. Word 会新建文档，直接改掉占位文字并开始写作。\n\n本平台标题快捷键前缀：%s\n详细说明见 00-开始使用.pdf。\n' "$shortcut" > "build/${folder}/先看这里.txt"
+            (cd build && zip -qr "../release/${folder}.zip" "$folder")
+          done
+
+      - name: Commit generated downloads
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add templates release docs/开始使用-windows.pdf docs/开始使用-macos.pdf
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+          else
+            git commit -m "build: refresh generated templates and downloads"
+            git push
+          fi
+
+      - name: Create or refresh GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="$(cat version.txt)"
+          TAG="v${VERSION}"
+          WIN="release/Word结构化写作模板-Windows-v${VERSION}.zip"
+          MAC="release/Word结构化写作模板-macOS-v${VERSION}.zip"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$WIN" "$MAC" --clobber
+          else
+            gh release create "$TAG" "$WIN" "$MAC" --target main --title "$TAG" --notes "面向普通 Word 用户的 Windows / macOS 成品模板包。下载对应系统的 ZIP，解压后双击 .dotx 模板即可开始写作。"
+          fi
