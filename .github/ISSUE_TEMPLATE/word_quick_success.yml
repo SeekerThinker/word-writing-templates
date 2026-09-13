@@ -23,7 +23,7 @@ body:
   - type: dropdown
     id: template_name
     attributes:
-      label: 测试模板
+      label: 编号方案
       options:
         - 书籍｜中文传统
         - 书籍｜章节数字
@@ -31,6 +31,16 @@ body:
         - 文章｜中文论文
         - 文章｜数字层级
         - 文章｜中文简洁
+    validations:
+      required: true
+
+  - type: dropdown
+    id: starter_variant
+    attributes:
+      label: 模板版本
+      options:
+        - 直接开始版
+        - 带常用结构版
     validations:
       required: true
 
