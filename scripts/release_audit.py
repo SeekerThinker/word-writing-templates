@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit the user-facing ZIP packages before publishing a GitHub Release."""
+"""Audit the v4 user-facing ZIP packages before publishing a GitHub Release."""
 from __future__ import annotations
 
 import io
@@ -19,10 +19,8 @@ def expected_members(label: str, version: str) -> set[str]:
     }
     for stem in BOOKS:
         members.add(f"{root}/书籍模板/{stem}.dotx")
-        members.add(f"{root}/书籍模板/带常用结构/{stem}-常用结构.dotx")
     for stem in ARTICLES:
         members.add(f"{root}/文章模板/{stem}.dotx")
-        members.add(f"{root}/文章模板/带常用结构/{stem}-常用结构.dotx")
     return members
 
 
@@ -42,8 +40,8 @@ def audit_zip(path: Path, label: str, version: str) -> list[str]:
             errors.append(f"{path.name}: unexpected files: {', '.join(extra)}")
 
         dotx_members = sorted(name for name in actual if name.endswith(".dotx"))
-        if len(dotx_members) != 12:
-            errors.append(f"{path.name}: expected 12 .dotx files, got {len(dotx_members)}")
+        if len(dotx_members) != 6:
+            errors.append(f"{path.name}: expected 6 unified .dotx files, got {len(dotx_members)}")
 
         forbidden_suffixes = (".exe", ".msi", ".pkg", ".dmg", ".dotm", ".docm")
         for name in actual:
@@ -83,7 +81,7 @@ def main() -> None:
             print("-", error)
         raise SystemExit(1)
 
-    print(f"OK: v{version} release packages verified (2 ZIPs, 12 templates each, no macros/installers)")
+    print(f"OK: v{version} release packages verified (2 ZIPs, 6 unified templates each, no macros/installers)")
 
 
 if __name__ == "__main__":
