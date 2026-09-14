@@ -58,8 +58,10 @@ def main() -> None:
         errors.append("STABILITY.md is missing")
     else:
         text = stability.read_text(encoding="utf-8")
-        if "一套模板，两种使用深度" not in text:
+        if "一个编号方案只对应一个用户模板" not in text:
             errors.append("STABILITY.md is missing the v4 single-template principle")
+        if "标题层级与导航窗格继续作为核心思考工作流" not in text:
+            errors.append("STABILITY.md is missing the structured-thinking principle")
 
     if errors:
         print("STABILITY CHECK FAILED")
