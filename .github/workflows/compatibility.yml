@@ -12,6 +12,10 @@ on:
       - 'scripts/reference_check.py'
       - 'scripts/compatibility_check.py'
       - 'scripts/manuscript_check.py'
+      - 'scripts/stability_check.py'
+      - 'version.txt'
+      - 'README.md'
+      - 'STABILITY.md'
       - 'requirements-dev.txt'
       - '.github/workflows/compatibility.yml'
   pull_request:
@@ -24,6 +28,10 @@ on:
       - 'scripts/reference_check.py'
       - 'scripts/compatibility_check.py'
       - 'scripts/manuscript_check.py'
+      - 'scripts/stability_check.py'
+      - 'version.txt'
+      - 'README.md'
+      - 'STABILITY.md'
       - 'requirements-dev.txt'
       - '.github/workflows/compatibility.yml'
   workflow_dispatch:
@@ -57,3 +65,4 @@ jobs:
           python scripts/thinking_check.py
           python scripts/manuscript_check.py
           python scripts/reference_check.py
+          python scripts/stability_check.py
