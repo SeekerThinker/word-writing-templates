@@ -29,14 +29,47 @@
         </div>
         <p class="micro">不用安装插件，不用启用宏，也不必先弄懂复杂的多级列表。</p>
       </div>
-      <div class="thought-card" aria-label="标题层级示意">
-        <div class="tree-title">一眼看清整体脉络</div>
-        <div class="tree-row level-1"><span>1</span><b>为什么要研究这个问题</b></div>
-        <div class="tree-row level-2"><span>1.1</span><b>问题从哪里来</b></div>
-        <div class="tree-row level-2 active"><span>1.2</span><b>真正的矛盾是什么</b></div>
-        <div class="tree-row level-3"><span>1.2.1</span><b>证据与例子</b></div>
-        <div class="tree-row level-1"><span>2</span><b>可以怎样解决</b></div>
-        <p>记录时先专心眼前这一点；觉得乱了，就退回来只看标题。从局部回到整体，很多关系会变得更清楚。</p>
+      <div class="thought-demo" aria-label="动态演示：用快捷键设置标题层级，在导航窗格中检查结构，并拖动标题调整顺序。">
+        <div class="demo-head" aria-hidden="true">
+          <div class="demo-captions">
+            <span class="caption-1">先写下来，再用快捷键分出层级</span>
+            <span class="caption-2">导航窗格把层级变成全局视图</span>
+            <span class="caption-3">顺序不对？直接拖动标题</span>
+            <span class="caption-4">整块内容跟着移动，结构随思考调整</span>
+          </div>
+          <span class="demo-live"><i></i> 动态演示</span>
+        </div>
+        <div class="demo-word" aria-hidden="true">
+          <div class="demo-chrome"><span></span><span></span><span></span><b>思考笔记.docx</b></div>
+          <div class="demo-body">
+            <div class="demo-document">
+              <div class="demo-pane-title">正文</div>
+              <div class="demo-doc-list">
+                <div class="demo-doc-row doc-a level-1"><em>标题 1</em><b>为什么要研究这个问题</b></div>
+                <div class="demo-doc-row doc-b level-2"><em>标题 2</em><b>问题从哪里来</b></div>
+                <div class="demo-doc-row doc-c level-2 moving"><em>标题 2</em><b>真正的矛盾是什么</b></div>
+                <div class="demo-doc-row doc-d level-3 moving"><em>标题 3</em><b>证据与例子</b></div>
+                <div class="demo-doc-row doc-e level-1"><em>标题 1</em><b>可以怎样解决</b></div>
+              </div>
+            </div>
+            <div class="demo-navigation">
+              <div class="demo-pane-title">导航窗格</div>
+              <div class="demo-nav-list">
+                <div class="demo-nav-row nav-a level-1"><span>⋮⋮</span><b>为什么要研究这个问题</b></div>
+                <div class="demo-nav-row nav-b level-2"><span>⋮⋮</span><b>问题从哪里来</b></div>
+                <div class="demo-nav-row nav-c level-2 moving"><span>⋮⋮</span><b>真正的矛盾是什么</b></div>
+                <div class="demo-nav-row nav-d level-3 moving"><span>⋮⋮</span><b>证据与例子</b></div>
+                <div class="demo-nav-row nav-e level-1"><span>⋮⋮</span><b>可以怎样解决</b></div>
+                <span class="demo-drag-cursor">↕</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-keys" aria-hidden="true">
+          <span><kbd>Ctrl + Alt + 1 / 2 / 3 / 4</kbd> Windows</span>
+          <span><kbd>⌘ + ⌥ + 1 / 2 / 3 / 4</kbd> macOS</span>
+        </div>
+        <p>标题层级负责分组和关系，导航窗格负责看整体和重组。</p>
       </div>
     </section>
 
