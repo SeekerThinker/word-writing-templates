@@ -29,34 +29,40 @@ def make(platform):
     out=ROOT/'docs'/f'开始使用-{platform}.pdf'
     c=Canvas(str(out),pagesize=A4)
     c.setTitle(f'Word 结构化思考与写作模板集 - {label} 开始使用')
-    x=22*mm; y=H-24*mm
-    txt(c,x,y,'Word 结构化思考与写作模板集',20); y-=12*mm
-    txt(c,x,y,f'{label}｜先把思路写清楚，再让排版自动完成',13); y-=10*mm
-    txt(c,x,y,'核心：用标题层级组织思考，用导航窗格看全局。',11); y-=9*mm
+    x=22*mm; y=H-22*mm
+    txt(c,x,y,'Word 结构化思考与写作模板集',19); y-=10*mm
+    txt(c,x,y,f'{label}｜先用结构思考，再自然长成成稿',13); y-=10*mm
+
+    txt(c,x,y,'第一次使用',13); y-=8*mm
     steps=[
       '1. 进入“书籍模板”或“文章模板”，选择喜欢的章节编号。',
-      '2. 直接双击第一层的 .dotx 文件。Word 会自动创建新文档，原模板不会被改坏。',
-      '3. 把“在这里输入……”换成自己的内容；需要拆分时用“标题 2”，写一会儿后打开导航窗格看结构。',
+      '2. 双击 .dotx。Word 会创建新文档，原模板不会被改坏。',
+      '3. 大主题用“标题 1”；需要拆分时用“标题 2 / 3 / 4”。',
+      '4. 写一会儿后打开“导航窗格”，只看标题检查整体结构。',
     ]
-    for s in steps: txt(c,x,y,s,10.5); y-=8*mm
-    txt(c,x,y,'不用先把完整大纲一次想好：可以边写、边整理、边调整。',9); y-=10*mm
-    txt(c,x,y,'需要更接近成稿？“带常用结构”版还带页码；书籍版另含章节自动换页与双面打印设置。',9); y-=11*mm
-    txt(c,x,y,'常用快捷键',14); y-=9*mm
+    for s in steps: txt(c,x,y,s,10.5); y-=7.2*mm
+
+    y-=2*mm
+    txt(c,x,y,'结构五问：并列吗？单一吗？完整吗？重复吗？顺序对吗？',10); y-=8*mm
+    txt(c,x,y,'前言、摘要、作者信息、目录、参考文献等已经在模板里；暂时不用可以保留。',9.5); y-=6.5*mm
+    txt(c,x,y,'这些可选区块不会进入导航窗格，导航窗格主要显示你的标题层级。',9.5); y-=10*mm
+
+    txt(c,x,y,'常用快捷键（可选）',13); y-=8*mm
     pre='Ctrl + Alt +' if iswin else 'Command + Option +'
     rows=[('一级标题',pre+' 1'),('二级标题',pre+' 2'),('三级标题',pre+' 3'),('四级标题',pre+' 4'),('正文',pre+' Z'),('表格文字',pre+' B'),('引用',pre+' Q'),('插入脚注',pre+' F')]
     for i,(a,b) in enumerate(rows):
         col=i%2; row=i//2
-        xx=x+col*82*mm; yy=y-row*8*mm
-        txt(c,xx,yy,a,10); txt(c,xx+28*mm,yy,b,10)
-    y-=38*mm
-    txt(c,x,y,'提示：不会快捷键也没关系，可以直接在 Word 的“样式”区域选择标题和正文。',9); y-=8*mm
-    txt(c,x,y,'写乱时先别改句子：只看导航窗格里的标题，检查并列、缺口、重复和顺序。',9); y-=8*mm
-    txt(c,x,y,'脚注、图表题注和参考文献都使用 Word 原生功能；“参考文献条目”样式带悬挂缩进。',9); y-=12*mm
-    txt(c,x,y,'选模板只看编号',14); y-=9*mm
+        xx=x+col*82*mm; yy=y-row*7.2*mm
+        txt(c,xx,yy,a,9.5); txt(c,xx+27*mm,yy,b,9.5)
+    y-=34*mm
+    txt(c,x,y,'不会快捷键也没关系，直接在 Word 的“样式”区域选择标题和正文即可。',9); y-=10*mm
+
+    txt(c,x,y,'选模板只看编号',13); y-=8*mm
     for name,ex in MATRIX:
-        txt(c,x,y,name,10); txt(c,x+46*mm,y,ex,10); y-=7.5*mm
-    y-=4*mm
-    txt(c,x,y,'目录、页眉页码、双面打印等成稿功能，不会也不影响开始思考和写作。',9)
+        txt(c,x,y,name,9.5); txt(c,x+46*mm,y,ex,9.5); y-=7*mm
+
+    y-=3*mm
+    txt(c,x,y,'一句话：标题层级承载思考，导航窗格提供全局视野，排版功能尽量不打断你。',9)
     c.showPage(); c.save(); print(out)
 
 for p in ('windows','macos'): make(p)
