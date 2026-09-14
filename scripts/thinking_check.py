@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the thinking-first first-open experience in all generated templates."""
+"""Verify the v4 thinking-first single-template public experience."""
 from __future__ import annotations
 
 import zipfile
@@ -15,7 +15,6 @@ NS = {"w": W, "dc": DC}
 Q = lambda ns, tag: f"{{{ns}}}{tag}"
 
 SUBJECT = "Word 结构化思考与写作模板"
-DIRECT_CUE = "从这里开始写。需要拆分时用“标题 2”；写一会儿后打开“导航窗格”，只看标题检查结构。"
 BOOK_CUE = "从这里开始写正文。需要拆分时用“标题 2”；写一会儿后打开“导航窗格”检查整体结构。以后每个“标题 1”都会自动另起新页。"
 ARTICLE_CUE = "从这里开始写正文。需要拆分时用“标题 2”；写一会儿后打开“导航窗格”检查整体结构。"
 
@@ -24,54 +23,55 @@ def paragraph_text(paragraph) -> str:
     return "".join((node.text or "") for node in paragraph.findall(".//w:t", NS)).strip()
 
 
-def paragraph_style(paragraph) -> str | None:
-    ppr = paragraph.find("w:pPr", NS)
-    if ppr is None:
-        return None
-    style = ppr.find("w:pStyle", NS)
-    return style.get(Q(W, "val")) if style is not None else None
-
-
-def expected_cue(rel: str) -> str:
-    if "/structured/books/" in f"/{rel}":
-        return BOOK_CUE
-    if "/structured/articles/" in f"/{rel}":
-        return ARTICLE_CUE
-    return DIRECT_CUE
+def style_by_name(styles, name: str):
+    for style in styles.findall("w:style", NS):
+        node = style.find("w:name", NS)
+        if node is not None and node.get(Q(W, "val")) == name:
+            return style
+    return None
 
 
 def main() -> None:
     errors: list[str] = []
-    files = sorted(TEMPLATES.rglob("*.dotx"))
-    if len(files) != 24:
-        errors.append(f"expected 24 templates, got {len(files)}")
+    all_files = sorted(TEMPLATES.rglob("*.dotx"))
+    public_files = [
+        p for p in all_files if "structured" not in p.relative_to(TEMPLATES).parts
+    ]
 
-    for path in files:
+    if len(all_files) != 24:
+        errors.append(f"expected 24 internal build artifacts during v4 transition, got {len(all_files)}")
+    if len(public_files) != 12:
+        errors.append(f"expected 12 public unified templates, got {len(public_files)}")
+
+    for path in public_files:
         rel = path.relative_to(TEMPLATES).as_posix()
-        structured = "/structured/" in f"/{rel}"
+        is_book = "/books/" in f"/{rel}"
         try:
             with zipfile.ZipFile(path) as zf:
                 document = etree.fromstring(zf.read("word/document.xml"))
-                body_paragraphs = [
-                    p for p in document.findall(".//w:body/w:p", NS) if paragraph_text(p)
-                ]
-                text = "".join(paragraph_text(p) for p in body_paragraphs)
-                cue = expected_cue(rel)
+                styles = etree.fromstring(zf.read("word/styles.xml"))
+                paragraphs = [p for p in document.findall(".//w:body/w:p", NS) if paragraph_text(p)]
+                text = "".join(paragraph_text(p) for p in paragraphs)
+
+                cue = BOOK_CUE if is_book else ARTICLE_CUE
                 if cue not in text:
                     errors.append(f"{rel}: missing thinking-first starter cue")
                 if "导航窗格" not in text or "标题 2" not in text:
-                    errors.append(f"{rel}: starter does not expose heading hierarchy + Navigation Pane")
+                    errors.append(f"{rel}: does not expose heading hierarchy + Navigation Pane")
 
-                if not structured:
-                    if len(body_paragraphs) != 3:
-                        errors.append(
-                            f"{rel}: direct-start must stay minimal with 3 non-empty paragraphs; got {len(body_paragraphs)}"
-                        )
-                    styles = [paragraph_style(p) for p in body_paragraphs]
-                    if styles != ["Title", "Heading1", "BodyText"]:
-                        errors.append(
-                            f"{rel}: direct-start paragraph styles changed: {styles}"
-                        )
+                if is_book:
+                    for token in ("作者：在这里填写作者", "前言（可选）", "目录", "附录（可选）", "参考文献（可选）"):
+                        if token not in text:
+                            errors.append(f"{rel}: unified book template missing {token}")
+                else:
+                    for token in ("作者：在这里填写作者", "单位：在这里填写单位", "摘要（可选）", "关键词：", "参考文献（可选）"):
+                        if token not in text:
+                            errors.append(f"{rel}: unified article template missing {token}")
+
+                structure = style_by_name(styles, "结构标题")
+                outline = None if structure is None else structure.find(".//w:pPr/w:outlineLvl", NS)
+                if outline is None or outline.get(Q(W, "val")) != "9":
+                    errors.append(f"{rel}: optional 结构标题 must use outline level 9 to stay out of Navigation Pane")
 
                 core = etree.fromstring(zf.read("docProps/core.xml"))
                 subject = core.find("dc:subject", NS)
@@ -87,7 +87,7 @@ def main() -> None:
             print("-", error)
         raise SystemExit(1)
 
-    print("OK: 24 templates expose the thinking-first cue; 12 direct-start templates remain title + Heading 1 + body only")
+    print("OK: 12 public templates combine optional manuscript structure with a clean Heading 1–4 thinking tree")
 
 
 if __name__ == "__main__":
