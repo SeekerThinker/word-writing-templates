@@ -21,8 +21,8 @@
       label: "文章",
       options: [
         { id: "article-cn-academic", name: "中文论文", file: "文章-中文论文.dotx", folder: "articles", preview: "article-cn-academic.png", example: "一、 → （一） → 1. → （1）", desc: "适合中文论文、报告和正式文章。", recommended: true },
-        { id: "article-decimal", name: "数字层级", file: "文章-数字层级.dotx", folder: "articles", preview: "article-decimal.png", example: "1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "适合学术、研究和技术文章。" },
-        { id: "article-cn-compact", name: "中文简洁", file: "文章-中文简洁.dotx", folder: "articles", preview: "article-cn-compact.png", example: "一、 → 1. → （1） → ①", desc: "适合长文章、随笔和内容写作。" }
+        { id: "article-decimal", name: "数字层级", file: "文章-数字层级.dotx", folder: "articles", preview: "article-decimal.png", example: "1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "适合研究、技术内容和需要清晰编号的笔记或文档。" },
+        { id: "article-cn-compact", name: "中文简洁", file: "文章-中文简洁.dotx", folder: "articles", preview: "article-cn-compact.png", example: "一、 → 1. → （1） → ①", desc: "适合一般文章、研究笔记和日常整理。" }
       ]
     }
   };
@@ -121,7 +121,7 @@
     state.type = null;
     state.scheme = null;
     state.os = null;
-    el.schemeChoices.innerHTML = '<div class="placeholder">先选“写书”或“写文章”。</div>';
+    el.schemeChoices.innerHTML = '<div class="placeholder">先选一种结构。</div>';
     lock(el.stepScheme, true);
     lock(el.stepOs, true);
     setPressed(el.typeChoices, "data-type", null);
