@@ -55,6 +55,9 @@ def main() -> None:
         "releases/latest/download/Word-Writing-Templates-Windows.zip",
         "releases/latest/download/Word-Writing-Templates-macOS.zip",
         "STABILITY.md",
+        "docs/结构化思考.md",
+        "模板不会替你思考",
+        "思考 → 结构 → 写作 → 排版",
     ]
     for fragment in required_readme_fragments:
         if fragment not in readme:
@@ -64,13 +67,17 @@ def main() -> None:
     if not stability.exists():
         errors.append("STABILITY.md is missing")
 
+    thinking_doc = ROOT / "docs" / "结构化思考.md"
+    if not thinking_doc.exists():
+        errors.append("docs/结构化思考.md is missing")
+
     if errors:
         print("STABILITY CHECK FAILED")
         for error in errors:
             print("-", error)
         raise SystemExit(1)
 
-    print("OK: v3 stable contract verified for 24 template paths and public download URLs")
+    print("OK: v3 stable contract verified for 24 template paths, public downloads and thinking-first positioning")
 
 
 if __name__ == "__main__":
