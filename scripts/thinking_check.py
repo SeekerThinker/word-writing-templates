@@ -15,8 +15,8 @@ NS = {"w": W, "dc": DC}
 Q = lambda ns, tag: f"{{{ns}}}{tag}"
 
 SUBJECT = "Word 结构化思考与写作模板"
-BOOK_CUE = "从这里开始写正文。需要拆分时用“标题 2”；写一会儿后打开“导航窗格”检查整体结构。以后每个“标题 1”都会自动另起新页。"
-ARTICLE_CUE = "从这里开始写正文。需要拆分时用“标题 2”；写一会儿后打开“导航窗格”检查整体结构。"
+BOOK_CUE = "从这里开始记录或展开内容。需要拆分时用“标题 2”；积累一些内容后打开“导航窗格”看看整体结构。以后每个“标题 1”都会自动另起新页。"
+ARTICLE_CUE = "从这里开始记录或展开内容。需要拆分时用“标题 2”；积累一些内容后打开“导航窗格”看看整体结构。"
 
 
 def paragraph_text(paragraph) -> str:
@@ -55,9 +55,11 @@ def main() -> None:
 
                 cue = BOOK_CUE if is_book else ARTICLE_CUE
                 if cue not in text:
-                    errors.append(f"{rel}: missing thinking-first starter cue")
+                    errors.append(f"{rel}: missing open-ended thinking-first starter cue")
                 if "导航窗格" not in text or "标题 2" not in text:
                     errors.append(f"{rel}: does not expose heading hierarchy + Navigation Pane")
+                if "从这里开始写正文" in text:
+                    errors.append(f"{rel}: starter cue still assumes formal manuscript writing")
 
                 if is_book:
                     for token in ("作者：在这里填写作者", "前言（可选）", "目录", "附录（可选）", "参考文献（可选）"):
@@ -87,7 +89,7 @@ def main() -> None:
             print("-", error)
         raise SystemExit(1)
 
-    print("OK: 12 public templates combine optional manuscript structure with a clean Heading 1–4 thinking tree")
+    print("OK: 12 public templates support open-ended structured thinking with a clean Heading 1–4 tree")
 
 
 if __name__ == "__main__":
