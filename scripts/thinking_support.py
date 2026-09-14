@@ -6,8 +6,10 @@ that mature generator path for now, but promotes the complete manuscript starter
 to the short public filename. Users therefore see one template per numbering
 scheme rather than choosing between "直接开始" and "带常用结构".
 
-Optional manuscript labels use outline level 9, so Word's Navigation Pane stays
-focused on Heading 1–4: the writer's actual thinking structure.
+The public starter cue is deliberately open-ended: users may organize notes and
+materials indefinitely, or continue into formal writing when useful. Optional
+manuscript labels use outline level 9, so Word's Navigation Pane stays focused
+on Heading 1–4: the user's actual thinking structure.
 """
 from __future__ import annotations
 
@@ -25,11 +27,11 @@ NS = {"w": W, "dc": DC}
 Q = lambda ns, tag: f"{{{ns}}}{tag}"
 
 DIRECT_OLD = "从这里开始写作。"
-DIRECT_NEW = "从这里开始写。需要拆分时用“标题 2”；写一会儿后打开“导航窗格”，只看标题检查结构。"
+DIRECT_NEW = "从这里开始记录或展开内容。需要拆分时用“标题 2”；积累一些内容后打开“导航窗格”，只看标题检查整体结构。"
 BOOK_OLD = "从这里开始写正文。以后每个“标题 1”都会自动另起新页。"
-BOOK_NEW = "从这里开始写正文。需要拆分时用“标题 2”；写一会儿后打开“导航窗格”检查整体结构。以后每个“标题 1”都会自动另起新页。"
+BOOK_NEW = "从这里开始记录或展开内容。需要拆分时用“标题 2”；积累一些内容后打开“导航窗格”看看整体结构。以后每个“标题 1”都会自动另起新页。"
 ARTICLE_OLD = "从这里开始写正文。"
-ARTICLE_NEW = "从这里开始写正文。需要拆分时用“标题 2”；写一会儿后打开“导航窗格”检查整体结构。"
+ARTICLE_NEW = "从这里开始记录或展开内容。需要拆分时用“标题 2”；积累一些内容后打开“导航窗格”看看整体结构。"
 SUBJECT = "Word 结构化思考与写作模板"
 BOOKS = ["书籍-中文传统", "书籍-章节数字", "书籍-纯数字"]
 ARTICLES = ["文章-中文论文", "文章-数字层级", "文章-中文简洁"]
@@ -148,8 +150,8 @@ def main() -> None:
     if len(public) != 12:
         raise SystemExit(f"expected 12 public unified templates, got {len(public)}")
 
-    print("OK: 12 public templates now use the complete manuscript structure")
-    print("OK: optional blocks stay out of Navigation Pane; Heading 1–4 remain the thinking tree")
+    print("OK: 12 public templates now use the complete optional manuscript structure")
+    print("OK: starter cues support notes or formal writing; Heading 1–4 remain the thinking tree")
 
 
 if __name__ == "__main__":
