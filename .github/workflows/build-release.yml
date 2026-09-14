@@ -124,6 +124,13 @@ jobs:
       - name: Audit user download packages
         run: python scripts/release_audit.py
 
+      - name: Upload release packages for QA
+        uses: actions/upload-artifact@v4
+        with:
+          name: v4-release-packages
+          path: release/*.zip
+          retention-days: 7
+
       - name: Commit generated downloads and previews
         run: |
           git config user.name "github-actions[bot]"
