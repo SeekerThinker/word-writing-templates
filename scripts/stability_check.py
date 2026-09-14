@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Protect the public compatibility contract introduced in v4.0."""
+"""Protect the public compatibility and positioning contract introduced in v4.0."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -47,6 +47,8 @@ def main() -> None:
         "releases/latest/download/Word-Writing-Templates-Windows.zip",
         "releases/latest/download/Word-Writing-Templates-macOS.zip",
         "6 种编号 × 2 个平台 = 12 个",
+        "整理和积累本身就是完整用途",
+        "成稿是可选延伸",
         "STABILITY.md",
     ]
     for fragment in required_readme_fragments:
@@ -62,6 +64,8 @@ def main() -> None:
             errors.append("STABILITY.md is missing the v4 single-template principle")
         if "标题层级与导航窗格继续作为核心思考工作流" not in text:
             errors.append("STABILITY.md is missing the structured-thinking principle")
+        if "成稿是可选延伸，不是必然终点" not in text:
+            errors.append("STABILITY.md is missing the open-ended use principle")
 
     if errors:
         print("STABILITY CHECK FAILED")
@@ -69,7 +73,7 @@ def main() -> None:
             print("-", error)
         raise SystemExit(1)
 
-    print("OK: v4 stable contract verified for 12 public template paths and stable download URLs")
+    print("OK: v4 stable contract verified for paths, downloads and open-ended structured-thinking positioning")
 
 
 if __name__ == "__main__":
