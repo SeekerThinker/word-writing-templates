@@ -1,0 +1,32 @@
+name: Sync GitHub Release notes
+
+on:
+  workflow_run:
+    workflows: ["Build templates and user downloads"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Sync current release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION="$(cat version.txt)"
+          TAG="v${VERSION}"
+          test -s RELEASE_NOTES.md
+          gh release view "$TAG" >/dev/null
+          gh release edit "$TAG" --notes-file RELEASE_NOTES.md
+          echo "Synced RELEASE_NOTES.md to ${TAG}."
