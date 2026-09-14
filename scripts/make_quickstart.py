@@ -28,17 +28,18 @@ def make(platform):
     label='Windows' if iswin else 'macOS / MacBook'
     out=ROOT/'docs'/f'开始使用-{platform}.pdf'
     c=Canvas(str(out),pagesize=A4)
-    c.setTitle(f'Word 结构化写作模板集 - {label} 开始使用')
+    c.setTitle(f'Word 结构化思考与写作模板集 - {label} 开始使用')
     x=22*mm; y=H-24*mm
-    txt(c,x,y,'Word 结构化写作模板集',20); y-=12*mm
-    txt(c,x,y,f'{label}｜3 步开始写作',14); y-=11*mm
+    txt(c,x,y,'Word 结构化思考与写作模板集',20); y-=12*mm
+    txt(c,x,y,f'{label}｜先把思路写清楚，再让排版自动完成',13); y-=10*mm
+    txt(c,x,y,'核心：用标题层级组织思考，用导航窗格看全局。',11); y-=9*mm
     steps=[
       '1. 进入“书籍模板”或“文章模板”，选择喜欢的章节编号。',
       '2. 直接双击第一层的 .dotx 文件。Word 会自动创建新文档，原模板不会被改坏。',
-      '3. 把“在这里输入……”替换成自己的标题和正文，然后继续写。',
+      '3. 把“在这里输入……”换成自己的内容；需要拆分时用“标题 2”，写一会儿后打开导航窗格看结构。',
     ]
-    for s in steps: txt(c,x,y,s,11); y-=8*mm
-    y-=2*mm
+    for s in steps: txt(c,x,y,s,10.5); y-=8*mm
+    txt(c,x,y,'不用先把完整大纲一次想好：可以边写、边整理、边调整。',9); y-=10*mm
     txt(c,x,y,'需要更接近成稿？“带常用结构”版还带页码；书籍版另含章节自动换页与双面打印设置。',9); y-=11*mm
     txt(c,x,y,'常用快捷键',14); y-=9*mm
     pre='Ctrl + Alt +' if iswin else 'Command + Option +'
@@ -49,12 +50,13 @@ def make(platform):
         txt(c,xx,yy,a,10); txt(c,xx+28*mm,yy,b,10)
     y-=38*mm
     txt(c,x,y,'提示：不会快捷键也没关系，可以直接在 Word 的“样式”区域选择标题和正文。',9); y-=8*mm
+    txt(c,x,y,'写乱时先别改句子：只看导航窗格里的标题，检查并列、缺口、重复和顺序。',9); y-=8*mm
     txt(c,x,y,'脚注、图表题注和参考文献都使用 Word 原生功能；“参考文献条目”样式带悬挂缩进。',9); y-=12*mm
     txt(c,x,y,'选模板只看编号',14); y-=9*mm
     for name,ex in MATRIX:
         txt(c,x,y,name,10); txt(c,x+46*mm,y,ex,10); y-=7.5*mm
     y-=4*mm
-    txt(c,x,y,'目录、页眉页码、双面打印、导航窗格等进阶功能，不会也不影响开始写作。',9)
+    txt(c,x,y,'目录、页眉页码、双面打印等成稿功能，不会也不影响开始思考和写作。',9)
     c.showPage(); c.save(); print(out)
 
 for p in ('windows','macos'): make(p)

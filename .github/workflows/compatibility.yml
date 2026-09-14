@@ -6,6 +6,8 @@ on:
     paths:
       - 'templates/**'
       - 'scripts/build_templates.py'
+      - 'scripts/thinking_support.py'
+      - 'scripts/thinking_check.py'
       - 'scripts/reference_support.py'
       - 'scripts/reference_check.py'
       - 'scripts/compatibility_check.py'
@@ -16,6 +18,8 @@ on:
     paths:
       - 'templates/**'
       - 'scripts/build_templates.py'
+      - 'scripts/thinking_support.py'
+      - 'scripts/thinking_check.py'
       - 'scripts/reference_support.py'
       - 'scripts/reference_check.py'
       - 'scripts/compatibility_check.py'
@@ -45,9 +49,11 @@ jobs:
       - name: Generate templates on ${{ matrix.os }}
         run: |
           python scripts/build_templates.py
+          python scripts/thinking_support.py
           python scripts/reference_support.py
       - name: Verify templates on ${{ matrix.os }}
         run: |
           python scripts/compatibility_check.py
+          python scripts/thinking_check.py
           python scripts/manuscript_check.py
           python scripts/reference_check.py

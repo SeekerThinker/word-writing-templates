@@ -37,6 +37,9 @@ jobs:
       - name: Build Word templates
         run: python scripts/build_templates.py
 
+      - name: Add thinking-first starter cues
+        run: python scripts/thinking_support.py
+
       - name: Add caption, note and bibliography defaults
         run: python scripts/reference_support.py
 
@@ -44,6 +47,7 @@ jobs:
         run: |
           python scripts/verify_templates.py
           python scripts/compatibility_check.py
+          python scripts/thinking_check.py
           python scripts/manuscript_check.py
           python scripts/reference_check.py
           python scripts/stability_check.py
@@ -92,12 +96,15 @@ jobs:
             cp templates/${platform}/structured/articles/*.dotx "build/${folder}/文章模板/带常用结构/"
             cp "docs/开始使用-${platform}.pdf" "build/${folder}/00-开始使用.pdf"
             printf '%s\n' \
-              "Word 结构化写作模板集 - ${label}" \
+              "Word 结构化思考与写作模板集 - ${label}" \
               "" \
-              "你不需要会 Word 排版。最简单的用法只有 3 步：" \
+              "这套模板最重要的用途不是排版，而是帮助你用标题层级组织思考。" \
+              "最简单的用法只有 3 步：" \
               "1. 进入“书籍模板”或“文章模板”。" \
               "2. 直接双击文件夹第一层的 .dotx 文件。" \
-              "3. Word 会新建文档，把“在这里输入……”和“从这里开始写作”换成自己的内容。" \
+              "3. 把“在这里输入……”换成自己的内容。需要拆分时用“标题 2”；写一会儿后打开“导航窗格”，只看标题检查结构。" \
+              "" \
+              "不用先把大纲一次想完。可以边写、边整理、边调整；标题层级负责把思路显出来。" \
               "" \
               "如果你希望文档一开始就更接近成稿：" \
               "- 书籍：进入“书籍模板/带常用结构”。除书名页、前言、目录、页码和参考文献外，还会让每个一级章标题自动另起新页，并预置镜像页边距、装订线、奇偶页页眉和外侧页码。" \
@@ -114,7 +121,8 @@ jobs:
               "- 使用 Zotero / EndNote 时让引用管理器继续管理字段和格式，模板不会要求宏，也不会主动改写引用字段。" \
               "" \
               "第一次打开模板时，只需要记住：" \
-              "- 需要新章节：可以在 Word 的“样式”区域选择“标题 1 / 标题 2 / 标题 3 / 标题 4”。" \
+              "- 大主题 / 大问题用“标题 1”，需要继续拆分时用“标题 2 / 标题 3 / 标题 4”。" \
+              "- 写一会儿后打开导航窗格，只看标题，检查并列、缺口、重复和顺序。" \
               "- 也可以用快捷键；本平台快捷键前缀是：${shortcut}" \
               "- 快捷键没反应也没关系，直接用“样式”即可，标题编号仍会正常工作。" \
               "" \
@@ -151,7 +159,7 @@ jobs:
           MAC="release/Word结构化写作模板-macOS-v${VERSION}.zip"
           cp "$WIN" Word-Writing-Templates-Windows.zip
           cp "$MAC" Word-Writing-Templates-macOS.zip
-          NOTES="v3.0 稳定版：保持 6 种编号 × 2 种起步方式 × 2 个平台，共 24 个无宏 .dotx 模板。3.x 将稳定维护现有中文文件名、公开模板路径以及 Windows / macOS 的 releases/latest 下载地址。v3.0 主要完成项目收口：统一用户与维护文档、清理历史维护临时文件、加入稳定接口检查和发布 ZIP 审计；标题编号、成稿版式、图表题注 / 交叉引用、脚注 / 尾注和参考文献能力继续保留。"
+          NOTES="v${VERSION} 稳定维护版：继续保持 6 种编号 × 2 种起步方式 × 2 个平台，共 24 个无宏 .dotx 模板。本次把“辅助思考”落实到第一次打开模板的体验：不增加段落、不增加选择，直接开始版仍只有标题、一级标题和正文，但正文占位会轻量提示在需要拆分时使用“标题 2”，并在写一会儿后通过 Word 导航窗格只看标题检查整体结构。快速开始 PDF 与下载包说明同步强调“思考 → 结构 → 写作 → 排版”。"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" Word-Writing-Templates-Windows.zip Word-Writing-Templates-macOS.zip --clobber
           else
