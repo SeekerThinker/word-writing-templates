@@ -12,17 +12,17 @@
     book: {
       label: "书籍",
       options: [
-        { id: "book-cn-traditional", name: "中文传统", file: "书籍-中文传统.dotx", folder: "books", preview: "book-cn-traditional.png", example: "第一章 → 第一节 → 一、 → （一）", desc: "适合中文专著、教材和传统长篇作品。", recommended: true },
-        { id: "book-chapter-decimal", name: "章节数字", file: "书籍-章节数字.dotx", folder: "books", preview: "book-chapter-decimal.png", example: "第1章 → 1.1 → 1.1.1 → 1.1.1.1", desc: "适合技术书、教程和研究专著。" },
-        { id: "book-pure-decimal", name: "纯数字", file: "书籍-纯数字.dotx", folder: "books", preview: "book-pure-decimal.png", example: "1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "适合现代简洁型长文和电子书。" }
+        { id: "book-cn-traditional", name: "中文传统", file: "书籍-中文传统.dotx", folder: "books", preview: "book-cn-traditional.png", example: "第一章 → 第一节 → 一、 → （一）", desc: "适合中文专著、教材，以及偏传统体例的长篇写作。", recommended: true },
+        { id: "book-chapter-decimal", name: "章节数字", file: "书籍-章节数字.dotx", folder: "books", preview: "book-chapter-decimal.png", example: "第1章 → 1.1 → 1.1.1 → 1.1.1.1", desc: "适合技术书、教程和研究类专著。" },
+        { id: "book-pure-decimal", name: "纯数字", file: "书籍-纯数字.dotx", folder: "books", preview: "book-pure-decimal.png", example: "1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "适合偏现代、简洁的长篇写作和电子书。" }
       ]
     },
     article: {
       label: "文章",
       options: [
-        { id: "article-cn-academic", name: "中文论文", file: "文章-中文论文.dotx", folder: "articles", preview: "article-cn-academic.png", example: "一、 → （一） → 1. → （1）", desc: "适合中文论文、报告和正式文章。", recommended: true },
-        { id: "article-decimal", name: "数字层级", file: "文章-数字层级.dotx", folder: "articles", preview: "article-decimal.png", example: "1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "适合学术、研究和技术文章。" },
-        { id: "article-cn-compact", name: "中文简洁", file: "文章-中文简洁.dotx", folder: "articles", preview: "article-cn-compact.png", example: "一、 → 1. → （1） → ①", desc: "适合长文章、随笔和内容写作。" }
+        { id: "article-cn-academic", name: "中文论文", file: "文章-中文论文.dotx", folder: "articles", preview: "article-cn-academic.png", example: "一、 → （一） → 1. → （1）", desc: "适合中文论文、报告和较正式的文章。", recommended: true },
+        { id: "article-decimal", name: "数字层级", file: "文章-数字层级.dotx", folder: "articles", preview: "article-decimal.png", example: "1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "适合学术、研究和技术类文章。" },
+        { id: "article-cn-compact", name: "中文简洁", file: "文章-中文简洁.dotx", folder: "articles", preview: "article-cn-compact.png", example: "一、 → 1. → （1） → ①", desc: "适合长文章、随笔和日常内容创作。" }
       ]
     }
   };
@@ -168,7 +168,7 @@
   const detected = detectedOs();
   if (detected) {
     const platform = detected === "macos" ? "macOS" : "Windows";
-    el.osHint.textContent = `看起来你正在使用 ${platform}；如果 Word 在另一台电脑上，请按实际电脑选择。`;
+    el.osHint.textContent = `看起来你现在用的是 ${platform}。如果你会在另一台电脑上写，请按那台电脑的系统选择。`;
   }
 
   const params = new URLSearchParams(window.location.search);
