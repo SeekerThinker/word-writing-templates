@@ -42,7 +42,7 @@ jobs:
           for item in required:
               if item not in app:
                   raise SystemExit(f'missing public download mapping: {item}')
-          for phrase in ['用 Word 整理思路', '导航窗格', '选一个适合你的模板']:
+          for phrase in ['理清思路', '导航窗格', '选一个适合你的模板']:
               if phrase not in page:
                   raise SystemExit(f'missing ordinary-user homepage copy: {phrase}')
           if 'word_quick_success' in page or 'word_compatibility_report' in page:
