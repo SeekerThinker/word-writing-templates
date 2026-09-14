@@ -26,7 +26,6 @@
         <p class="lead">标题层级让思路有结构，导航窗格让结构一直可见、可检查、可调整。目录、页码、摘要、参考文献等已经准备好，需要时再用。</p>
         <div class="hero-actions">
           <a class="btn primary" href="#chooser">帮我选模板</a>
-          <a class="btn quiet" id="quickPackage" href="#chooser">直接下载整包</a>
         </div>
         <p class="micro">不用安装插件，不用开启宏，也不需要懂 Word 多级列表。</p>
       </div>
@@ -57,16 +56,16 @@
           </div>
         </section>
 
-        <section class="step locked" id="stepScheme" aria-disabled="true">
+        <section class="step locked" id="stepScheme" aria-disabled="true" inert>
           <div class="step-head"><span class="step-no">2</span><div><h3>你喜欢哪种章节编号？</h3><p>直接看效果选，不需要理解规则。</p></div></div>
           <div class="scheme-grid" id="schemeChoices"><div class="placeholder">先选“写书”或“写文章”。</div></div>
         </section>
 
-        <section class="step locked" id="stepOs" aria-disabled="true">
+        <section class="step locked" id="stepOs" aria-disabled="true" inert>
           <div class="step-head"><span class="step-no">3</span><div><h3>你在哪台电脑上使用 Word？</h3><p id="osHint">我们会匹配常用中文字体和快捷键。</p></div></div>
           <div class="choice-grid two" id="osChoices">
-            <button class="choice" type="button" data-os="windows" aria-pressed="false"><span class="icon">▣</span><strong>Windows</strong><small>宋体、黑体、微软雅黑等</small></button>
-            <button class="choice" type="button" data-os="macos" aria-pressed="false"><span class="icon">⌘</span><strong>macOS / MacBook</strong><small>Songti SC、PingFang SC 等</small></button>
+            <button class="choice" type="button" data-os="windows" aria-pressed="false" disabled><span class="icon">▣</span><strong>Windows</strong><small>宋体、黑体、微软雅黑等</small></button>
+            <button class="choice" type="button" data-os="macos" aria-pressed="false" disabled><span class="icon">⌘</span><strong>macOS / MacBook</strong><small>Songti SC、PingFang SC 等</small></button>
           </div>
         </section>
 

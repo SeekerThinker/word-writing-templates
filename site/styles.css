@@ -71,11 +71,11 @@ button { font: inherit; color: inherit; }
 main { overflow: hidden; }
 .hero {
   width: min(1160px, calc(100% - 40px));
-  margin: 48px auto 90px;
-  min-height: 520px;
+  margin: 42px auto 64px;
+  min-height: 500px;
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(380px, .92fr);
-  gap: 76px;
+  gap: 72px;
   align-items: center;
 }
 .eyebrow {
@@ -192,6 +192,7 @@ h1 {
   background: #292d28;
 }
 .step.locked { opacity: .42; }
+.step.locked button:disabled { opacity: 1; cursor: default; }
 .step-head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
 .step-no {
   width: 30px; height: 30px; flex: 0 0 30px;
@@ -331,7 +332,7 @@ footer {
 .footer-links a:hover { color: var(--ink); }
 
 @media (max-width: 880px) {
-  .hero { grid-template-columns: 1fr; gap: 42px; margin-top: 32px; }
+  .hero { grid-template-columns: 1fr; gap: 36px; margin-top: 28px; margin-bottom: 52px; }
   .thought-card { transform: none; }
   .scheme-grid { grid-template-columns: 1fr; }
   .scheme { display: grid; grid-template-columns: 150px 1fr; }
@@ -344,8 +345,8 @@ footer {
   .topbar { width: min(100% - 28px, 1160px); min-height: 68px; }
   .brand strong { font-size: 13px; }
   .top-link { display: none; }
-  .hero { width: min(100% - 28px, 1160px); margin-bottom: 64px; }
-  h1 { font-size: 45px; }
+  .hero { width: min(100% - 28px, 1160px); margin-bottom: 48px; }
+  h1 { font-size: clamp(38px, 11.5vw, 45px); }
   .lead { font-size: 17px; }
   .hero-actions .btn { width: 100%; }
   .thought-card { padding: 20px 15px; }
