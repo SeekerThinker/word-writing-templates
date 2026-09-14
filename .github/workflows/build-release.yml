@@ -37,7 +37,7 @@ jobs:
       - name: Build Word templates
         run: python scripts/build_templates.py
 
-      - name: Add thinking-first starter cues
+      - name: Promote the single thinking-first public templates
         run: python scripts/thinking_support.py
 
       - name: Add caption, note and bibliography defaults
@@ -52,7 +52,7 @@ jobs:
           python scripts/reference_check.py
           python scripts/stability_check.py
 
-      - name: Render all templates for layout smoke test
+      - name: Render 12 public templates for layout smoke test
         shell: bash
         run: |
           set -euo pipefail
@@ -62,8 +62,8 @@ jobs:
             out="build/render-smoke/$(dirname "$rel")"
             mkdir -p "$out"
             libreoffice --headless --convert-to pdf --outdir "$out" "$f" >/dev/null
-          done < <(find templates -name '*.dotx' -print0)
-          test "$(find build/render-smoke -name '*.pdf' | wc -l)" -eq 24
+          done < <(find templates/windows/books templates/windows/articles templates/macos/books templates/macos/articles -name '*.dotx' -print0)
+          test "$(find build/render-smoke -name '*.pdf' | wc -l)" -eq 12
 
       - name: Build quick-start PDFs
         run: python scripts/make_quickstart.py
@@ -87,46 +87,33 @@ jobs:
               shortcut="Command + Option"
             fi
             folder="Word结构化写作模板-${label}-v${VERSION}"
-            mkdir -p \
-              "build/${folder}/书籍模板/带常用结构" \
-              "build/${folder}/文章模板/带常用结构"
+            mkdir -p "build/${folder}/书籍模板" "build/${folder}/文章模板"
             cp templates/${platform}/books/*.dotx "build/${folder}/书籍模板/"
             cp templates/${platform}/articles/*.dotx "build/${folder}/文章模板/"
-            cp templates/${platform}/structured/books/*.dotx "build/${folder}/书籍模板/带常用结构/"
-            cp templates/${platform}/structured/articles/*.dotx "build/${folder}/文章模板/带常用结构/"
             cp "docs/开始使用-${platform}.pdf" "build/${folder}/00-开始使用.pdf"
             printf '%s\n' \
               "Word 结构化思考与写作模板集 - ${label}" \
               "" \
-              "这套模板最重要的用途不是排版，而是帮助你用标题层级组织思考。" \
-              "最简单的用法只有 3 步：" \
-              "1. 进入“书籍模板”或“文章模板”。" \
-              "2. 直接双击文件夹第一层的 .dotx 文件。" \
-              "3. 把“在这里输入……”换成自己的内容。需要拆分时用“标题 2”；写一会儿后打开“导航窗格”，只看标题检查结构。" \
+              "v4 开始，一个编号方案只保留一个用户模板。" \
+              "模板已经同时准备好思考阶段和成稿阶段需要的结构；暂时不用的前言、摘要、作者信息、目录、参考文献等区块可以先保留，需要时填写，不需要时删除。" \
               "" \
-              "不用先把大纲一次想完。可以边写、边整理、边调整；标题层级负责把思路显出来。" \
+              "最重要的用法：" \
+              "1. 大主题 / 大问题用“标题 1”。" \
+              "2. 需要拆分时用“标题 2 / 标题 3 / 标题 4”。" \
+              "3. 写一会儿后打开 Word“导航窗格”，只看标题，检查并列、缺口、重复和顺序。" \
               "" \
-              "如果你希望文档一开始就更接近成稿：" \
-              "- 书籍：进入“书籍模板/带常用结构”。除书名页、前言、目录、页码和参考文献外，还会让每个一级章标题自动另起新页，并预置镜像页边距、装订线、奇偶页页眉和外侧页码。" \
-              "- 文章：进入“文章模板/带常用结构”，会预置作者/单位/日期、摘要、关键词、页码和参考文献，并优化首页信息间距。" \
-              "- 这些区块都是可选的，不需要时直接删除即可。" \
+              "这些可选成稿区块不会进入导航窗格；导航窗格主要呈现你的标题层级，也就是思考结构。" \
               "" \
-              "图表与交叉引用：" \
-              "- Word 的“引用 → 插入题注”已经预置“图 / 表”标签。书籍按一级章编号，文章连续编号。" \
-              "- 文中引用图表时，用“引用 → 交叉引用”，不要手打编号；增删图表后更新域即可。" \
+              "书籍模板已经预置：书名页、作者、前言、自动目录、正文、附录、参考文献、正文页码、双面打印页边距、奇偶页页眉。" \
+              "文章模板已经预置：作者、单位、日期、摘要、关键词、正文、参考文献和页码。" \
               "" \
-              "脚注与参考文献：" \
-              "- 插入脚注可以用 ${shortcut} + F；模板已统一脚注 / 尾注的字体与字号。" \
-              "- 手工参考文献可选“参考文献条目”样式，自动使用悬挂缩进。" \
-              "- 使用 Zotero / EndNote 时让引用管理器继续管理字段和格式，模板不会要求宏，也不会主动改写引用字段。" \
+              "图表与引用：Word 的“引用 → 插入题注 / 交叉引用”已经预置图表规则；脚注、尾注和参考文献样式也已准备好。" \
+              "使用 Zotero / EndNote 时继续让引用管理器管理字段和格式，模板不会要求宏，也不会主动改写第三方引用字段。" \
               "" \
-              "第一次打开模板时，只需要记住：" \
-              "- 大主题 / 大问题用“标题 1”，需要继续拆分时用“标题 2 / 标题 3 / 标题 4”。" \
-              "- 写一会儿后打开导航窗格，只看标题，检查并列、缺口、重复和顺序。" \
-              "- 也可以用快捷键；本平台快捷键前缀是：${shortcut}" \
-              "- 快捷键没反应也没关系，直接用“样式”即可，标题编号仍会正常工作。" \
+              "快捷键是可选的；本平台标题快捷键前缀是：${shortcut}" \
+              "快捷键没反应时直接用 Word 的“样式”即可。" \
               "" \
-              "不知道该选哪个模板？" \
+              "不知道选哪种编号？" \
               "https://seekerthinker.github.io/toolbox/word-writing-templates/" \
               "" \
               "更完整的一页说明见：00-开始使用.pdf" \
@@ -137,6 +124,13 @@ jobs:
       - name: Audit user download packages
         run: python scripts/release_audit.py
 
+      - name: Upload release packages for QA
+        uses: actions/upload-artifact@v4
+        with:
+          name: v4-release-packages
+          path: release/*.zip
+          retention-days: 7
+
       - name: Commit generated downloads and previews
         run: |
           git config user.name "github-actions[bot]"
@@ -145,7 +139,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No generated changes to commit."
           else
-            git commit -m "build: refresh templates, previews and downloads"
+            git commit -m "build: refresh v4 templates, previews and downloads"
             git push
           fi
 
@@ -159,7 +153,7 @@ jobs:
           MAC="release/Word结构化写作模板-macOS-v${VERSION}.zip"
           cp "$WIN" Word-Writing-Templates-Windows.zip
           cp "$MAC" Word-Writing-Templates-macOS.zip
-          NOTES="v${VERSION} 稳定维护版：继续保持 6 种编号 × 2 种起步方式 × 2 个平台，共 24 个无宏 .dotx 模板。本次把“辅助思考”落实到第一次打开模板的体验：不增加段落、不增加选择，直接开始版仍只有标题、一级标题和正文，但正文占位会轻量提示在需要拆分时使用“标题 2”，并在写一会儿后通过 Word 导航窗格只看标题检查整体结构。快速开始 PDF 与下载包说明同步强调“思考 → 结构 → 写作 → 排版”。"
+          NOTES="v${VERSION}：从两种起步方式收敛为一个用户模板。现在是 6 种编号 × 2 个平台，共 12 个无宏 .dotx。每个模板同时包含可选成稿结构和标题层级思考结构；前言、摘要、作者信息、目录、参考文献等可以暂时保留或删除，并使用非大纲样式避免干扰 Word 导航窗格。标题 1–4 继续作为核心思考树，用户不再需要先判断‘直接开始’还是‘带常用结构’。"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" Word-Writing-Templates-Windows.zip Word-Writing-Templates-macOS.zip --clobber
           else

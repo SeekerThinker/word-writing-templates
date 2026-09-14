@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        谢谢你帮忙验证。无需技术背景。如果某一项有问题，也请照样选择“有问题”并提交。
+        谢谢你帮忙验证。v4 每一种编号只有一个用户模板；无需技术背景。如果某一项有问题，也请照样选择“有问题”并提交。
 
   - type: dropdown
     id: platform
@@ -37,17 +37,6 @@ body:
         - 文章｜中文论文
         - 文章｜数字层级
         - 文章｜中文简洁
-    validations:
-      required: true
-
-  - type: dropdown
-    id: starter_variant
-    attributes:
-      label: 模板版本
-      description: 第一层文件是“直接开始版”；“带常用结构”子文件夹里的文件是“带常用结构版”。
-      options:
-        - 直接开始版
-        - 带常用结构版
     validations:
       required: true
 
@@ -96,10 +85,22 @@ body:
       required: true
 
   - type: dropdown
+    id: navigation_result
+    attributes:
+      label: 导航窗格（建议测试）
+      description: 标题 1～4 是否形成清晰结构？前言、摘要、参考文献等可选成稿区块是否没有挤进标题树？
+      options:
+        - "✅ 正常"
+        - "❌ 有问题"
+        - "⏭️ 未测试"
+    validations:
+      required: true
+
+  - type: dropdown
     id: toc_result
     attributes:
       label: 目录（可选测试）
-      description: 带常用结构的书籍模板建议测试这一项。
+      description: 书籍模板建议测试目录更新。
       options:
         - "✅ 正常"
         - "❌ 有问题"
@@ -111,7 +112,7 @@ body:
     id: manuscript_layout_result
     attributes:
       label: 成稿 / 打印版式（可选测试）
-      description: 带常用结构版建议测试。书籍可看罗马页码、正文从 1 重启、新增“标题 1”自动换页、奇偶页页眉、外侧页码和镜像页边距；文章可看页码与首页信息排布。
+      description: 书籍可看罗马页码、正文从 1 重启、新增“标题 1”自动换页、奇偶页页眉、外侧页码和镜像页边距；文章可看页码与首页信息排布。
       options:
         - "✅ 正常"
         - "❌ 有问题"
@@ -124,17 +125,6 @@ body:
     attributes:
       label: 题注 / 脚注 / 参考文献（可选测试）
       description: 可任选一种测试：图表题注与交叉引用、脚注 / 尾注，或“参考文献条目”的悬挂缩进。使用 Zotero / EndNote 的测试结果可写在补充说明。
-      options:
-        - "✅ 正常"
-        - "❌ 有问题"
-        - "⏭️ 未测试"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: navigation_result
-    attributes:
-      label: 导航窗格（可选测试）
       options:
         - "✅ 正常"
         - "❌ 有问题"

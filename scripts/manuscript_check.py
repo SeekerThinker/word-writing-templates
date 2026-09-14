@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify manuscript-oriented features in structured Word templates."""
+"""Verify manuscript-oriented features in the 12 v4 public templates."""
 from pathlib import Path
 import zipfile
 from lxml import etree
@@ -10,14 +10,13 @@ NS = {'w': W}
 Q = lambda tag: f'{{{W}}}{tag}'
 
 errors = []
-files = sorted((ROOT / 'templates').rglob('*.dotx'))
-structured_count = 0
+files = sorted(
+    p for p in (ROOT / 'templates').rglob('*.dotx')
+    if 'structured' not in p.relative_to(ROOT / 'templates').parts
+)
 
 for path in files:
     rel = path.relative_to(ROOT / 'templates')
-    if 'structured' not in rel.parts:
-        continue
-    structured_count += 1
     try:
         with zipfile.ZipFile(path) as zf:
             names = set(zf.namelist())
@@ -77,17 +76,18 @@ for path in files:
                     errors.append(f'{rel}: odd-page chapter STYLEREF missing')
                 if sum('PAGE' in field for field in fields) < 4:
                     errors.append(f'{rel}: PAGE fields missing from front/body odd/even footers')
-                if '作者：在这里填写作者' not in text:
-                    errors.append(f'{rel}: title-page author placeholder missing')
+                for token in ('作者：在这里填写作者', '前言（可选）', '附录（可选）', '参考文献（可选）'):
+                    if token not in text:
+                        errors.append(f'{rel}: missing book manuscript block {token}')
                 if '以后每个“标题 1”都会自动另起新页' not in text:
                     errors.append(f'{rel}: chapter page-break guidance missing')
 
             else:
                 if '作者信息' not in style_names or '日期' not in style_names:
                     errors.append(f'{rel}: article metadata styles missing')
-                for token in ('作者：在这里填写作者', '单位：在这里填写单位', '日期：在这里填写日期'):
+                for token in ('作者：在这里填写作者', '单位：在这里填写单位', '日期：在这里填写日期', '摘要（可选）', '关键词：', '参考文献（可选）'):
                     if token not in text:
-                        errors.append(f'{rel}: missing article metadata placeholder {token}')
+                        errors.append(f'{rel}: missing article manuscript block {token}')
 
                 footer_parts = [name for name in names if name.startswith('word/footer') and name.endswith('.xml')]
                 if not footer_parts:
@@ -106,8 +106,8 @@ for path in files:
     except Exception as exc:
         errors.append(f'{rel}: {exc}')
 
-if structured_count != 12:
-    errors.append(f'expected 12 structured templates, got {structured_count}')
+if len(files) != 12:
+    errors.append(f'expected 12 public unified templates, got {len(files)}')
 
 if errors:
     print('MANUSCRIPT CHECK FAILED')
@@ -115,4 +115,4 @@ if errors:
         print('-', error)
     raise SystemExit(1)
 
-print('OK: v2.7 manuscript features verified for 12 structured templates')
+print('OK: manuscript features verified for 12 public unified templates')

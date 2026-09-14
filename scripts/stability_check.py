@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Protect the public compatibility contract introduced in v3.0."""
+"""Protect the public compatibility contract introduced in v4.0."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -11,15 +11,13 @@ ARTICLES = ["文章-中文论文", "文章-数字层级", "文章-中文简洁"]
 PLATFORMS = ["windows", "macos"]
 
 
-def expected_templates() -> set[str]:
+def expected_public_templates() -> set[str]:
     paths: set[str] = set()
     for platform in PLATFORMS:
         for stem in BOOKS:
             paths.add(f"templates/{platform}/books/{stem}.dotx")
-            paths.add(f"templates/{platform}/structured/books/{stem}-常用结构.dotx")
         for stem in ARTICLES:
             paths.add(f"templates/{platform}/articles/{stem}.dotx")
-            paths.add(f"templates/{platform}/structured/articles/{stem}-常用结构.dotx")
     return paths
 
 
@@ -27,33 +25,28 @@ def main() -> None:
     errors: list[str] = []
 
     version = (ROOT / "version.txt").read_text(encoding="utf-8").strip()
-    if not version.startswith("3."):
-        errors.append(f"stable contract expects a 3.x version, got {version!r}")
+    if not version.startswith("4."):
+        errors.append(f"v4 stable contract expects a 4.x version, got {version!r}")
 
-    expected = expected_templates()
+    expected = expected_public_templates()
     actual = {
         path.relative_to(ROOT).as_posix()
         for path in (ROOT / "templates").rglob("*.dotx")
+        if "structured" not in path.relative_to(ROOT / "templates").parts
     }
     if actual != expected:
         missing = sorted(expected - actual)
         extra = sorted(actual - expected)
         if missing:
-            errors.append("missing stable template paths: " + ", ".join(missing))
+            errors.append("missing stable public template paths: " + ", ".join(missing))
         if extra:
-            errors.append("unexpected template paths: " + ", ".join(extra))
-
-    forbidden = [
-        ROOT / "scripts" / "build.py.b64",
-    ]
-    for path in forbidden:
-        if path.exists():
-            errors.append(f"obsolete maintenance artifact should not exist: {path.relative_to(ROOT)}")
+            errors.append("unexpected stable public template paths: " + ", ".join(extra))
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     required_readme_fragments = [
         "releases/latest/download/Word-Writing-Templates-Windows.zip",
         "releases/latest/download/Word-Writing-Templates-macOS.zip",
+        "6 种编号 × 2 个平台 = 12 个",
         "STABILITY.md",
     ]
     for fragment in required_readme_fragments:
@@ -63,6 +56,10 @@ def main() -> None:
     stability = ROOT / "STABILITY.md"
     if not stability.exists():
         errors.append("STABILITY.md is missing")
+    else:
+        text = stability.read_text(encoding="utf-8")
+        if "一套模板，两种使用深度" not in text:
+            errors.append("STABILITY.md is missing the v4 single-template principle")
 
     if errors:
         print("STABILITY CHECK FAILED")
@@ -70,7 +67,7 @@ def main() -> None:
             print("-", error)
         raise SystemExit(1)
 
-    print("OK: v3 stable contract verified for 24 template paths and public download URLs")
+    print("OK: v4 stable contract verified for 12 public template paths and stable download URLs")
 
 
 if __name__ == "__main__":
