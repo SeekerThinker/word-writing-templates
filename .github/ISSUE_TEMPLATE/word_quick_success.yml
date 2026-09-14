@@ -34,16 +34,6 @@ body:
     validations:
       required: true
 
-  - type: dropdown
-    id: starter_variant
-    attributes:
-      label: 模板版本
-      options:
-        - 直接开始版
-        - 带常用结构版
-    validations:
-      required: true
-
   - type: checkboxes
     id: confirmation
     attributes:
