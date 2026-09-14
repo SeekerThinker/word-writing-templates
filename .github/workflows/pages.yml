@@ -42,9 +42,13 @@ jobs:
           for item in required:
               if item not in app:
                   raise SystemExit(f'missing public download mapping: {item}')
-          for phrase in ['标题层级', '导航窗格', '选一个适合你的模板']:
+          for phrase in ['标题层级', '导航窗格', '选一个适合你的模板', '积累笔记']:
               if phrase not in page:
                   raise SystemExit(f'missing ordinary-user homepage concept: {phrase}')
+          forbidden_positioning = ['也把文章写完', '从想法一直长成最终文稿']
+          for phrase in forbidden_positioning:
+              if phrase in page:
+                  raise SystemExit(f'homepage regressed to mandatory-manuscript positioning: {phrase}')
           if 'word_quick_success' in page or 'word_compatibility_report' in page:
               raise SystemExit('homepage must not solicit compatibility feedback')
           print('Homepage contract OK')
