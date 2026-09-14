@@ -10,7 +10,7 @@
 
   const DATA = {
     book: {
-      label: "书籍",
+      label: "书籍 / 长篇",
       options: [
         { id: "book-cn-traditional", name: "中文传统", file: "书籍-中文传统.dotx", folder: "books", preview: "book-cn-traditional.png", example: "第一章 → 第一节 → 一、 → （一）", desc: "适合中文专著、教材和传统长篇作品。", recommended: true },
         { id: "book-chapter-decimal", name: "章节数字", file: "书籍-章节数字.dotx", folder: "books", preview: "book-chapter-decimal.png", example: "第1章 → 1.1 → 1.1.1 → 1.1.1.1", desc: "适合技术书、教程和研究专著。" },
@@ -18,7 +18,7 @@
       ]
     },
     article: {
-      label: "文章",
+      label: "文章 / 日常整理",
       options: [
         { id: "article-cn-academic", name: "中文论文", file: "文章-中文论文.dotx", folder: "articles", preview: "article-cn-academic.png", example: "一、 → （一） → 1. → （1）", desc: "适合中文论文、报告和正式文章。", recommended: true },
         { id: "article-decimal", name: "数字层级", file: "文章-数字层级.dotx", folder: "articles", preview: "article-decimal.png", example: "1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "适合研究、技术内容和需要清晰编号的笔记或文档。" },
