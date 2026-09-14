@@ -42,8 +42,7 @@
     resultImage: document.querySelector("#resultImage"),
     templateDownload: document.querySelector("#templateDownload"),
     packageDownload: document.querySelector("#packageDownload"),
-    resetBtn: document.querySelector("#resetBtn"),
-    quickPackage: document.querySelector("#quickPackage")
+    resetBtn: document.querySelector("#resetBtn")
   };
 
   const allOptions = () => Object.values(DATA).flatMap((group) => group.options);
@@ -68,6 +67,10 @@
   function lock(step, locked) {
     step.classList.toggle("locked", locked);
     step.setAttribute("aria-disabled", locked ? "true" : "false");
+    step.toggleAttribute("inert", locked);
+    step.querySelectorAll("button").forEach((button) => {
+      button.disabled = locked;
+    });
   }
 
   function renderSchemes() {
@@ -166,8 +169,6 @@
   if (detected) {
     const platform = detected === "macos" ? "macOS" : "Windows";
     el.osHint.textContent = `看起来你正在使用 ${platform}；如果 Word 在另一台电脑上，请按实际电脑选择。`;
-    el.quickPackage.href = PACKAGE[detected];
-    el.quickPackage.textContent = `下载 ${platform} 整包`;
   }
 
   const params = new URLSearchParams(window.location.search);
