@@ -34,6 +34,7 @@ jobs:
           from pathlib import Path
           app = Path('site/app.js').read_text(encoding='utf-8')
           page = Path('site/index.html').read_text(encoding='utf-8')
+          guide = Path('site/guide.html').read_text(encoding='utf-8')
           required = [
               '书籍-中文传统.dotx', '书籍-章节数字.dotx', '书籍-纯数字.dotx',
               '文章-中文论文.dotx', '文章-数字层级.dotx', '文章-中文简洁.dotx',
@@ -45,18 +46,21 @@ jobs:
           for phrase in ['标题层级', '导航窗格', '选一个适合你的模板', '积累笔记']:
               if phrase not in page:
                   raise SystemExit(f'missing ordinary-user homepage concept: {phrase}')
+          for phrase in ['打开导航窗格', '标题 1', '拖动标题', '自动目录']:
+              if phrase not in guide:
+                  raise SystemExit(f'missing usage-guide concept: {phrase}')
           forbidden_positioning = ['也把文章写完', '从想法一直长成最终文稿']
           for phrase in forbidden_positioning:
-              if phrase in page:
-                  raise SystemExit(f'homepage regressed to mandatory-manuscript positioning: {phrase}')
+              if phrase in page or phrase in guide:
+                  raise SystemExit(f'public site regressed to mandatory-manuscript positioning: {phrase}')
           if 'word_quick_success' in page or 'word_compatibility_report' in page:
               raise SystemExit('homepage must not solicit compatibility feedback')
-          print('Homepage contract OK')
+          print('Homepage and guide contract OK')
 
       - name: Assemble static site
         run: |
           mkdir -p _site/previews
-          cp site/index.html site/styles.css site/app.js _site/
+          cp site/index.html site/guide.html site/styles.css site/app.js _site/
           cp docs/assets/previews/*.png _site/previews/
           touch _site/.nojekyll
 
