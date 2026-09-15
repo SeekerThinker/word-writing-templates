@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Organize a document in a browser with a heading tree, then export a real structured .docx that can continue in Microsoft Word." />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>Online structured editor | Structured Thinking & Writing with Word</title>
+  <link rel="alternate" hreflang="zh-CN" href="../editor.html" />
+  <link rel="alternate" hreflang="en" href="./editor.html" />
+  <link rel="stylesheet" href="../editor.css" />
+</head>
+<body>
+  <header class="editor-topbar">
+    <a class="editor-brand" href="./" aria-label="Back to project home"><span class="editor-brand-mark">W</span><span class="editor-brand-copy"><strong>Structured Thinking & Writing with Word</strong><small>Online structured editor</small></span></a>
+    <div class="editor-top-actions">
+      <button class="editor-btn quiet" id="newDoc" type="button">New</button>
+      <button class="editor-btn quiet" id="importJson" type="button">Import backup</button>
+      <button class="editor-btn quiet" id="exportJson" type="button">Backup JSON</button>
+      <button class="editor-btn primary" id="exportWord" type="button">Export Word</button>
+      <input id="importFile" type="file" accept="application/json,.json" />
+    </div>
+  </header>
+  <main class="editor-shell">
+    <section class="editor-intro">
+      <div><h1>Organize in the browser.<br />Continue in Word.</h1><p>Keep the heading tree on the left and develop the current section on the right. Dragging, promoting, demoting, and moving headings acts on whole sections. Export uses the existing Word templates as the package skeleton, so headings remain real Heading 1–4 paragraphs.</p></div>
+      <div class="save-chip"><strong id="saveStatus">Loading…</strong><span id="privacyNote"></span></div>
+    </section>
+    <section class="settings" aria-label="Document settings">
+      <div class="doc-title-field"><label for="docTitle">Document title</label><input id="docTitle" type="text" autocomplete="off" /></div>
+      <div class="field"><label for="docLanguage">Document language</label><select id="docLanguage"><option value="en">English</option><option value="zh">中文</option></select></div>
+      <div class="field"><label for="platform">Word platform after export</label><select id="platform"><option value="windows">Windows</option><option value="macos">macOS</option></select></div>
+      <div class="field"><label for="preset">Word numbering & layout skeleton</label><select id="preset"></select></div>
+      <label class="toggle-field"><input id="headingsOnly" type="checkbox" /> <span>Headings only</span></label>
+    </section>
+    <p class="format-hint" id="formatHint"></p>
+    <section class="workspace">
+      <aside class="outline-panel" aria-label="Document structure">
+        <div class="panel-head"><div><strong>Structure</strong><small>Drag a heading to move its whole section</small></div><button class="mini-btn" id="addRoot" type="button">+ Heading 1</button></div>
+        <div class="outline-list" id="outlineList"></div>
+      </aside>
+      <section class="document-panel" aria-label="Current section editor">
+        <div class="document-head"><span class="level-chip" id="selectedLevel">Heading 1 · H1</span><div class="structure-actions">
+          <button id="addSibling" type="button">+ Sibling</button><button id="addChild" type="button">+ Child</button><button id="promote" type="button">← Promote</button><button id="demote" type="button">Demote →</button><button id="moveUp" type="button">↑ Move</button><button id="moveDown" type="button">↓ Move</button><button id="splitSection" type="button">Split</button><button id="mergePrevious" type="button">Merge previous</button><button id="deleteSection" type="button" class="danger">Delete</button>
+        </div></div>
+        <div class="editor-page">
+          <input class="section-title" id="sectionTitle" type="text" autocomplete="off" aria-label="Current heading" />
+          <div class="body-toolbar" aria-label="Body formatting helpers"><button id="fmtBold" type="button"><strong>B</strong></button><button id="fmtItalic" type="button"><em>I</em></button><span class="sep" aria-hidden="true"></span><button id="fmtQuote" type="button">Quote</button><button id="fmtBullet" type="button">• List</button><button id="fmtNumber" type="button">1. List</button><button id="fmtClear" type="button">Paragraph</button></div>
+          <textarea class="section-body" id="sectionBody" spellcheck="true" aria-label="Current section body"></textarea>
+          <p class="syntax-help">Lightweight formatting: <code>**bold**</code>, <code>*italic*</code>, <code>&gt;</code> for a quote, <code>-</code> for bullets, and <code>1.</code> for a numbered list. These are converted into Word runs and paragraphs on export.</p>
+          <div class="keyboard-help"><kbd>Ctrl/⌘ + Enter</kbd> new sibling　 <kbd>Ctrl/⌘ + Shift + Enter</kbd> new child　 <kbd>Alt + ← / →</kbd> promote/demote　 <kbd>Alt + ↑ / ↓</kbd> move sibling　 <kbd>Ctrl/⌘ + S</kbd> save locally　 <kbd>Ctrl/⌘ + Shift + S</kbd> export Word</div>
+          <p class="editor-note">Your draft is stored locally in this browser and is not uploaded to the project server. For important work, download JSON backups periodically. This version supports browser → Word export; it does not attempt lossless round-tripping of arbitrary complex `.docx` files.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.2/dist/jszip.min.js"></script>
+  <script src="../editor.js"></script>
+  <script src="../i18n.js"></script>
+</body>
+</html>
