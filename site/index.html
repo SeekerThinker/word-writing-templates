@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="借助 Word 的标题层级与导航窗格，让思考的结构可见、可检查、可重组。可以用来整理思路、积累笔记，也可以在需要时继续发展成文章、报告或书稿。" />
+  <meta name="description" content="借助 Word 的标题层级与导航窗格，让思路可见、可检查、可重组。适合日常笔记、研究整理、文章、报告与长篇写作。" />
   <meta name="theme-color" content="#f7f5ef" />
   <title>Word 结构化思考与写作</title>
   <link rel="stylesheet" href="./styles.css" />
@@ -58,6 +58,54 @@
     .doc-c.moving,
     .doc-d.moving { animation-name: demo-doc-block-with-copy, demo-block-highlight; }
 
+    .tool-landscape { padding: 20px 20px 100px; }
+    .tool-table-wrap {
+      width: min(1040px, 100%);
+      margin: 36px auto 0;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.34);
+    }
+    .tool-table {
+      width: 100%;
+      min-width: 790px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .tool-table th,
+    .tool-table td {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    .tool-table tr:last-child td { border-bottom: 0; }
+    .tool-table th {
+      color: var(--muted);
+      background: rgba(255,255,255,.45);
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+    .tool-table td:first-child {
+      width: 150px;
+      font-weight: 750;
+    }
+    .tool-table a {
+      color: var(--accent);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    .tool-table .word-row td { background: var(--accent-soft); }
+    .tool-note {
+      width: min(900px, 100%);
+      margin: 22px auto 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .tool-note strong { color: var(--ink); }
+
     @keyframes demo-nav-reveal-left {
       0%, 23% { opacity: 0; transform: translateX(-9px); }
       31%, 96% { opacity: 1; transform: translateX(0); }
@@ -94,6 +142,9 @@
       .doc-b { animation-name: demo-doc-b-with-copy-mobile; }
       .doc-c, .doc-d { animation-name: demo-doc-block-with-copy-mobile; }
       .doc-c.moving, .doc-d.moving { animation-name: demo-doc-block-with-copy-mobile, demo-block-highlight; }
+      .tool-landscape { padding-left: 14px; padding-right: 14px; }
+      .tool-table-wrap { margin-top: 28px; }
+      .tool-note { font-size: 13px; }
     }
 
     @keyframes demo-doc-b-with-copy-mobile {
@@ -132,8 +183,8 @@
     <section class="hero">
       <div class="hero-copy">
         <p class="eyebrow">想到 → 写下 → 归类 → 重组</p>
-        <h1>让思路有层级，<br />让结构随思考而变。</h1>
-        <p class="lead">这套模板不要求每个想法最后都变成文章。你可以用标题给笔记、问题、材料和想法分组、命名、排序，再从导航窗格看整体；结构可以停留在整理与积累，也可以在需要时继续发展成文章、报告或书稿。</p>
+        <h1>让思路有层级，<br />让整体始终看得见。</h1>
+        <p class="lead">用标题给笔记、问题、材料和想法分组、命名、排序，再从导航窗格看整体、调顺序。想到什么先写下来，关系可以边写边理；日常记录、研究整理和长篇写作，都可以沿着同一套层级继续展开。</p>
         <div class="hero-actions">
           <a class="btn primary" href="#chooser">帮我选模板</a>
         </div>
@@ -145,7 +196,7 @@
             <span class="caption-1">先写下来，再用快捷键分出层级</span>
             <span class="caption-2">左侧导航窗格把层级变成全局视图</span>
             <span class="caption-3">顺序不对？直接拖动标题</span>
-            <span class="caption-4">标题和正文一起移动，结构随思考调整</span>
+            <span class="caption-4">标题和正文一起移动，整体关系更清楚</span>
           </div>
           <span class="demo-live"><i></i> 动态演示</span>
         </div>
@@ -240,15 +291,57 @@
         <article><span>01</span><h3>给想法归类、命名</h3><p>想到什么先写下来，再问：这一部分到底在讲什么？给它一个标题，就是在给想法找到位置。</p></article>
         <article><span>02</span><h3>把关系放进层级</h3><p>哪些内容应该并列，哪些应该从属于更大的主题？用标题 1、标题 2、标题 3、标题 4，把这些关系逐层显出来。</p></article>
         <article><span>03</span><h3>从局部回到整体</h3><p>记录或展开内容时看眼前这一点；觉得乱时就回到导航窗格，只看标题，检查缺口、重复、层级和顺序。</p></article>
-        <article><span>04</span><h3>重组，再继续</h3><p>标题可以改名、拆分、合并或移动。结构不必在开始前一次想定，它可以随着思考不断调整。</p></article>
+        <article><span>04</span><h3>重组，再继续</h3><p>标题可以改名、拆分、合并或移动。结构不必在开始前一次想定，它可以随着内容逐渐清楚。</p></article>
       </div>
+    </section>
+
+    <section class="tool-landscape" aria-labelledby="toolLandscapeTitle">
+      <div class="section-head compact">
+        <p class="eyebrow">同一种结构思想，也有不同工具</p>
+        <h2 id="toolLandscapeTitle">为什么这个项目仍然选择 Word</h2>
+        <p>Scrivener、Org mode、Quarto 都在用不同方式处理层级、章节和重组。这里简单放在一起看，不是为了分高下，而是为了看清：结构化写作是一类方法，Word 只是其中一种实现。</p>
+      </div>
+      <div class="tool-table-wrap">
+        <table class="tool-table">
+          <thead>
+            <tr><th>工具</th><th>结构怎么呈现</th><th>怎么重组</th><th>更适合</th></tr>
+          </thead>
+          <tbody>
+            <tr class="word-row">
+              <td><a href="https://support.microsoft.com/en-us/word/use-the-navigation-pane-in-word" rel="noreferrer" target="_blank">Word</a></td>
+              <td>标题层级 + 导航窗格</td>
+              <td>在导航窗格拖动标题，整节内容随之移动</td>
+              <td>日常记录、论文、报告、长篇文稿，以及需要 `.docx` 交换的场景</td>
+            </tr>
+            <tr>
+              <td><a href="https://www.literatureandlatte.com/blog/use-folders-and-texts-to-power-up-the-scrivener-binder" rel="noreferrer" target="_blank">Scrivener</a></td>
+              <td>Binder 中的章、节、场景树</td>
+              <td>拖动节点，或用移动快捷键调整顺序和层级</td>
+              <td>专门的长篇写作项目</td>
+            </tr>
+            <tr>
+              <td><a href="https://orgmode.org/manual/Structure-Editing.html" rel="noreferrer" target="_blank">Org mode</a></td>
+              <td>标题树 / subtree</td>
+              <td>用快捷键移动、提升或降低整个子树</td>
+              <td>键盘驱动的结构化记录与知识整理</td>
+            </tr>
+            <tr>
+              <td><a href="https://quarto.org/docs/books/" rel="noreferrer" target="_blank">Quarto</a></td>
+              <td>多文件章节 + Markdown</td>
+              <td>调整章节文件和项目结构</td>
+              <td>用一套源文件输出 HTML、PDF、Word、EPUB 等格式</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tool-note"><strong>这个项目选择 Word，理由很简单：</strong>很多人本来就在 Word 里记录、协作和交稿，不必先更换软件，也不必学习新的标记语法。把标题层级、导航窗格和模板能力真正用起来，Word 本身就能成为一个很实用的结构化思考与写作环境。</p>
     </section>
 
     <section class="ready">
       <div class="section-head compact">
         <p class="eyebrow">整理、积累、成稿，可以共用一套结构</p>
-        <h2>先把思路留下来，去向不必预先决定</h2>
-        <p>你在标题层级里梳理出的关系，可以只是长期积累的笔记，也可以在后来发展成文章、报告或书稿。需要继续写时，不必重新搬运：导航、编号、目录和正文组织都可以沿用已经形成的结构。</p>
+        <h2>同一套层级，可以一直沿用</h2>
+        <p>日常笔记、研究材料、文章、报告或书稿，都可以用同一套标题层级来组织。需要形成正式文稿时，导航、编号、目录和正文组织可以直接沿用前面已经整理出的关系。</p>
       </div>
       <div class="pill-grid">
         <span>自动多级编号</span><span>目录</span><span>页码</span><span>作者信息</span><span>前言 / 摘要</span><span>题注与交叉引用</span><span>脚注 / 尾注</span><span>参考文献样式</span>
@@ -257,14 +350,14 @@
 
     <section class="start">
       <div class="start-card">
-        <div><p class="eyebrow">一个可以长期使用的循环</p><h2>想到 → 写下 → 归类 → 命名 → 看整体</h2><p>然后调整顺序、发现缺口，再继续记录或展开。这个循环可以发生在日常笔记里，也可以发生在写文章时；停在整理阶段没有问题，需要时再往下发展。</p></div>
+        <div><p class="eyebrow">一个可以长期使用的循环</p><h2>想到 → 写下 → 归类 → 命名 → 看整体</h2><p>然后调整顺序、发现缺口，再继续记录或展开。这个循环既适合日常笔记和研究整理，也适合文章、报告和长篇写作。</p></div>
         <a class="btn primary" href="#chooser">现在选模板</a>
       </div>
     </section>
 
     <section class="faq">
       <div class="section-head compact"><h2>常见问题</h2></div>
-      <details><summary>一定要把这些内容写成文章吗？</summary><p>不需要。你可以一直把它当作整理思路、积累笔记和组织材料的工具。哪天需要写文章、报告或更长的文稿，再沿着已经形成的结构继续展开即可。</p></details>
+      <details><summary>适合拿来整理什么内容？</summary><p>日常笔记、研究材料、论文、报告和长篇文稿都可以。核心不是文档最后叫什么，而是先用标题层级把内容之间的关系整理清楚。</p></details>
       <details><summary>我不熟悉 Word 样式，也能用吗？</summary><p>可以。模板已经设置好标题层级、编号和正文样式。需要增加层级时，在 Word 的“样式”里选“标题 1”“标题 2”即可；需要的话，也可以用模板预设的快捷键。</p></details>
       <details><summary>前言、摘要、目录现在用不上，怎么办？</summary><p>先放着即可，不会影响日常整理或正文写作；完全不需要的内容也可以删除。这些部分不会混进核心标题层级，也不会打乱导航窗格里的思考脉络。</p></details>
       <details><summary>导航窗格到底有什么用？</summary><p>它会把文档中的标题按层级列在一旁，让你在“专心处理眼前一点”和“退回来观察整体”之间随时切换。在支持拖动重排的 Word 桌面版中，还可以直接移动文档中的整块内容。</p></details>
