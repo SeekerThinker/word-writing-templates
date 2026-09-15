@@ -95,7 +95,7 @@ jobs:
               if phrase not in en_editor:
                   raise SystemExit(f'missing English editor concept: {phrase}')
 
-          for phrase in ['IndexedDB', 'Heading${node.level}', 'word/document.xml', 'word/styles.xml', 'word/numbering.xml', '[Content_Types].xml', 'JSZip.loadAsync']:
+          for phrase in ['indexedDB', 'Heading${node.level}', 'word/document.xml', 'word/styles.xml', 'word/numbering.xml', '[Content_Types].xml', 'JSZip.loadAsync']:
               if phrase not in editor_js:
                   raise SystemExit(f'missing structured Word export behavior: {phrase}')
 
