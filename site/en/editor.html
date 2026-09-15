@@ -9,6 +9,24 @@
   <link rel="alternate" hreflang="zh-CN" href="../editor.html" />
   <link rel="alternate" hreflang="en" href="./editor.html" />
   <link rel="stylesheet" href="../editor.css" />
+  <style>
+    .shortcut-panel { margin-top: 14px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.7); overflow: hidden; }
+    .shortcut-panel summary { padding: 12px 14px; cursor: pointer; font-size: 12px; font-weight: 800; }
+    .shortcut-panel[open] summary { border-bottom: 1px solid var(--line); }
+    .shortcut-content { padding: 14px; }
+    .shortcut-content > p { margin: 0 0 12px; color: var(--muted); font-size: 11px; line-height: 1.65; }
+    .shortcut-group + .shortcut-group { margin-top: 18px; }
+    .shortcut-group h3 { margin: 0 0 8px; font-size: 12px; }
+    .shortcut-table-wrap { overflow-x: auto; }
+    .shortcut-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .shortcut-table th, .shortcut-table td { padding: 8px 10px; border: 1px solid var(--line); text-align: left; vertical-align: middle; }
+    .shortcut-table th { background: #f3f3ef; font-weight: 800; }
+    .shortcut-table kbd { white-space: nowrap; padding: 2px 5px; border: 1px solid #d4d5cf; border-bottom-width: 2px; border-radius: 5px; background: white; font: 700 10px/1.2 ui-monospace, monospace; }
+    .shortcut-panel[data-active-platform="windows"] [data-shortcut-platform="windows"],
+    .shortcut-panel[data-active-platform="macos"] [data-shortcut-platform="macos"] { background: var(--accent-soft); color: var(--accent); }
+    .shortcut-platform-note { margin-top: 8px !important; }
+    @media (max-width: 720px) { .shortcut-table { min-width: 560px; } }
+  </style>
 </head>
 <body>
   <header class="editor-topbar">
@@ -60,7 +78,37 @@
         <div class="document-canvas" id="documentCanvas" aria-live="polite"></div>
         <div class="editor-help">
           <p class="syntax-help">Lightweight formatting: <code>**bold**</code>, <code>*italic*</code>, <code>&gt;</code> for a quote, <code>-</code> for bullets, and <code>1.</code> for a numbered list. These are converted into Word runs and paragraphs on export.</p>
-          <div class="keyboard-help"><kbd>Ctrl/⌘ + Enter</kbd> new sibling　 <kbd>Ctrl/⌘ + Shift + Enter</kbd> new child　 <kbd>Alt + ← / →</kbd> promote/demote　 <kbd>Alt + ↑ / ↓</kbd> move sibling　 <kbd>Ctrl/⌘ + S</kbd> save locally　 <kbd>Ctrl/⌘ + Shift + S</kbd> export Word</div>
+          <details class="shortcut-panel" id="shortcutPanel" open>
+            <summary>Keyboard shortcuts: Windows / macOS</summary>
+            <div class="shortcut-content">
+              <p>The browser editor and the exported Word template use two different shortcut sets. The column matching the platform selected above is highlighted.</p>
+              <section class="shortcut-group" aria-labelledby="web-shortcuts-title">
+                <h3 id="web-shortcuts-title">Browser editor shortcuts</h3>
+                <div class="shortcut-table-wrap"><table class="shortcut-table"><thead><tr><th>Action</th><th data-shortcut-platform="windows">Windows</th><th data-shortcut-platform="macos">macOS</th></tr></thead><tbody>
+                  <tr><td>New sibling heading</td><td data-shortcut-platform="windows"><kbd>Ctrl + Enter</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + Enter</kbd></td></tr>
+                  <tr><td>New child heading</td><td data-shortcut-platform="windows"><kbd>Ctrl + Shift + Enter</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + Shift + Enter</kbd></td></tr>
+                  <tr><td>Promote / demote heading</td><td data-shortcut-platform="windows"><kbd>Alt + ← / →</kbd></td><td data-shortcut-platform="macos"><kbd>⌥ + ← / →</kbd></td></tr>
+                  <tr><td>Move sibling up / down</td><td data-shortcut-platform="windows"><kbd>Alt + ↑ / ↓</kbd></td><td data-shortcut-platform="macos"><kbd>⌥ + ↑ / ↓</kbd></td></tr>
+                  <tr><td>Save locally</td><td data-shortcut-platform="windows"><kbd>Ctrl + S</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + S</kbd></td></tr>
+                  <tr><td>Export Word</td><td data-shortcut-platform="windows"><kbd>Ctrl + Shift + S</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + Shift + S</kbd></td></tr>
+                </tbody></table></div>
+              </section>
+              <section class="shortcut-group" aria-labelledby="word-shortcuts-title">
+                <h3 id="word-shortcuts-title">Word template style shortcuts</h3>
+                <div class="shortcut-table-wrap"><table class="shortcut-table"><thead><tr><th>Style</th><th data-shortcut-platform="windows">Windows</th><th data-shortcut-platform="macos">macOS</th></tr></thead><tbody>
+                  <tr><td>Heading 1</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + 1</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + 1</kbd></td></tr>
+                  <tr><td>Heading 2</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + 2</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + 2</kbd></td></tr>
+                  <tr><td>Heading 3</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + 3</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + 3</kbd></td></tr>
+                  <tr><td>Heading 4</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + 4</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + 4</kbd></td></tr>
+                  <tr><td>Body text</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + Z</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + Z</kbd></td></tr>
+                  <tr><td>Table text</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + B</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + B</kbd></td></tr>
+                  <tr><td>Quote / special paragraph</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + Q</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + Q</kbd></td></tr>
+                  <tr><td>Footnote</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + F</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + F</kbd></td></tr>
+                </tbody></table></div>
+                <p class="shortcut-platform-note">These shortcuts travel with the template and documents created from it; they do not change Word's global shortcut settings.</p>
+              </section>
+            </div>
+          </details>
           <p class="editor-note">Your draft is stored locally in this browser and is not uploaded to the project server. Page preview is for an overall layout check; final line and page breaks are determined by Word after export.</p>
         </div>
       </section>
@@ -68,6 +116,16 @@
   </main>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="../editor.js"></script>
+  <script>
+    (() => {
+      const panel = document.querySelector('#shortcutPanel');
+      const platform = document.querySelector('#platform');
+      if (!panel || !platform) return;
+      const sync = () => panel.dataset.activePlatform = platform.value === 'macos' ? 'macos' : 'windows';
+      platform.addEventListener('change', sync);
+      sync();
+    })();
+  </script>
   <script src="../i18n.js"></script>
 </body>
 </html>

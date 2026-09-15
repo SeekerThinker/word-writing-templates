@@ -9,6 +9,24 @@
   <link rel="alternate" hreflang="zh-CN" href="./editor.html" />
   <link rel="alternate" hreflang="en" href="./en/editor.html" />
   <link rel="stylesheet" href="./editor.css" />
+  <style>
+    .shortcut-panel { margin-top: 14px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.7); overflow: hidden; }
+    .shortcut-panel summary { padding: 12px 14px; cursor: pointer; font-size: 12px; font-weight: 800; }
+    .shortcut-panel[open] summary { border-bottom: 1px solid var(--line); }
+    .shortcut-content { padding: 14px; }
+    .shortcut-content > p { margin: 0 0 12px; color: var(--muted); font-size: 11px; line-height: 1.65; }
+    .shortcut-group + .shortcut-group { margin-top: 18px; }
+    .shortcut-group h3 { margin: 0 0 8px; font-size: 12px; }
+    .shortcut-table-wrap { overflow-x: auto; }
+    .shortcut-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .shortcut-table th, .shortcut-table td { padding: 8px 10px; border: 1px solid var(--line); text-align: left; vertical-align: middle; }
+    .shortcut-table th { background: #f3f3ef; font-weight: 800; }
+    .shortcut-table kbd { white-space: nowrap; padding: 2px 5px; border: 1px solid #d4d5cf; border-bottom-width: 2px; border-radius: 5px; background: white; font: 700 10px/1.2 ui-monospace, monospace; }
+    .shortcut-panel[data-active-platform="windows"] [data-shortcut-platform="windows"],
+    .shortcut-panel[data-active-platform="macos"] [data-shortcut-platform="macos"] { background: var(--accent-soft); color: var(--accent); }
+    .shortcut-platform-note { margin-top: 8px !important; }
+    @media (max-width: 720px) { .shortcut-table { min-width: 560px; } }
+  </style>
 </head>
 <body>
   <header class="editor-topbar">
@@ -60,7 +78,37 @@
         <div class="document-canvas" id="documentCanvas" aria-live="polite"></div>
         <div class="editor-help">
           <p class="syntax-help">轻量格式：<code>**加粗**</code>、<code>*斜体*</code>、行首 <code>&gt;</code> 引用、<code>-</code> 项目符号、<code>1.</code> 编号列表。导出 Word 时会转换成相应段落和文字格式。</p>
-          <div class="keyboard-help"><kbd>Ctrl/⌘ + Enter</kbd> 新增同级　 <kbd>Ctrl/⌘ + Shift + Enter</kbd> 新增子标题　 <kbd>Alt + ← / →</kbd> 升降级　 <kbd>Alt + ↑ / ↓</kbd> 同级移动　 <kbd>Ctrl/⌘ + S</kbd> 本地保存　 <kbd>Ctrl/⌘ + Shift + S</kbd> 导出 Word</div>
+          <details class="shortcut-panel" id="shortcutPanel" open>
+            <summary>快捷键：Windows / macOS</summary>
+            <div class="shortcut-content">
+              <p>网页编辑器与导出后的 Word 模板使用两套不同的快捷键。下表会根据上方选择的平台强调对应一列。</p>
+              <section class="shortcut-group" aria-labelledby="web-shortcuts-title">
+                <h3 id="web-shortcuts-title">网页编辑器快捷键</h3>
+                <div class="shortcut-table-wrap"><table class="shortcut-table"><thead><tr><th>操作</th><th data-shortcut-platform="windows">Windows</th><th data-shortcut-platform="macos">macOS</th></tr></thead><tbody>
+                  <tr><td>新增同级标题</td><td data-shortcut-platform="windows"><kbd>Ctrl + Enter</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + Enter</kbd></td></tr>
+                  <tr><td>新增子标题</td><td data-shortcut-platform="windows"><kbd>Ctrl + Shift + Enter</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + Shift + Enter</kbd></td></tr>
+                  <tr><td>标题升级 / 降级</td><td data-shortcut-platform="windows"><kbd>Alt + ← / →</kbd></td><td data-shortcut-platform="macos"><kbd>⌥ + ← / →</kbd></td></tr>
+                  <tr><td>同级上移 / 下移</td><td data-shortcut-platform="windows"><kbd>Alt + ↑ / ↓</kbd></td><td data-shortcut-platform="macos"><kbd>⌥ + ↑ / ↓</kbd></td></tr>
+                  <tr><td>本地保存</td><td data-shortcut-platform="windows"><kbd>Ctrl + S</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + S</kbd></td></tr>
+                  <tr><td>导出 Word</td><td data-shortcut-platform="windows"><kbd>Ctrl + Shift + S</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + Shift + S</kbd></td></tr>
+                </tbody></table></div>
+              </section>
+              <section class="shortcut-group" aria-labelledby="word-shortcuts-title">
+                <h3 id="word-shortcuts-title">Word 模板样式快捷键</h3>
+                <div class="shortcut-table-wrap"><table class="shortcut-table"><thead><tr><th>样式</th><th data-shortcut-platform="windows">Windows</th><th data-shortcut-platform="macos">macOS</th></tr></thead><tbody>
+                  <tr><td>标题 1</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + 1</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + 1</kbd></td></tr>
+                  <tr><td>标题 2</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + 2</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + 2</kbd></td></tr>
+                  <tr><td>标题 3</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + 3</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + 3</kbd></td></tr>
+                  <tr><td>标题 4</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + 4</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + 4</kbd></td></tr>
+                  <tr><td>正文</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + Z</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + Z</kbd></td></tr>
+                  <tr><td>表格文字</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + B</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + B</kbd></td></tr>
+                  <tr><td>引用 / 特殊段落</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + Q</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + Q</kbd></td></tr>
+                  <tr><td>脚注</td><td data-shortcut-platform="windows"><kbd>Ctrl + Alt + F</kbd></td><td data-shortcut-platform="macos"><kbd>⌘ + ⌥ + F</kbd></td></tr>
+                </tbody></table></div>
+                <p class="shortcut-platform-note">这一组快捷键随模板及其创建的 Word 文档使用，不会改动 Word 的全局快捷键设置。</p>
+              </section>
+            </div>
+          </details>
           <p class="editor-note">正文和结构默认只保存在这个浏览器的本地存储中，不会上传到项目服务器。页面预览用于观察整体版面，最终换行和分页仍以导出后 Word 的实际排版为准。</p>
         </div>
       </section>
@@ -68,6 +116,16 @@
   </main>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="./editor.js"></script>
+  <script>
+    (() => {
+      const panel = document.querySelector('#shortcutPanel');
+      const platform = document.querySelector('#platform');
+      if (!panel || !platform) return;
+      const sync = () => panel.dataset.activePlatform = platform.value === 'macos' ? 'macos' : 'windows';
+      platform.addEventListener('change', sync);
+      sync();
+    })();
+  </script>
   <script src="./i18n.js"></script>
 </body>
 </html>
