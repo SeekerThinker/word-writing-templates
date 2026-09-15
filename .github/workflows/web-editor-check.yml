@@ -1,0 +1,87 @@
+name: Validate web editor Word export
+
+on:
+  pull_request:
+    paths:
+      - 'site/**'
+      - 'templates/**'
+      - 'scripts/web_editor_export_check.py'
+      - '.github/workflows/web-editor-check.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'templates/**'
+      - 'scripts/web_editor_export_check.py'
+      - '.github/workflows/web-editor-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install Open XML test dependencies
+        run: python -m pip install 'lxml>=5.0' 'python-docx>=1.1'
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check site/editor.js
+          node --check site/i18n.js
+          node --check site/app.js
+          node --check site/en/app.js
+
+      - name: Check bilingual editor contract
+        shell: python
+        run: |
+          from pathlib import Path
+
+          zh = Path('site/editor.html').read_text(encoding='utf-8')
+          en = Path('site/en/editor.html').read_text(encoding='utf-8')
+          en_app = Path('site/en/app.js').read_text(encoding='utf-8')
+          editor = Path('site/editor.js').read_text(encoding='utf-8')
+          i18n = Path('site/i18n.js').read_text(encoding='utf-8')
+
+          integrity = 'sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=='
+          for page in (zh, en):
+              for phrase in ['jszip/3.10.1/jszip.min.js', integrity, 'referrerpolicy="no-referrer"']:
+                  if phrase not in page:
+                      raise SystemExit(f'missing pinned JSZip contract: {phrase}')
+
+          if 'name: "Traditional Chinese"' in en_app:
+              raise SystemExit('English UI must not use “Traditional Chinese” as a numbering-scheme name')
+          for phrase in [
+              'Chinese traditional chapter numbering',
+              'Chinese academic numbering',
+              'Compact Chinese numbering',
+          ]:
+              if phrase not in en_app or phrase not in editor:
+                  raise SystemExit(f'missing clarified English numbering name: {phrase}')
+
+          for phrase in [
+              'indexedDB', 'word/document.xml', 'word/styles.xml', 'word/numbering.xml',
+              '[Content_Types].xml', 'Heading${node.level}', 'JSZip.loadAsync',
+          ]:
+              if phrase not in editor:
+                  raise SystemExit(f'missing editor/export behavior: {phrase}')
+
+          for phrase in ['editor.html', 'language-switch', 'window.location.replace']:
+              if phrase not in i18n:
+                  raise SystemExit(f'missing editor language routing behavior: {phrase}')
+
+          print('Bilingual web editor contract OK')
+
+      - name: Validate real Word template export packages
+        run: python scripts/web_editor_export_check.py

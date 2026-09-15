@@ -12,17 +12,17 @@
     book: {
       label: "Book / long-form",
       options: [
-        { id: "book-cn-traditional", name: "Traditional Chinese", file: "书籍-中文传统.dotx", folder: "books", preview: "book-cn-traditional.png", example: "第一章 → 第一节 → 一、 → （一）", desc: "For Chinese-language books, teaching materials, and traditional long-form writing.", recommended: true },
-        { id: "book-chapter-decimal", name: "Chapter decimals", file: "书籍-章节数字.dotx", folder: "books", preview: "book-chapter-decimal.png", example: "Chapter 1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "For technical books, tutorials, and research monographs." },
-        { id: "book-pure-decimal", name: "Pure decimals", file: "书籍-纯数字.dotx", folder: "books", preview: "book-pure-decimal.png", example: "1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "For clean modern long-form documents and ebooks." }
+        { id: "book-cn-traditional", name: "Chinese traditional chapter numbering", file: "书籍-中文传统.dotx", folder: "books", preview: "book-cn-traditional.png", example: "第一章 → 第一节 → 一、 → （一）", desc: "A Chinese-style chapter numbering system for Chinese-language books, teaching materials, and traditional long-form writing.", recommended: true },
+        { id: "book-chapter-decimal", name: "Chapter + decimal numbering", file: "书籍-章节数字.dotx", folder: "books", preview: "book-chapter-decimal.png", example: "Chapter 1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "For technical books, tutorials, and research monographs." },
+        { id: "book-pure-decimal", name: "Decimal long-form numbering", file: "书籍-纯数字.dotx", folder: "books", preview: "book-pure-decimal.png", example: "1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "For clean modern long-form documents and ebooks." }
       ]
     },
     article: {
       label: "Article / everyday notes",
       options: [
-        { id: "article-cn-academic", name: "Chinese academic", file: "文章-中文论文.dotx", folder: "articles", preview: "article-cn-academic.png", example: "一、 → （一） → 1. → （1）", desc: "For Chinese academic papers, reports, and formal articles.", recommended: true },
+        { id: "article-cn-academic", name: "Chinese academic numbering", file: "文章-中文论文.dotx", folder: "articles", preview: "article-cn-academic.png", example: "一、 → （一） → 1. → （1）", desc: "A Chinese academic numbering system for papers, reports, and formal Chinese-language articles.", recommended: true },
         { id: "article-decimal", name: "Decimal hierarchy", file: "文章-数字层级.dotx", folder: "articles", preview: "article-decimal.png", example: "1 → 1.1 → 1.1.1 → 1.1.1.1", desc: "For research, technical writing, and notes that benefit from explicit numbering." },
-        { id: "article-cn-compact", name: "Compact Chinese", file: "文章-中文简洁.dotx", folder: "articles", preview: "article-cn-compact.png", example: "一、 → 1. → （1） → ①", desc: "For general articles, research notes, and everyday organization." }
+        { id: "article-cn-compact", name: "Compact Chinese numbering", file: "文章-中文简洁.dotx", folder: "articles", preview: "article-cn-compact.png", example: "一、 → 1. → （1） → ①", desc: "A compact Chinese numbering system for general articles, research notes, and everyday organization." }
       ]
     }
   };
