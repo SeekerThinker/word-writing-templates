@@ -32,37 +32,96 @@ jobs:
         shell: python
         run: |
           from pathlib import Path
+
           app = Path('site/app.js').read_text(encoding='utf-8')
           page = Path('site/index.html').read_text(encoding='utf-8')
           guide = Path('site/guide.html').read_text(encoding='utf-8')
+          en_app = Path('site/en/app.js').read_text(encoding='utf-8')
+          en_page = Path('site/en/index.html').read_text(encoding='utf-8')
+          en_guide = Path('site/en/guide.html').read_text(encoding='utf-8')
+          i18n = Path('site/i18n.js').read_text(encoding='utf-8')
+
           required = [
               '书籍-中文传统.dotx', '书籍-章节数字.dotx', '书籍-纯数字.dotx',
               '文章-中文论文.dotx', '文章-数字层级.dotx', '文章-中文简洁.dotx',
               'Word-Writing-Templates-Windows.zip', 'Word-Writing-Templates-macOS.zip',
           ]
           for item in required:
-              if item not in app:
-                  raise SystemExit(f'missing public download mapping: {item}')
+              if item not in app or item not in en_app:
+                  raise SystemExit(f'missing bilingual public download mapping: {item}')
+
           for phrase in ['标题层级', '导航窗格', '选一个适合你的模板', '积累笔记']:
               if phrase not in page:
-                  raise SystemExit(f'missing ordinary-user homepage concept: {phrase}')
+                  raise SystemExit(f'missing Chinese homepage concept: {phrase}')
           for phrase in ['打开导航窗格', '标题 1', '拖动标题', '自动目录']:
               if phrase not in guide:
-                  raise SystemExit(f'missing usage-guide concept: {phrase}')
+                  raise SystemExit(f'missing Chinese usage-guide concept: {phrase}')
+
+          for phrase in ['Turn Word into', 'Navigation Pane', 'Find a template', 'Start in 3 minutes']:
+              if phrase not in en_page:
+                  raise SystemExit(f'missing English homepage concept: {phrase}')
+          for phrase in ['Open the Navigation Pane', 'Heading 1', 'drag a heading', 'table of contents']:
+              if phrase not in en_guide:
+                  raise SystemExit(f'missing English usage-guide concept: {phrase}')
+
+          for phrase in ['navigator.languages', 'localStorage', 'language-switch', 'window.location.replace']:
+              if phrase not in i18n:
+                  raise SystemExit(f'missing language behavior: {phrase}')
+
           forbidden_positioning = ['也把文章写完', '从想法一直长成最终文稿']
           for phrase in forbidden_positioning:
               if phrase in page or phrase in guide:
                   raise SystemExit(f'public site regressed to mandatory-manuscript positioning: {phrase}')
           if 'word_quick_success' in page or 'word_compatibility_report' in page:
               raise SystemExit('homepage must not solicit compatibility feedback')
-          print('Homepage and guide contract OK')
+
+          print('Bilingual homepage and guide contract OK')
 
       - name: Assemble static site
+        shell: python
         run: |
-          mkdir -p _site/previews
-          cp site/index.html site/guide.html site/styles.css site/app.js _site/
-          cp docs/assets/previews/*.png _site/previews/
-          touch _site/.nojekyll
+          from pathlib import Path
+          import shutil
+
+          site = Path('site')
+          out = Path('_site')
+          if out.exists():
+              shutil.rmtree(out)
+          shutil.copytree(site, out)
+
+          previews = out / 'previews'
+          previews.mkdir(parents=True, exist_ok=True)
+          for source in Path('docs/assets/previews').glob('*.png'):
+              shutil.copy2(source, previews / source.name)
+
+          # The Chinese source pages stay simple in the repository; the deployed
+          # copies receive the shared language detector/switcher and hreflang links.
+          zh_index = out / 'index.html'
+          text = zh_index.read_text(encoding='utf-8')
+          text = text.replace(
+              '<link rel="stylesheet" href="./styles.css" />',
+              '<link rel="alternate" hreflang="zh-CN" href="./" />\n'
+              '  <link rel="alternate" hreflang="en" href="./en/" />\n'
+              '  <link rel="stylesheet" href="./styles.css" />'
+          )
+          text = text.replace(
+              '<script src="./app.js"></script>',
+              '<script src="./i18n.js"></script>\n  <script src="./app.js"></script>'
+          )
+          zh_index.write_text(text, encoding='utf-8')
+
+          zh_guide = out / 'guide.html'
+          text = zh_guide.read_text(encoding='utf-8')
+          text = text.replace(
+              '<link rel="stylesheet" href="./styles.css" />',
+              '<link rel="alternate" hreflang="zh-CN" href="./guide.html" />\n'
+              '  <link rel="alternate" hreflang="en" href="./en/guide.html" />\n'
+              '  <link rel="stylesheet" href="./styles.css" />'
+          )
+          text = text.replace('</body>', '  <script src="./i18n.js"></script>\n</body>')
+          zh_guide.write_text(text, encoding='utf-8')
+
+          (out / '.nojekyll').touch()
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
