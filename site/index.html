@@ -7,6 +7,116 @@
   <meta name="theme-color" content="#f7f5ef" />
   <title>Word 结构化思考与写作</title>
   <link rel="stylesheet" href="./styles.css" />
+  <style>
+    .demo-body {
+      grid-template-columns: minmax(138px, .78fr) minmax(0, 1.22fr);
+      min-height: 292px;
+    }
+    .demo-navigation {
+      grid-column: 1;
+      grid-row: 1;
+      border-right: 1px solid #e2e3de;
+      background: #f6f7f4;
+      transform: translateX(-9px);
+      animation-name: demo-nav-reveal-left;
+    }
+    .demo-document {
+      grid-column: 2;
+      grid-row: 1;
+      border-right: 0;
+      background: #fff;
+    }
+    .demo-doc-row {
+      min-height: 48px;
+      grid-template-columns: 38px minmax(0, 1fr);
+      align-items: start;
+      gap: 6px;
+      padding: 6px;
+    }
+    .demo-doc-row em {
+      grid-row: 1;
+      margin-top: 1px;
+    }
+    .demo-doc-copy { min-width: 0; }
+    .demo-doc-row b {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 11px;
+    }
+    .demo-doc-row small {
+      display: block;
+      color: #989b93;
+      font-size: 7.5px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+    .demo-doc-row.level-2 { padding-left: 13px; }
+    .demo-doc-row.level-3 { padding-left: 22px; }
+    .doc-b { animation-name: demo-doc-b-with-copy; }
+    .doc-c,
+    .doc-d { animation-name: demo-doc-block-with-copy; }
+    .doc-c.moving,
+    .doc-d.moving { animation-name: demo-doc-block-with-copy, demo-block-highlight; }
+
+    @keyframes demo-nav-reveal-left {
+      0%, 23% { opacity: 0; transform: translateX(-9px); }
+      31%, 96% { opacity: 1; transform: translateX(0); }
+      100% { opacity: 0; transform: translateX(-9px); }
+    }
+    @keyframes demo-doc-b-with-copy {
+      0%, 52% { transform: translateY(0); }
+      68%, 96% { transform: translateY(102px); }
+      100% { transform: translateY(0); }
+    }
+    @keyframes demo-doc-block-with-copy {
+      0%, 52% { transform: translateY(0); }
+      68%, 96% { transform: translateY(-51px); }
+      100% { transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .demo-body {
+        grid-template-columns: minmax(104px, .72fr) minmax(0, 1.28fr);
+        min-height: 266px;
+      }
+      .demo-navigation { padding: 10px 6px 12px; }
+      .demo-document { padding: 10px 7px 12px; }
+      .demo-doc-row {
+        min-height: 44px;
+        grid-template-columns: 31px minmax(0, 1fr);
+        gap: 4px;
+        padding: 5px 3px;
+      }
+      .demo-doc-row.level-2 { padding-left: 8px; }
+      .demo-doc-row.level-3 { padding-left: 13px; }
+      .demo-doc-row b { font-size: 9px; margin-bottom: 2px; }
+      .demo-doc-row small { font-size: 6.5px; line-height: 1.4; }
+      .doc-b { animation-name: demo-doc-b-with-copy-mobile; }
+      .doc-c, .doc-d { animation-name: demo-doc-block-with-copy-mobile; }
+      .doc-c.moving, .doc-d.moving { animation-name: demo-doc-block-with-copy-mobile, demo-block-highlight; }
+    }
+
+    @keyframes demo-doc-b-with-copy-mobile {
+      0%, 52% { transform: translateY(0); }
+      68%, 96% { transform: translateY(94px); }
+      100% { transform: translateY(0); }
+    }
+    @keyframes demo-doc-block-with-copy-mobile {
+      0%, 52% { transform: translateY(0); }
+      68%, 96% { transform: translateY(-47px); }
+      100% { transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .demo-navigation { opacity: 1; transform: none; }
+      .doc-b { transform: translateY(102px); }
+      .doc-c, .doc-d { transform: translateY(-51px); }
+    }
+    @media (max-width: 600px) and (prefers-reduced-motion: reduce) {
+      .doc-b { transform: translateY(94px); }
+      .doc-c, .doc-d { transform: translateY(-47px); }
+    }
+  </style>
 </head>
 <body>
   <a class="skip" href="#chooser">跳到模板选择</a>
@@ -29,29 +139,19 @@
         </div>
         <p class="micro">不用安装插件，不用启用宏，也不必先弄懂复杂的多级列表。</p>
       </div>
-      <div class="thought-demo" aria-label="动态演示：用快捷键设置标题层级，在导航窗格中检查结构，并拖动标题调整顺序。">
+      <div class="thought-demo" aria-label="动态演示：左侧导航窗格显示标题结构，右侧正文保留具体内容，并通过拖动标题调整整节顺序。">
         <div class="demo-head" aria-hidden="true">
           <div class="demo-captions">
             <span class="caption-1">先写下来，再用快捷键分出层级</span>
-            <span class="caption-2">导航窗格把层级变成全局视图</span>
+            <span class="caption-2">左侧导航窗格把层级变成全局视图</span>
             <span class="caption-3">顺序不对？直接拖动标题</span>
-            <span class="caption-4">整块内容跟着移动，结构随思考调整</span>
+            <span class="caption-4">标题和正文一起移动，结构随思考调整</span>
           </div>
           <span class="demo-live"><i></i> 动态演示</span>
         </div>
         <div class="demo-word" aria-hidden="true">
           <div class="demo-chrome"><span></span><span></span><span></span><b>思考笔记.docx</b></div>
           <div class="demo-body">
-            <div class="demo-document">
-              <div class="demo-pane-title">正文</div>
-              <div class="demo-doc-list">
-                <div class="demo-doc-row doc-a level-1"><em>标题 1</em><b>为什么要研究这个问题</b></div>
-                <div class="demo-doc-row doc-b level-2"><em>标题 2</em><b>问题从哪里来</b></div>
-                <div class="demo-doc-row doc-c level-2 moving"><em>标题 2</em><b>真正的矛盾是什么</b></div>
-                <div class="demo-doc-row doc-d level-3 moving"><em>标题 3</em><b>证据与例子</b></div>
-                <div class="demo-doc-row doc-e level-1"><em>标题 1</em><b>可以怎样解决</b></div>
-              </div>
-            </div>
             <div class="demo-navigation">
               <div class="demo-pane-title">导航窗格</div>
               <div class="demo-nav-list">
@@ -63,13 +163,23 @@
                 <span class="demo-drag-cursor">↕</span>
               </div>
             </div>
+            <div class="demo-document">
+              <div class="demo-pane-title">正文</div>
+              <div class="demo-doc-list">
+                <div class="demo-doc-row doc-a level-1"><em>标题 1</em><div class="demo-doc-copy"><b>为什么要研究这个问题</b><small>先把问题记下来，不急着得到一个完整答案。</small></div></div>
+                <div class="demo-doc-row doc-b level-2"><em>标题 2</em><div class="demo-doc-copy"><b>问题从哪里来</b><small>最初的判断，往往来自几个还没有连起来的现象。</small></div></div>
+                <div class="demo-doc-row doc-c level-2 moving"><em>标题 2</em><div class="demo-doc-copy"><b>真正的矛盾是什么</b><small>继续往下问，表面的症状和真正的问题可能并不相同。</small></div></div>
+                <div class="demo-doc-row doc-d level-3 moving"><em>标题 3</em><div class="demo-doc-copy"><b>证据与例子</b><small>把事实、数据和反例放在这里，检查前面的判断。</small></div></div>
+                <div class="demo-doc-row doc-e level-1"><em>标题 1</em><div class="demo-doc-copy"><b>可以怎样解决</b><small>关系更清楚以后，再决定下一步从哪里开始。</small></div></div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="demo-keys" aria-hidden="true">
           <span><kbd>Ctrl + Alt + 1 / 2 / 3 / 4</kbd> Windows</span>
           <span><kbd>⌘ + ⌥ + 1 / 2 / 3 / 4</kbd> macOS</span>
         </div>
-        <p>标题层级负责分组和关系，导航窗格负责看整体和重组。</p>
+        <p>正文里处理眼前这一点，左侧导航窗格随时用来检查和重组整体。</p>
       </div>
     </section>
 
