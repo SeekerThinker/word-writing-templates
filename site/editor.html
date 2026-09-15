@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="在浏览器中用标题层级和结构树整理内容，并导出为可在 Word 中继续编辑的结构化 .docx 文档。" />
+  <meta name="description" content="在浏览器中用标题层级和结构树浏览、编辑整篇文档，并导出为可在 Word 中继续编辑的结构化 .docx。" />
   <meta name="theme-color" content="#f7f5ef" />
   <title>在线结构化写作｜Word 结构化思考与写作</title>
   <link rel="alternate" hreflang="zh-CN" href="./editor.html" />
@@ -23,7 +23,7 @@
   </header>
   <main class="editor-shell">
     <section class="editor-intro">
-      <div><h1>在网页里整理结构，<br />在 Word 里继续。</h1><p>左边保持标题树，右边展开当前一节。拖动、升降级和重排会作用于整节内容；导出时使用现有 Word 模板作为骨架，标题仍然是真正的 Heading 1–4。</p></div>
+      <div><h1>左边看结构，<br />右边看全文。</h1><p>整篇文档默认连续显示并可直接编辑。点击左侧标题会定位到正文，滚动正文也会同步当前标题；需要时可以切到页面预览观察整体版面，或进入专注模式只处理当前一节。</p></div>
       <div class="save-chip"><strong id="saveStatus">正在载入…</strong><span id="privacyNote"></span></div>
     </section>
     <section class="settings" aria-label="文档设置">
@@ -39,17 +39,29 @@
         <div class="panel-head"><div><strong>结构</strong><small>拖动标题可以移动整节</small></div><button class="mini-btn" id="addRoot" type="button">+ 一级标题</button></div>
         <div class="outline-list" id="outlineList"></div>
       </aside>
-      <section class="document-panel" aria-label="当前章节编辑">
-        <div class="document-head"><span class="level-chip" id="selectedLevel">Heading 1 · H1</span><div class="structure-actions">
-          <button id="addSibling" type="button">+ 同级</button><button id="addChild" type="button">+ 子标题</button><button id="promote" type="button">← 升级</button><button id="demote" type="button">降级 →</button><button id="moveUp" type="button">↑ 上移</button><button id="moveDown" type="button">↓ 下移</button><button id="splitSection" type="button">拆分</button><button id="mergePrevious" type="button">合并到前一节</button><button id="deleteSection" type="button" class="danger">删除</button>
-        </div></div>
-        <div class="editor-page">
-          <input class="section-title" id="sectionTitle" type="text" autocomplete="off" aria-label="当前标题" />
+      <section class="document-panel" aria-label="全文编辑与预览">
+        <div class="document-head">
+          <div class="document-head-main">
+            <span class="level-chip" id="selectedLevel">Heading 1 · H1</span>
+            <div class="view-switch" role="group" aria-label="文档视图">
+              <button id="viewContinuous" type="button" aria-pressed="true">全文</button>
+              <button id="viewPages" type="button" aria-pressed="false">页面预览</button>
+              <button id="viewFocus" type="button" aria-pressed="false">专注</button>
+            </div>
+          </div>
+          <div class="structure-actions">
+            <button id="addSibling" type="button">+ 同级</button><button id="addChild" type="button">+ 子标题</button><button id="promote" type="button">← 升级</button><button id="demote" type="button">降级 →</button><button id="moveUp" type="button">↑ 上移</button><button id="moveDown" type="button">↓ 下移</button><button id="splitSection" type="button">拆分</button><button id="mergePrevious" type="button">合并到前一节</button><button id="deleteSection" type="button" class="danger">删除</button>
+          </div>
+        </div>
+        <div class="document-tools">
           <div class="body-toolbar" aria-label="正文格式辅助"><button id="fmtBold" type="button"><strong>B</strong></button><button id="fmtItalic" type="button"><em>I</em></button><span class="sep" aria-hidden="true"></span><button id="fmtQuote" type="button">引用</button><button id="fmtBullet" type="button">• 列表</button><button id="fmtNumber" type="button">1. 列表</button><button id="fmtClear" type="button">普通段落</button></div>
-          <textarea class="section-body" id="sectionBody" spellcheck="true" aria-label="当前章节正文"></textarea>
+          <p class="view-note" id="viewNote">全文模式：整篇文档连续显示并可直接编辑。</p>
+        </div>
+        <div class="document-canvas" id="documentCanvas" aria-live="polite"></div>
+        <div class="editor-help">
           <p class="syntax-help">轻量格式：<code>**加粗**</code>、<code>*斜体*</code>、行首 <code>&gt;</code> 引用、<code>-</code> 项目符号、<code>1.</code> 编号列表。导出 Word 时会转换成相应段落和文字格式。</p>
           <div class="keyboard-help"><kbd>Ctrl/⌘ + Enter</kbd> 新增同级　 <kbd>Ctrl/⌘ + Shift + Enter</kbd> 新增子标题　 <kbd>Alt + ← / →</kbd> 升降级　 <kbd>Alt + ↑ / ↓</kbd> 同级移动　 <kbd>Ctrl/⌘ + S</kbd> 本地保存　 <kbd>Ctrl/⌘ + Shift + S</kbd> 导出 Word</div>
-          <p class="editor-note">正文和结构默认只保存在这个浏览器的本地存储中，不会上传到项目服务器。建议重要内容定期下载 JSON 备份。当前版本支持“网页 → Word”；不尝试无损导入任意复杂 `.docx`。</p>
+          <p class="editor-note">正文和结构默认只保存在这个浏览器的本地存储中，不会上传到项目服务器。页面预览用于观察整体版面，最终换行和分页仍以导出后 Word 的实际排版为准。</p>
         </div>
       </section>
     </section>
