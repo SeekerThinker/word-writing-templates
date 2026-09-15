@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="自愿支持 Word 结构化思考与写作模板的持续维护。模板继续免费、开源；支持将用于模板维护、兼容性检查、使用说明与网站更新。" />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>支持项目｜Word 结构化思考与写作</title>
+  <link rel="alternate" hreflang="zh-CN" href="./support.html" />
+  <link rel="alternate" hreflang="en" href="./en/support.html" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    main { overflow: visible; }
+    .support-hero {
+      width: min(920px, calc(100% - 40px));
+      margin: 64px auto 54px;
+      text-align: center;
+    }
+    .support-hero h1 { max-width: 780px; margin-left: auto; margin-right: auto; }
+    .support-hero .lead { max-width: 760px; margin-left: auto; margin-right: auto; }
+    .support-grid {
+      width: min(1040px, calc(100% - 40px));
+      margin: 0 auto 44px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .support-card {
+      padding: 28px 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,.42);
+    }
+    .support-card .eyebrow { margin-bottom: 8px; }
+    .support-card h2 { margin-bottom: 10px; font: 650 24px/1.2 Georgia, "Songti SC", serif; }
+    .support-card p { color: var(--muted); font-size: 14px; }
+    .support-card ul { margin: 18px 0 22px; padding-left: 20px; color: #555850; font-size: 13px; }
+    .support-card li + li { margin-top: 5px; }
+    .support-button {
+      width: 100%;
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      color: var(--muted);
+      font-weight: 750;
+      font-size: 13px;
+    }
+    .support-button.pending { border-style: dashed; }
+    .support-note {
+      width: min(820px, calc(100% - 40px));
+      margin: 0 auto 92px;
+      padding: 24px 26px;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+      background: var(--accent-soft);
+      color: #405248;
+    }
+    .support-note h2 { margin-bottom: 8px; font-size: 18px; }
+    .support-note p { margin-bottom: 0; font-size: 14px; }
+    .support-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+    @media (max-width: 820px) { .support-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .support-hero, .support-grid, .support-note { width: min(100% - 28px, 1040px); }
+      .support-hero { margin-top: 38px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#channels">跳到支持方式</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="返回 Word 结构化思考与写作首页">
+      <span class="brand-mark">W</span>
+      <span><strong>Word 结构化思考与写作</strong><small>支持项目</small></span>
+    </a>
+    <a class="top-link" href="./">返回首页</a>
+  </header>
+
+  <main>
+    <section class="support-hero">
+      <p class="eyebrow">自愿支持</p>
+      <h1>模板会继续免费、开源。<br />如果它对你有帮助，也欢迎支持维护。</h1>
+      <p class="lead">支持不会解锁额外功能，也不会改变模板的免费使用和开源方式。收到的支持主要用于模板维护、兼容性检查、使用说明和网站更新。</p>
+      <div class="support-actions">
+        <a class="btn primary" href="#channels">查看支持方式</a>
+        <a class="btn quiet" href="./#chooser">继续免费下载模板</a>
+      </div>
+    </section>
+
+    <section class="support-grid" id="channels" aria-label="支持方式">
+      <article class="support-card">
+        <p class="eyebrow">中国用户</p>
+        <h2>支付宝 / 微信支付</h2>
+        <p>为中国大陆用户保留一个直接、熟悉的支付通道。接入后会在这里提供正式收款页面或二维码入口。</p>
+        <ul>
+          <li>适合一次性自愿支持</li>
+          <li>不要求注册 GitHub</li>
+          <li>实际收款信息接入后再公开</li>
+        </ul>
+        <span class="support-button pending" aria-disabled="true">支付通道待接入</span>
+      </article>
+
+      <article class="support-card">
+        <p class="eyebrow">国际用户</p>
+        <h2>银行卡 / 钱包支付</h2>
+        <p>国际通道计划支持常用银行卡，以及可用时的 Apple Pay、Google Pay 等方式；最终以实际支付页面提供的选项为准。</p>
+        <ul>
+          <li>适合海外一次性支持</li>
+          <li>尽量使用本地币种和常见支付方式</li>
+          <li>不在本站保存银行卡信息</li>
+        </ul>
+        <span class="support-button pending" aria-disabled="true">国际支付待接入</span>
+      </article>
+
+      <article class="support-card">
+        <p class="eyebrow">开源社区</p>
+        <h2>GitHub Sponsors</h2>
+        <p>如果后续开通 GitHub Sponsors，这里会提供一次性或长期赞助入口，适合已经在 GitHub 上使用开源项目的用户。</p>
+        <ul>
+          <li>适合开源社区用户</li>
+          <li>可作为长期支持渠道</li>
+          <li>是否启用以 GitHub Sponsors 账户状态为准</li>
+        </ul>
+        <span class="support-button pending" aria-disabled="true">GitHub Sponsors 待接入</span>
+      </article>
+    </section>
+
+    <section class="support-note">
+      <h2>为什么先把页面做好，再接支付链接？</h2>
+      <p>收款链接涉及具体账户、身份地区和支付平台配置，不适合在没有真实账户信息时猜测或伪造。现在先固定中英文页面、入口和结构；等支付账户准备好，只需替换对应按钮的实际链接即可。</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>Word 结构化思考与写作模板</span>
+    <span class="footer-links"><a href="./">首页</a><a href="./guide.html">使用说明</a><a href="https://github.com/SeekerThinker/word-writing-templates" rel="noreferrer">开源项目</a></span>
+  </footer>
+
+  <script src="./i18n.js"></script>
+</body>
+</html>
