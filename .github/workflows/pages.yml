@@ -6,6 +6,7 @@ on:
     paths:
       - 'site/**'
       - 'templates/**'
+      - 'scripts/web_editor_export_check.py'
       - 'docs/assets/previews/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
@@ -28,6 +29,25 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install Word export validation dependencies
+        run: python -m pip install 'lxml>=5.0' 'python-docx>=1.1'
+
+      - name: Check editor JavaScript syntax
+        run: |
+          node --check site/editor.js
+          node --check site/i18n.js
+          node --check site/app.js
+          node --check site/en/app.js
+
+      - name: Validate Word export packages
+        run: python scripts/web_editor_export_check.py
 
       - name: Validate public homepage
         shell: python
@@ -77,8 +97,18 @@ jobs:
           for phrase in ['IndexedDB', 'Heading${node.level}', 'word/document.xml', 'word/styles.xml', 'word/numbering.xml', '[Content_Types].xml', 'JSZip.loadAsync']:
               if phrase not in editor_js:
                   raise SystemExit(f'missing structured Word export behavior: {phrase}')
-          if 'jszip@3.10.2' not in editor or 'jszip@3.10.2' not in en_editor:
-              raise SystemExit('editor must pin the JSZip dependency')
+
+          integrity = 'sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=='
+          for editor_page in (editor, en_editor):
+              for phrase in ['jszip/3.10.1/jszip.min.js', integrity, 'referrerpolicy="no-referrer"']:
+                  if phrase not in editor_page:
+                      raise SystemExit(f'missing pinned JSZip contract: {phrase}')
+
+          if 'name: "Traditional Chinese"' in en_app:
+              raise SystemExit('English UI must not call a numbering preset “Traditional Chinese”')
+          for phrase in ['Chinese traditional chapter numbering', 'Chinese academic numbering', 'Compact Chinese numbering']:
+              if phrase not in en_app or phrase not in editor_js:
+                  raise SystemExit(f'missing clarified English numbering name: {phrase}')
 
           for phrase in ['navigator.languages', 'localStorage', 'language-switch', 'window.location.replace', 'editor.html']:
               if phrase not in i18n:
