@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'site/**'
+      - 'templates/**'
       - 'docs/assets/previews/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
@@ -36,9 +37,12 @@ jobs:
           app = Path('site/app.js').read_text(encoding='utf-8')
           page = Path('site/index.html').read_text(encoding='utf-8')
           guide = Path('site/guide.html').read_text(encoding='utf-8')
+          editor = Path('site/editor.html').read_text(encoding='utf-8')
+          editor_js = Path('site/editor.js').read_text(encoding='utf-8')
           en_app = Path('site/en/app.js').read_text(encoding='utf-8')
           en_page = Path('site/en/index.html').read_text(encoding='utf-8')
           en_guide = Path('site/en/guide.html').read_text(encoding='utf-8')
+          en_editor = Path('site/en/editor.html').read_text(encoding='utf-8')
           i18n = Path('site/i18n.js').read_text(encoding='utf-8')
 
           required = [
@@ -56,6 +60,9 @@ jobs:
           for phrase in ['打开导航窗格', '标题 1', '拖动标题', '自动目录']:
               if phrase not in guide:
                   raise SystemExit(f'missing Chinese usage-guide concept: {phrase}')
+          for phrase in ['在线结构化写作', '导出 Word', '拖动标题可以移动整节', '文档语言']:
+              if phrase not in editor:
+                  raise SystemExit(f'missing Chinese editor concept: {phrase}')
 
           for phrase in ['Turn Word into', 'Navigation Pane', 'Find a template', 'Start in 3 minutes']:
               if phrase not in en_page:
@@ -63,8 +70,17 @@ jobs:
           for phrase in ['Open the Navigation Pane', 'Heading 1', 'drag a heading', 'table of contents']:
               if phrase not in en_guide:
                   raise SystemExit(f'missing English usage-guide concept: {phrase}')
+          for phrase in ['Online structured editor', 'Export Word', 'Document language', 'Drag a heading']:
+              if phrase not in en_editor:
+                  raise SystemExit(f'missing English editor concept: {phrase}')
 
-          for phrase in ['navigator.languages', 'localStorage', 'language-switch', 'window.location.replace']:
+          for phrase in ['IndexedDB', 'Heading${node.level}', 'word/document.xml', 'word/styles.xml', 'word/numbering.xml', '[Content_Types].xml', 'JSZip.loadAsync']:
+              if phrase not in editor_js:
+                  raise SystemExit(f'missing structured Word export behavior: {phrase}')
+          if 'jszip@3.10.2' not in editor or 'jszip@3.10.2' not in en_editor:
+              raise SystemExit('editor must pin the JSZip dependency')
+
+          for phrase in ['navigator.languages', 'localStorage', 'language-switch', 'window.location.replace', 'editor.html']:
               if phrase not in i18n:
                   raise SystemExit(f'missing language behavior: {phrase}')
 
@@ -75,7 +91,7 @@ jobs:
           if 'word_quick_success' in page or 'word_compatibility_report' in page:
               raise SystemExit('homepage must not solicit compatibility feedback')
 
-          print('Bilingual homepage and guide contract OK')
+          print('Bilingual homepage, guide, and online editor contract OK')
 
       - name: Assemble static site
         shell: python
@@ -93,6 +109,11 @@ jobs:
           previews.mkdir(parents=True, exist_ok=True)
           for source in Path('docs/assets/previews').glob('*.png'):
               shutil.copy2(source, previews / source.name)
+
+          # Export uses the real .dotx packages as browser-side skeletons.
+          # Keep them on the same Pages origin so drafts never need to be sent
+          # to an application server just to create a .docx file.
+          shutil.copytree(Path('templates'), out / 'templates')
 
           # The Chinese source pages stay simple in the repository; the deployed
           # copies receive the shared language detector/switcher and hreflang links.
