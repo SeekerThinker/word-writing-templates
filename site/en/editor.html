@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Organize a document in a browser with a heading tree, then export a real structured .docx that can continue in Microsoft Word." />
+  <meta name="description" content="Browse and edit the whole document in a browser with a heading tree, then export a structured .docx that continues in Microsoft Word." />
   <meta name="theme-color" content="#f7f5ef" />
   <title>Online structured editor | Structured Thinking & Writing with Word</title>
   <link rel="alternate" hreflang="zh-CN" href="../editor.html" />
@@ -23,7 +23,7 @@
   </header>
   <main class="editor-shell">
     <section class="editor-intro">
-      <div><h1>Organize in the browser.<br />Continue in Word.</h1><p>Keep the heading tree on the left and develop the current section on the right. Dragging, promoting, demoting, and moving headings acts on whole sections. Export uses the existing Word templates as the package skeleton, so headings remain real Heading 1–4 paragraphs.</p></div>
+      <div><h1>See the structure.<br />Edit the whole document.</h1><p>The full document is shown as one continuous editable flow by default. Selecting a heading in the outline jumps to the same place in the document, and scrolling the document updates the current heading. Switch to page preview for a paper-like overview, or focus mode for one section and its subsections.</p></div>
       <div class="save-chip"><strong id="saveStatus">Loading…</strong><span id="privacyNote"></span></div>
     </section>
     <section class="settings" aria-label="Document settings">
@@ -39,17 +39,29 @@
         <div class="panel-head"><div><strong>Structure</strong><small>Drag a heading to move its whole section</small></div><button class="mini-btn" id="addRoot" type="button">+ Heading 1</button></div>
         <div class="outline-list" id="outlineList"></div>
       </aside>
-      <section class="document-panel" aria-label="Current section editor">
-        <div class="document-head"><span class="level-chip" id="selectedLevel">Heading 1 · H1</span><div class="structure-actions">
-          <button id="addSibling" type="button">+ Sibling</button><button id="addChild" type="button">+ Child</button><button id="promote" type="button">← Promote</button><button id="demote" type="button">Demote →</button><button id="moveUp" type="button">↑ Move</button><button id="moveDown" type="button">↓ Move</button><button id="splitSection" type="button">Split</button><button id="mergePrevious" type="button">Merge previous</button><button id="deleteSection" type="button" class="danger">Delete</button>
-        </div></div>
-        <div class="editor-page">
-          <input class="section-title" id="sectionTitle" type="text" autocomplete="off" aria-label="Current heading" />
+      <section class="document-panel" aria-label="Full document editor and preview">
+        <div class="document-head">
+          <div class="document-head-main">
+            <span class="level-chip" id="selectedLevel">Heading 1 · H1</span>
+            <div class="view-switch" role="group" aria-label="Document view">
+              <button id="viewContinuous" type="button" aria-pressed="true">Full document</button>
+              <button id="viewPages" type="button" aria-pressed="false">Page preview</button>
+              <button id="viewFocus" type="button" aria-pressed="false">Focus</button>
+            </div>
+          </div>
+          <div class="structure-actions">
+            <button id="addSibling" type="button">+ Sibling</button><button id="addChild" type="button">+ Child</button><button id="promote" type="button">← Promote</button><button id="demote" type="button">Demote →</button><button id="moveUp" type="button">↑ Move</button><button id="moveDown" type="button">↓ Move</button><button id="splitSection" type="button">Split</button><button id="mergePrevious" type="button">Merge previous</button><button id="deleteSection" type="button" class="danger">Delete</button>
+          </div>
+        </div>
+        <div class="document-tools">
           <div class="body-toolbar" aria-label="Body formatting helpers"><button id="fmtBold" type="button"><strong>B</strong></button><button id="fmtItalic" type="button"><em>I</em></button><span class="sep" aria-hidden="true"></span><button id="fmtQuote" type="button">Quote</button><button id="fmtBullet" type="button">• List</button><button id="fmtNumber" type="button">1. List</button><button id="fmtClear" type="button">Paragraph</button></div>
-          <textarea class="section-body" id="sectionBody" spellcheck="true" aria-label="Current section body"></textarea>
+          <p class="view-note" id="viewNote">Full document: edit every section in one continuous scroll.</p>
+        </div>
+        <div class="document-canvas" id="documentCanvas" aria-live="polite"></div>
+        <div class="editor-help">
           <p class="syntax-help">Lightweight formatting: <code>**bold**</code>, <code>*italic*</code>, <code>&gt;</code> for a quote, <code>-</code> for bullets, and <code>1.</code> for a numbered list. These are converted into Word runs and paragraphs on export.</p>
           <div class="keyboard-help"><kbd>Ctrl/⌘ + Enter</kbd> new sibling　 <kbd>Ctrl/⌘ + Shift + Enter</kbd> new child　 <kbd>Alt + ← / →</kbd> promote/demote　 <kbd>Alt + ↑ / ↓</kbd> move sibling　 <kbd>Ctrl/⌘ + S</kbd> save locally　 <kbd>Ctrl/⌘ + Shift + S</kbd> export Word</div>
-          <p class="editor-note">Your draft is stored locally in this browser and is not uploaded to the project server. For important work, download JSON backups periodically. This version supports browser → Word export; it does not attempt lossless round-tripping of arbitrary complex `.docx` files.</p>
+          <p class="editor-note">Your draft is stored locally in this browser and is not uploaded to the project server. Page preview is for an overall layout check; final line and page breaks are determined by Word after export.</p>
         </div>
       </section>
     </section>
