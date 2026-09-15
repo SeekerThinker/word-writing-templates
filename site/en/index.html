@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Turn Word into a tool for thinking and writing: use heading levels to organize relationships, the Navigation Pane to inspect and restructure the whole, and the document body to keep notes and writing together." />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>Structured Thinking & Writing with Word</title>
+  <link rel="alternate" hreflang="zh-CN" href="../" />
+  <link rel="alternate" hreflang="en" href="./" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .demo-body { grid-template-columns: minmax(138px, .78fr) minmax(0, 1.22fr); min-height: 292px; }
+    .demo-navigation { grid-column: 1; grid-row: 1; border-right: 1px solid #e2e3de; background: #f6f7f4; transform: translateX(-9px); animation-name: demo-nav-reveal-left; }
+    .demo-document { grid-column: 2; grid-row: 1; border-right: 0; background: #fff; }
+    .demo-doc-row { min-height: 48px; grid-template-columns: 38px minmax(0, 1fr); align-items: start; gap: 6px; padding: 6px; }
+    .demo-doc-row em { grid-row: 1; margin-top: 1px; }
+    .demo-doc-copy { min-width: 0; }
+    .demo-doc-row b { display: block; margin-bottom: 3px; font-size: 11px; }
+    .demo-doc-row small { display: block; color: #989b93; font-size: 7.5px; line-height: 1.45; font-weight: 500; }
+    .demo-doc-row.level-2 { padding-left: 13px; }
+    .demo-doc-row.level-3 { padding-left: 22px; }
+    .doc-b { animation-name: demo-doc-b-with-copy; }
+    .doc-c, .doc-d { animation-name: demo-doc-block-with-copy; }
+    .doc-c.moving, .doc-d.moving { animation-name: demo-doc-block-with-copy, demo-block-highlight; }
+    .tool-landscape { padding: 20px 20px 100px; }
+    .tool-table-wrap { width: min(1040px, 100%); margin: 36px auto 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.34); }
+    .tool-table { width: 100%; min-width: 790px; border-collapse: collapse; font-size: 14px; }
+    .tool-table th, .tool-table td { padding: 16px 18px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .tool-table tr:last-child td { border-bottom: 0; }
+    .tool-table th { color: var(--muted); background: rgba(255,255,255,.45); font-size: 12px; letter-spacing: .04em; }
+    .tool-table td:first-child { width: 150px; font-weight: 750; }
+    .tool-table a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    .tool-table .word-row td { background: var(--accent-soft); }
+    .tool-note { width: min(900px, 100%); margin: 22px auto 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    .tool-note strong { color: var(--ink); }
+    @keyframes demo-nav-reveal-left { 0%,23% { opacity:0; transform:translateX(-9px); } 31%,96% { opacity:1; transform:translateX(0); } 100% { opacity:0; transform:translateX(-9px); } }
+    @keyframes demo-doc-b-with-copy { 0%,52% { transform:translateY(0); } 68%,96% { transform:translateY(102px); } 100% { transform:translateY(0); } }
+    @keyframes demo-doc-block-with-copy { 0%,52% { transform:translateY(0); } 68%,96% { transform:translateY(-51px); } 100% { transform:translateY(0); } }
+    @media (max-width:600px) {
+      .demo-body { grid-template-columns: minmax(104px,.72fr) minmax(0,1.28fr); min-height:266px; }
+      .demo-navigation { padding:10px 6px 12px; }
+      .demo-document { padding:10px 7px 12px; }
+      .demo-doc-row { min-height:44px; grid-template-columns:31px minmax(0,1fr); gap:4px; padding:5px 3px; }
+      .demo-doc-row.level-2 { padding-left:8px; }
+      .demo-doc-row.level-3 { padding-left:13px; }
+      .demo-doc-row b { font-size:9px; margin-bottom:2px; }
+      .demo-doc-row small { font-size:6.5px; line-height:1.4; }
+      .doc-b { animation-name:demo-doc-b-with-copy-mobile; }
+      .doc-c,.doc-d { animation-name:demo-doc-block-with-copy-mobile; }
+      .doc-c.moving,.doc-d.moving { animation-name:demo-doc-block-with-copy-mobile,demo-block-highlight; }
+      .tool-landscape { padding-left:14px; padding-right:14px; }
+      .tool-table-wrap { margin-top:28px; }
+      .tool-note { font-size:13px; }
+    }
+    @keyframes demo-doc-b-with-copy-mobile { 0%,52% { transform:translateY(0); } 68%,96% { transform:translateY(94px); } 100% { transform:translateY(0); } }
+    @keyframes demo-doc-block-with-copy-mobile { 0%,52% { transform:translateY(0); } 68%,96% { transform:translateY(-47px); } 100% { transform:translateY(0); } }
+    @media (prefers-reduced-motion:reduce) { .demo-navigation { opacity:1; transform:none; } .doc-b { transform:translateY(102px); } .doc-c,.doc-d { transform:translateY(-51px); } }
+    @media (max-width:600px) and (prefers-reduced-motion:reduce) { .doc-b { transform:translateY(94px); } .doc-c,.doc-d { transform:translateY(-47px); } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#chooser">Skip to template chooser</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Structured Thinking and Writing with Word home">
+      <span class="brand-mark">W</span>
+      <span><strong>Structured Thinking & Writing with Word</strong><small>Think and write with Word</small></span>
+    </a>
+    <a class="top-link" href="#how">How it works</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Think → organize → write</p>
+        <h1>Turn Word into<br />a tool for thinking and writing.</h1>
+        <p class="lead">Heading levels make the relationships among ideas, questions, sources, and notes explicit. The Navigation Pane keeps the whole structure in view, while the document body holds the detailed thinking and writing. Work locally, then step back to inspect, rearrange, and rethink the whole—without leaving the same document.</p>
+        <div class="hero-actions"><a class="btn primary" href="#chooser">Help me choose a template</a></div>
+        <p class="micro">No plugins, no macros, and no need to learn Word's multilevel-list machinery first.</p>
+      </div>
+
+      <div class="thought-demo" aria-label="Animated demo: headings appear in the Navigation Pane and an entire section is reordered by dragging its heading.">
+        <div class="demo-head" aria-hidden="true">
+          <div class="demo-captions">
+            <span class="caption-1">Write first, then assign heading levels</span>
+            <span class="caption-2">The Navigation Pane turns levels into a whole-document view</span>
+            <span class="caption-3">Wrong order? Drag a heading</span>
+            <span class="caption-4">The heading and its body move together</span>
+          </div>
+          <span class="demo-live"><i></i> LIVE DEMO</span>
+        </div>
+        <div class="demo-word" aria-hidden="true">
+          <div class="demo-chrome"><span></span><span></span><span></span><b>thinking-notes.docx</b></div>
+          <div class="demo-body">
+            <div class="demo-navigation">
+              <div class="demo-pane-title">Navigation Pane</div>
+              <div class="demo-nav-list">
+                <div class="demo-nav-row nav-a level-1"><span>⋮⋮</span><b>Why this problem matters</b></div>
+                <div class="demo-nav-row nav-b level-2"><span>⋮⋮</span><b>Where the problem comes from</b></div>
+                <div class="demo-nav-row nav-c level-2 moving"><span>⋮⋮</span><b>What the real tension is</b></div>
+                <div class="demo-nav-row nav-d level-3 moving"><span>⋮⋮</span><b>Evidence and examples</b></div>
+                <div class="demo-nav-row nav-e level-1"><span>⋮⋮</span><b>Possible ways forward</b></div>
+                <span class="demo-drag-cursor">↕</span>
+              </div>
+            </div>
+            <div class="demo-document">
+              <div class="demo-pane-title">Document</div>
+              <div class="demo-doc-list">
+                <div class="demo-doc-row doc-a level-1"><em>Heading 1</em><div class="demo-doc-copy"><b>Why this problem matters</b><small>Start by recording the problem; a complete answer can come later.</small></div></div>
+                <div class="demo-doc-row doc-b level-2"><em>Heading 2</em><div class="demo-doc-copy"><b>Where the problem comes from</b><small>Early judgments often begin with observations that are not connected yet.</small></div></div>
+                <div class="demo-doc-row doc-c level-2 moving"><em>Heading 2</em><div class="demo-doc-copy"><b>What the real tension is</b><small>Keep asking: the visible symptom may not be the underlying problem.</small></div></div>
+                <div class="demo-doc-row doc-d level-3 moving"><em>Heading 3</em><div class="demo-doc-copy"><b>Evidence and examples</b><small>Put facts, data, and counterexamples here to test the judgment above.</small></div></div>
+                <div class="demo-doc-row doc-e level-1"><em>Heading 1</em><div class="demo-doc-copy"><b>Possible ways forward</b><small>Once the relationships are clearer, decide where to act next.</small></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-keys" aria-hidden="true">
+          <span><kbd>Ctrl + Alt + 1 / 2 / 3 / 4</kbd> Windows</span>
+          <span><kbd>⌘ + ⌥ + 1 / 2 / 3 / 4</kbd> macOS</span>
+        </div>
+        <p>Write and develop on the right; inspect the whole on the left. Heading levels plus the Navigation Pane form an adjustable map of the document's thinking.</p>
+      </div>
+    </section>
+
+    <section class="chooser-wrap" id="chooser">
+      <div class="section-head">
+        <p class="eyebrow">Choose in about 30 seconds</p>
+        <h2>Find a template that fits</h2>
+        <p>Answer three simple questions and download the closest fit.</p>
+      </div>
+      <div class="chooser">
+        <section class="step" id="stepType">
+          <div class="step-head"><span class="step-no">1</span><div><h3>What kind of structure do you need?</h3><p>Pick the closest option. For thinking, research notes, or everyday accumulation, “Article / everyday notes” is usually lighter.</p></div></div>
+          <div class="choice-grid two" id="typeChoices">
+            <button class="choice" type="button" data-type="book" aria-pressed="false"><span class="icon">📚</span><strong>Book / long-form</strong><small>Books, textbooks, tutorials, long-running projects</small></button>
+            <button class="choice" type="button" data-type="article" aria-pressed="false"><span class="icon">📄</span><strong>Article / everyday notes</strong><small>Papers, reports, research notes, general organization</small></button>
+          </div>
+        </section>
+        <section class="step locked" id="stepScheme" aria-disabled="true" inert>
+          <div class="step-head"><span class="step-no">2</span><div><h3>Which numbering style feels most natural?</h3><p>You do not need to study the rules—pick the one you prefer.</p></div></div>
+          <div class="scheme-grid" id="schemeChoices"><div class="placeholder">Choose a structure first.</div></div>
+        </section>
+        <section class="step locked" id="stepOs" aria-disabled="true" inert>
+          <div class="step-head"><span class="step-no">3</span><div><h3>Which computer will you use Word on?</h3><p id="osHint">The templates use platform-appropriate Chinese fonts and keyboard shortcuts.</p></div></div>
+          <div class="choice-grid two" id="osChoices">
+            <button class="choice" type="button" data-os="windows" aria-pressed="false" disabled><span class="icon">▣</span><strong>Windows</strong><small>SimSun, SimHei, Microsoft YaHei, and related fonts</small></button>
+            <button class="choice" type="button" data-os="macos" aria-pressed="false" disabled><span class="icon">⌘</span><strong>macOS / MacBook</strong><small>Songti SC, PingFang SC, and related fonts</small></button>
+          </div>
+        </section>
+        <section class="result" id="result" hidden aria-live="polite">
+          <div class="result-copy">
+            <p class="eyebrow">Ready</p>
+            <h3 id="resultTitle"></h3>
+            <p class="number-example" id="resultExample"></p>
+            <p id="resultDesc"></p>
+            <div class="result-actions">
+              <a class="btn primary" id="templateDownload" href="#">Download this template</a>
+              <a class="btn quiet" id="packageDownload" href="#">Download all</a>
+            </div>
+            <p class="micro">After downloading the `.dotx`, double-click it. Word creates a new document from the template while leaving the template itself unchanged. It does not modify Word's global template or your existing global settings; the styles and shortcuts travel with this template and documents created from it.</p>
+            <button class="reset" id="resetBtn" type="button">Choose again</button>
+          </div>
+          <div class="preview"><img id="resultImage" alt="Preview of the selected numbering style" /></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="value" id="quickstart">
+      <div class="section-head compact">
+        <p class="eyebrow">Start in 3 minutes</p>
+        <h2>Learn these four moves first</h2>
+        <p>You do not need to learn all of Word. Start with the Navigation Pane, heading levels, and structural rearrangement.</p>
+      </div>
+      <div class="value-grid">
+        <article><span>01</span><h3>Double-click the template</h3><p>Open the downloaded `.dotx`; Word creates a new document from it. Work in that new document.</p></article>
+        <article><span>02</span><h3>Open the Navigation Pane</h3><p>In desktop Word, use View → Navigation Pane and switch to the headings view so the document structure stays visible.</p></article>
+        <article><span>03</span><h3>Use real heading levels</h3><p>Use Heading 1, 2, 3, and 4 from Home → Styles to express hierarchy. Keep ordinary paragraphs as body text.</p></article>
+        <article><span>04</span><h3>Inspect, then rearrange</h3><p>Use the pane to spot gaps, repetition, and order problems. In desktop versions that support it, dragging a heading moves its entire section.</p></article>
+      </div>
+      <div class="hero-actions" style="justify-content:center; margin-top:30px"><a class="btn primary" href="./guide.html">Read the full usage guide</a></div>
+    </section>
+
+    <section class="value" id="how">
+      <div class="section-head compact">
+        <p class="eyebrow">How Word becomes a thinking tool</p>
+        <h2>Make relationships visible</h2>
+        <p>As material grows, the problem is not only the text itself but the relationships among pieces: parallel ideas, subordination, sequence, and connection. Heading levels externalize those relationships; the Navigation Pane gives you a persistent map of them.</p>
+      </div>
+      <div class="value-grid">
+        <article><span>01</span><h3>Record first, then name</h3><p>Write down what appears. Giving a group of material a heading asks, “What is this part actually about?” and gives it a place.</p></article>
+        <article><span>02</span><h3>Use levels to express relationships</h3><p>Which parts are peers, and which belong inside a larger topic? Heading 1–4 makes those relationships explicit.</p></article>
+        <article><span>03</span><h3>Move between local and global</h3><p>Work on details in the document body; step back to the heading tree to inspect gaps, duplication, levels, and order.</p></article>
+        <article><span>04</span><h3>Restructure to rethink</h3><p>Renaming, splitting, merging, and moving headings is also a way to reinterpret the relationships among the material.</p></article>
+      </div>
+    </section>
+
+    <section class="tool-landscape" aria-labelledby="toolLandscapeTitle">
+      <div class="section-head compact">
+        <p class="eyebrow">Thinking tools can take different forms</p>
+        <h2 id="toolLandscapeTitle">Why this project still chooses Word</h2>
+        <p>Scrivener, Org mode, and Quarto also organize content into structures you can inspect and change. The point is not that one tool wins; structured writing is a method, and Word is one particularly accessible implementation for people who already use it to take notes, collaborate, and deliver documents.</p>
+      </div>
+      <div class="tool-table-wrap">
+        <table class="tool-table">
+          <thead><tr><th>Tool</th><th>How structure appears</th><th>How it is reorganized</th><th>Best suited for</th></tr></thead>
+          <tbody>
+            <tr class="word-row"><td><a href="https://support.microsoft.com/en-us/word/use-the-navigation-pane-in-word" rel="noreferrer" target="_blank">Word</a></td><td>Heading levels + Navigation Pane</td><td>Drag headings in supported desktop versions so whole sections move together</td><td>Notes, papers, reports, long-form work, and workflows that exchange `.docx` files</td></tr>
+            <tr><td><a href="https://www.literatureandlatte.com/blog/use-folders-and-texts-to-power-up-the-scrivener-binder" rel="noreferrer" target="_blank">Scrivener</a></td><td>Chapter, section, and scene tree in the Binder</td><td>Drag nodes or use structural movement commands</td><td>Dedicated long-form writing projects</td></tr>
+            <tr><td><a href="https://orgmode.org/manual/Structure-Editing.html" rel="noreferrer" target="_blank">Org mode</a></td><td>Heading tree / subtrees</td><td>Move, promote, or demote whole subtrees with keyboard commands</td><td>Keyboard-driven structured notes and knowledge organization</td></tr>
+            <tr><td><a href="https://quarto.org/docs/books/" rel="noreferrer" target="_blank">Quarto</a></td><td>Multiple chapter files + Markdown</td><td>Change chapter files and project structure</td><td>Producing HTML, PDF, Word, EPUB, and other outputs from one source</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tool-note"><strong>Word's strength here is its generality:</strong> many people already use it for notes, collaboration, and final delivery. Once heading levels and the Navigation Pane are used deliberately, Word offers an outline-like, mind-map-like global view while retaining continuous prose, comments, references, tables of contents, and final-document features.</p>
+    </section>
+
+    <section class="ready">
+      <div class="section-head compact">
+        <p class="eyebrow">Think, record, and write in one document</p>
+        <h2>The same structure can support thinking and formal writing</h2>
+        <p>Heading levels can begin as a way to organize ideas and sources. If the material later becomes a paper, report, or book, the same structure can continue to drive navigation, numbering, the table of contents, and body organization.</p>
+      </div>
+      <div class="pill-grid"><span>Multilevel numbering</span><span>Table of contents</span><span>Page numbers</span><span>Author information</span><span>Preface / abstract</span><span>Captions & cross-references</span><span>Footnotes / endnotes</span><span>Reference styles</span></div>
+    </section>
+
+    <section class="start">
+      <div class="start-card">
+        <div><p class="eyebrow">Move between the part and the whole</p><h2>Write a little, inspect the whole, adjust, continue</h2><p>Develop the immediate material in the document body, inspect the larger structure in the Navigation Pane, rename or rearrange what needs work, then return to the text. That back-and-forth is the core workflow.</p></div>
+        <a class="btn primary" href="#chooser">Choose a template</a>
+      </div>
+    </section>
+
+    <section class="faq">
+      <div class="section-head compact"><h2>FAQ</h2></div>
+      <details><summary>Is this mainly a writing template or a thinking tool?</summary><p>Both, but the project first treats Word as an environment for thinking and writing. Heading levels and the Navigation Pane help you organize relationships, inspect the whole, and restructure material; numbering, contents, captions, and references support formal writing when you need them.</p></details>
+      <details><summary>What kinds of material can I organize with it?</summary><p>Everyday notes, research materials, papers, reports, and long-form manuscripts. Heading levels organize relationships while the body keeps the detailed notes, arguments, and source material.</p></details>
+      <details><summary>Can I use it if I do not know Word styles well?</summary><p>Yes. The template already configures heading levels, numbering, and body styles. Use Heading 1–4 from Word's Styles gallery, or use the template shortcuts once they feel natural.</p></details>
+      <details><summary>What if I do not need the preface, abstract, or table of contents yet?</summary><p>Leave them alone or delete them. They do not interfere with the core heading hierarchy used for thinking and navigation.</p></details>
+      <details><summary>What is the Navigation Pane for?</summary><p>It keeps your headings visible as a hierarchy, so you can switch between focusing on one passage and inspecting the whole document. In supported desktop versions of Word, you can also move an entire section by dragging its heading.</p></details>
+      <details><summary>Do I need a macro or plugin?</summary><p>No. The templates use Word's native `.dotx` format, contain no VBA macros, and require no additional plugin.</p></details>
+    </section>
+  </main>
+
+  <footer>
+    <span>Structured Thinking & Writing with Word</span>
+    <span class="footer-links"><a href="./guide.html">Usage guide</a><a href="https://github.com/SeekerThinker/word-writing-templates" rel="noreferrer">Open-source project</a><a href="https://github.com/SeekerThinker/word-writing-templates/releases/latest" rel="noreferrer">Release notes</a></span>
+  </footer>
+
+  <script src="./app.js"></script>
+  <script src="../i18n.js"></script>
+</body>
+</html>
