@@ -71,7 +71,7 @@ jobs:
                   raise SystemExit(f'missing clarified English numbering name: {phrase}')
 
           for phrase in [
-              'IndexedDB', 'word/document.xml', 'word/styles.xml', 'word/numbering.xml',
+              'indexedDB', 'word/document.xml', 'word/styles.xml', 'word/numbering.xml',
               '[Content_Types].xml', 'Heading${node.level}', 'JSZip.loadAsync',
           ]:
               if phrase not in editor:
