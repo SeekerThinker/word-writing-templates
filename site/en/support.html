@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Voluntarily support ongoing maintenance of the Structured Thinking & Writing with Word templates. The templates remain free and open source." />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>Support the project | Structured Thinking & Writing with Word</title>
+  <link rel="alternate" hreflang="zh-CN" href="../support.html" />
+  <link rel="alternate" hreflang="en" href="./support.html" />
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    main { overflow: visible; }
+    .support-hero {
+      width: min(920px, calc(100% - 40px));
+      margin: 64px auto 54px;
+      text-align: center;
+    }
+    .support-hero h1 { max-width: 780px; margin-left: auto; margin-right: auto; }
+    .support-hero .lead { max-width: 760px; margin-left: auto; margin-right: auto; }
+    .support-grid {
+      width: min(1040px, calc(100% - 40px));
+      margin: 0 auto 44px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .support-card {
+      padding: 28px 24px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255,255,255,.42);
+    }
+    .support-card .eyebrow { margin-bottom: 8px; }
+    .support-card h2 { margin-bottom: 10px; font: 650 24px/1.2 Georgia, serif; }
+    .support-card p { color: var(--muted); font-size: 14px; }
+    .support-card ul { margin: 18px 0 22px; padding-left: 20px; color: #555850; font-size: 13px; }
+    .support-card li + li { margin-top: 5px; }
+    .support-button {
+      width: 100%;
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      color: var(--muted);
+      font-weight: 750;
+      font-size: 13px;
+    }
+    .support-button.pending { border-style: dashed; }
+    .support-note {
+      width: min(820px, calc(100% - 40px));
+      margin: 0 auto 92px;
+      padding: 24px 26px;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+      background: var(--accent-soft);
+      color: #405248;
+    }
+    .support-note h2 { margin-bottom: 8px; font-size: 18px; }
+    .support-note p { margin-bottom: 0; font-size: 14px; }
+    .support-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+    @media (max-width: 820px) { .support-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .support-hero, .support-grid, .support-note { width: min(100% - 28px, 1040px); }
+      .support-hero { margin-top: 38px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#channels">Skip to support options</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Back to Structured Thinking and Writing with Word home">
+      <span class="brand-mark">W</span>
+      <span><strong>Structured Thinking & Writing with Word</strong><small>Support the project</small></span>
+    </a>
+    <a class="top-link" href="./">Back home</a>
+  </header>
+
+  <main>
+    <section class="support-hero">
+      <p class="eyebrow">Voluntary support</p>
+      <h1>The templates will stay free and open source.<br />If they help you, you can support their upkeep.</h1>
+      <p class="lead">Support does not unlock extra features and does not change the project's free, open-source model. Contributions mainly help with template maintenance, compatibility checks, documentation, and the public website.</p>
+      <div class="support-actions">
+        <a class="btn primary" href="#channels">See support options</a>
+        <a class="btn quiet" href="./#chooser">Keep downloading for free</a>
+      </div>
+    </section>
+
+    <section class="support-grid" id="channels" aria-label="Support options">
+      <article class="support-card">
+        <p class="eyebrow">China</p>
+        <h2>Alipay / WeChat Pay</h2>
+        <p>A direct, familiar payment route is reserved for users in mainland China. Once configured, this page will link to the real payment page or QR-code flow.</p>
+        <ul>
+          <li>Best for one-time voluntary support</li>
+          <li>No GitHub account required</li>
+          <li>Actual payment details will only be published after setup</li>
+        </ul>
+        <span class="support-button pending" aria-disabled="true">Payment channel not connected yet</span>
+      </article>
+
+      <article class="support-card">
+        <p class="eyebrow">International</p>
+        <h2>Cards / digital wallets</h2>
+        <p>The international route is intended to support common cards and, where available, options such as Apple Pay and Google Pay. The final set will depend on the actual payment page.</p>
+        <ul>
+          <li>Best for one-time support outside China</li>
+          <li>Aim for familiar local payment methods and currencies</li>
+          <li>No card details are stored on this site</li>
+        </ul>
+        <span class="support-button pending" aria-disabled="true">International payments not connected yet</span>
+      </article>
+
+      <article class="support-card">
+        <p class="eyebrow">Open-source community</p>
+        <h2>GitHub Sponsors</h2>
+        <p>If GitHub Sponsors is enabled later, this section can offer one-time or recurring sponsorship for people who already support open-source work through GitHub.</p>
+        <ul>
+          <li>Good fit for GitHub and open-source users</li>
+          <li>Can support recurring sponsorship</li>
+          <li>Availability depends on the project's GitHub Sponsors account status</li>
+        </ul>
+        <span class="support-button pending" aria-disabled="true">GitHub Sponsors not connected yet</span>
+      </article>
+    </section>
+
+    <section class="support-note">
+      <h2>Why build the page before connecting payment links?</h2>
+      <p>Payment URLs depend on real accounts, identity region, and provider setup. They should not be guessed or fabricated. The bilingual pages, navigation, and structure are ready now; once the payment accounts are configured, only the real button URLs need to be added.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>Structured Thinking & Writing with Word</span>
+    <span class="footer-links"><a href="./">Home</a><a href="./guide.html">Usage guide</a><a href="https://github.com/SeekerThinker/word-writing-templates" rel="noreferrer">Open-source project</a></span>
+  </footer>
+
+  <script src="../i18n.js"></script>
+</body>
+</html>
