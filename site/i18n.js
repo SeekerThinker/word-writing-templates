@@ -26,8 +26,8 @@
       const saved = localStorage.getItem(KEY);
       if (saved === "zh" || saved === "en") return saved;
     } catch (_) {}
-    const candidates = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
-    return candidates.some((item) => /^zh(?:-|$)/i.test(item)) ? "zh" : "en";
+    const primary = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+    return /^zh(?:-|$)/i.test(primary) ? "zh" : "en";
   }
 
   function remember(lang) {
