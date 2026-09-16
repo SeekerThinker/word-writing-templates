@@ -121,4 +121,11 @@
     link.textContent = current === "en" ? "Online editor" : "在线写作";
     footerLinks.insertBefore(link, footerLinks.firstChild);
   }
+
+  if (page === "editor" && !document.querySelector("script[data-editor-copy]")) {
+    const copy = document.createElement("script");
+    copy.dataset.editorCopy = "true";
+    copy.src = current === "en" ? "../editor-copy.js" : "./editor-copy.js";
+    document.body.appendChild(copy);
+  }
 })();
