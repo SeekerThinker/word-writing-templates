@@ -39,6 +39,7 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check site/editor.js
+          node --check site/editor-copy.js
           node --check site/i18n.js
           node --check site/app.js
           node --check site/en/app.js
@@ -52,6 +53,7 @@ jobs:
           en = Path('site/en/editor.html').read_text(encoding='utf-8')
           en_app = Path('site/en/app.js').read_text(encoding='utf-8')
           editor = Path('site/editor.js').read_text(encoding='utf-8')
+          editor_copy = Path('site/editor-copy.js').read_text(encoding='utf-8')
           i18n = Path('site/i18n.js').read_text(encoding='utf-8')
 
           integrity = 'sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=='
@@ -77,9 +79,16 @@ jobs:
               if phrase not in editor:
                   raise SystemExit(f'missing editor/export behavior: {phrase}')
 
-          for phrase in ['editor.html', 'language-switch', 'window.location.replace']:
+          for phrase in ['editor.html', 'language-switch', 'window.location.replace', 'editor-copy.js']:
               if phrase not in i18n:
-                  raise SystemExit(f'missing editor language routing behavior: {phrase}')
+                  raise SystemExit(f'missing editor language/copy routing behavior: {phrase}')
+
+          for phrase in [
+              '让结构始终可见', '在局部与整体之间来回', '从网页一路用到 Word',
+              'Keep the structure in view', 'between the part and the whole', 'Carry the same shortcuts into Word',
+          ]:
+              if phrase not in editor_copy:
+                  raise SystemExit(f'missing refined editor copy concept: {phrase}')
 
           print('Bilingual web editor contract OK')
 
