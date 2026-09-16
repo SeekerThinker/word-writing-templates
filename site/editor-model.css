@@ -1,0 +1,31 @@
+.doc-block-list { display: grid; gap: 14px; }
+.doc-content-block { position: relative; }
+.doc-text-content + .doc-table-block, .doc-table-block + .doc-text-content { margin-top: 6px; }
+.doc-table-block { padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: rgba(247,248,245,.72); overflow-x: auto; }
+.table-block-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 8px; }
+.table-block-tools strong { margin-right: auto; font-size: 11px; }
+.table-block-tools button { padding: 5px 7px; border: 1px solid var(--line); border-radius: 6px; background: white; cursor: pointer; font-size: 10px; }
+.table-block-tools button.danger { color: var(--danger); }
+.doc-table { width: 100%; min-width: 420px; border-collapse: collapse; table-layout: fixed; background: white; }
+.doc-table td { padding: 0; border: 1px solid #c9cbc5; vertical-align: top; }
+.doc-table-cell { display: block; width: 100%; min-height: 42px; padding: 8px; resize: none; overflow: hidden; border: 0; outline: none; background: transparent; color: var(--ink); font-family: Georgia, "Songti SC", "STSong", serif; font-size: 14px; line-height: 1.45; }
+.doc-table-cell:focus { box-shadow: inset 0 0 0 2px rgba(45,90,74,.18); }
+.footnote-editors { margin: 14px 8px 0; padding-top: 10px; border-top: 1px solid var(--line); }
+.footnote-editors-title { display: block; margin-bottom: 7px; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+.footnote-editor { display: grid; grid-template-columns: 24px minmax(0,1fr) 28px; gap: 7px; align-items: start; margin-bottom: 6px; }
+.footnote-editor sup { padding-top: 7px; color: var(--accent); text-align: right; font-weight: 800; }
+.footnote-editor textarea { width: 100%; min-height: 38px; padding: 7px 9px; resize: none; overflow: hidden; border: 1px solid var(--line); border-radius: 7px; background: white; outline: none; font-family: Georgia, "Songti SC", "STSong", serif; font-size: 12px; line-height: 1.5; }
+.footnote-editor textarea:focus { border-color: #789386; box-shadow: 0 0 0 3px rgba(45,90,74,.07); }
+.footnote-editor button { width: 28px; height: 28px; margin-top: 3px; border: 1px solid var(--line); border-radius: 6px; background: white; color: var(--danger); cursor: pointer; }
+.preview-table-wrap { margin: 14px 0 16px; overflow: hidden; }
+.preview-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+.preview-table td { min-height: 28px; padding: 6px 8px; border: 1px solid #bfc1bb; vertical-align: top; line-height: 1.5; }
+.preview-footnote-ref { margin-left: 1px; color: var(--accent); font-size: .72em; font-weight: 700; }
+.preview-footnotes { margin: 12px 0 18px; padding-top: 8px; border-top: 1px solid #c9cbc5; font-size: 10px; line-height: 1.5; }
+.preview-footnotes p { margin: 0 0 4px; }
+.preview-footnotes sup { color: var(--accent); font-weight: 800; }
+.body-toolbar #fmtTable, .body-toolbar #fmtFootnote { min-width: auto; padding-inline: 9px; }
+@media (max-width: 720px) {
+  .doc-table { min-width: 520px; }
+  .table-block-tools { position: sticky; left: 0; }
+}
