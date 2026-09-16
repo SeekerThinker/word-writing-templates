@@ -206,7 +206,9 @@ def assert_styles(data: bytes) -> None:
         num_id = style[0].xpath("w:pPr/w:numPr/w:numId/@w:val", namespaces=NS)
         assert num_id == ["1"], f"{style_id} must use numbering numId=1, got {num_id}"
     assert find_style_id(data, "表格", "") != "", "missing table-text style 表格"
-    assert find_style_id(data, "Footnote Text", "") != "", "missing Footnote Text style"
+    footnote_by_id = root.xpath("w:style[@w:styleId='FootnoteText']", namespaces=NS)
+    footnote_by_name = find_style_id(data, "Footnote Text", "")
+    assert footnote_by_id or footnote_by_name, "missing FootnoteText / Footnote Text style"
 
 
 def assert_numbering(data: bytes) -> None:
