@@ -29,8 +29,8 @@ for path, phrases in REQUIRED.items():
         if phrase not in body:
             raise SystemExit(f"Missing documented contract {phrase!r} in {path}")
 
-# Both language versions must link to their counterpart. Static keywords cannot
-# establish translation quality; human review is still required.
+# Counterpart links can be relative within docs/; require the basename rather
+# than incorrectly demanding a repository-root path in every Markdown link.
 for chinese, english in (
     ("README.md", "README.en.md"),
     ("CONTRIBUTING.md", "CONTRIBUTING.en.md"),
@@ -38,9 +38,9 @@ for chinese, english in (
     ("docs/在线编辑器.md", "docs/online-editor.md"),
     ("docs/双语维护.md", "docs/bilingual-maintenance.md"),
 ):
-    if english not in (ROOT / chinese).read_text(encoding="utf-8"):
+    if Path(english).name not in (ROOT / chinese).read_text(encoding="utf-8"):
         raise SystemExit(f"Missing English counterpart link in {chinese}")
-    if chinese not in (ROOT / english).read_text(encoding="utf-8"):
+    if Path(chinese).name not in (ROOT / english).read_text(encoding="utf-8"):
         raise SystemExit(f"Missing Chinese counterpart link in {english}")
 
 print("Project documentation contract OK; semantic parity still needs human review")
