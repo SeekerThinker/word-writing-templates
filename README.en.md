@@ -24,12 +24,12 @@ Alternatively, download the `.dotx` for your Windows or macOS setup and double-c
 
 ## Template matrix and numbering
 
-Version 4 keeps **one user template per numbering preset**: 6 presets × Windows/macOS = **12 `.dotx` files**. Interface language, document language, and numbering are separate choices. “Chinese traditional chapter numbering” describes a numbering convention, **not a Traditional Chinese character setting**.
+Version 4 keeps **one user template per numbering preset**: 6 presets × Windows/macOS = **12 `.dotx` files**. Interface language, document language, and numbering are separate choices. “Chinese traditional chapter numbering” describes a numbering convention, **not a Traditional Chinese character setting**. The examples below show the original downloadable templates; for an English-language browser export, the chapter-decimal option changes `第1章` to `Chapter 1`.
 
-| Type | Numbering | Example | Windows | macOS |
+| Type | Numbering | Original template example | Windows | macOS |
 |---|---|---|---|---|
 | Book | Chinese traditional chapter numbering | `第一章 → 第一节 → 一、 → （一）` | [Template](templates/windows/books/书籍-中文传统.dotx?raw=1) | [Template](templates/macos/books/书籍-中文传统.dotx?raw=1) |
-| Book | Chapter + decimal | `Chapter 1 → 1.1 → 1.1.1 → 1.1.1.1` | [Template](templates/windows/books/书籍-章节数字.dotx?raw=1) | [Template](templates/macos/books/书籍-章节数字.dotx?raw=1) |
+| Book | Chapter + decimal | `第1章 → 1.1 → 1.1.1 → 1.1.1.1` | [Template](templates/windows/books/书籍-章节数字.dotx?raw=1) | [Template](templates/macos/books/书籍-章节数字.dotx?raw=1) |
 | Book | Pure decimal | `1 → 1.1 → 1.1.1 → 1.1.1.1` | [Template](templates/windows/books/书籍-纯数字.dotx?raw=1) | [Template](templates/macos/books/书籍-纯数字.dotx?raw=1) |
 | Article | Chinese academic numbering | `一、 → （一） → 1. → （1）` | [Template](templates/windows/articles/文章-中文论文.dotx?raw=1) | [Template](templates/macos/articles/文章-中文论文.dotx?raw=1) |
 | Article | Decimal hierarchy | `1 → 1.1 → 1.1.1 → 1.1.1.1` | [Template](templates/windows/articles/文章-数字层级.dotx?raw=1) | [Template](templates/macos/articles/文章-数字层级.dotx?raw=1) |
@@ -41,7 +41,7 @@ For everyday notes and research material, the article presets are often a lighte
 
 Heading levels help answer: What is this section about? What larger theme does it belong to? Which parts are peers or children? What's missing or repeated? Does the order make sense?
 
-Write a little, give the material a name and a place, inspect the outline, move something, and return to the body. A complete outline is not a prerequisite, and formal publication is not the assumed goal. The [structured-thinking method](docs/结构化思考.md) and [Word template quick start](docs/快速开始.md) are currently in Chinese.
+Write a little, give the material a name and a place, inspect the outline, move something, and return to the body. A complete outline is not a prerequisite, and formal publication is not the assumed goal. The [structured-thinking method](docs/结构化思考.md) is currently in Chinese; the [quick start](docs/quick-start.md) is available in English.
 
 ## Shared style shortcuts in the browser and Word
 
@@ -59,6 +59,6 @@ The browser editor and exported Word templates share shortcuts for headings, bod
 
 Automation checks the 12 public templates' OOXML, numbering, styles, sections, and optional publication features, and checks exported Word packages for real tables, footnotes, and shortcut customizations. PDF layout smoke tests and OOXML checks **are not the same as testing every operation in Microsoft Word itself**. See [compatibility and testing](docs/兼容性与测试.md) (currently Chinese).
 
-The [stability policy](STABILITY.md) protects filenames, the 12-template matrix, download URLs, and macro-free operation. See [maintainer notes](MAINTAINERS.md), [contribution instructions](CONTRIBUTING.md), and the [AI collaboration guide](AGENTS.md). The project is licensed under [MIT](LICENSE).
+The [stability policy](STABILITY.md) protects filenames, the 12-template matrix, download URLs, and macro-free operation. See [maintainer notes](MAINTAINERS.md), [contribution instructions](CONTRIBUTING.en.md), and the [AI collaboration guide](AGENTS.md). The project is licensed under [MIT](LICENSE).
 
 **Let heading levels carry your thinking and keep the whole visible. Your work can remain a collection of notes—or grow along the same structure into something more.**
