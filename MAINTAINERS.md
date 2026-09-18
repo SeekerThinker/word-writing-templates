@@ -1,46 +1,17 @@
 # 维护者说明
 
-这个项目的原则是：**普通用户零配置；复杂性留在维护端。**
+项目始终遵循：**普通用户零配置；复杂性留在维护端。** 优先顺序为 **思考 → 结构 → 记录 / 写作 → 排版**。整理笔记与材料本身是完整用途，正式成稿不是默认终点。用户现在有两条独立起点：网页在线整理并导出 Word，或者直接下载 `.dotx` 在 Word 中工作；不要让其中一条依赖另一条。
 
-v4 的产品目标进一步明确：**一个编号方案只对应一个用户模板。** 日常整理、长期积累和可能的正式成稿可以使用同一份 Word 文件，不再让普通用户判断“直接开始版”还是“带常用结构版”。
+当前项目决定见 [docs/项目决策.md](docs/项目决策.md)；稳定接口见 [STABILITY.md](STABILITY.md)；贡献与实际命令见 [CONTRIBUTING.md](CONTRIBUTING.md)；AI 协作约定见 [AGENTS.md](AGENTS.md)。
 
-## 用户产品矩阵
+## 公共产品矩阵与生成路径
 
-6 种编号方案 × 2 个平台 = **12 个用户 `.dotx` 模板**。
+**6 种编号 × Windows/macOS = 12 个用户 `.dotx`**。书籍：中文传统 / 章节数字 / 纯数字；文章：中文论文 / 数字层级 / 中文简洁。公共路径为 `templates/<platform>/books/*.dotx`、`templates/<platform>/articles/*.dotx`，每个平台 Release ZIP 仅包含 6 个。v3 的 `templates/<platform>/structured/...` 可能继续由生成器产生，但只是内部过渡副本，不在 v4 用户矩阵和下载包中。
 
-- 书籍：中文传统 / 章节数字 / 纯数字
-- 文章：中文论文 / 数字层级 / 中文简洁
-- 平台：Windows / macOS
-
-公共路径：
-
-- `templates/<platform>/books/*.dotx`
-- `templates/<platform>/articles/*.dotx`
-
-v4 初期旧生成器仍会产生 `templates/<platform>/structured/...` 副本，作为内部过渡产物。`thinking_support.py` 会把完整结构版本提升到上面的公共短路径。历史副本**不进入 Release ZIP，也不属于 v4 用户矩阵**。
-
-## 核心产品原则
-
-产品优先级始终是：**思考 → 结构 → 记录 / 写作 → 排版。**
-
-其中有一个需要长期保护的定位边界：**整理思路、积累笔记和组织材料本身就是完整用途；文章、报告或书稿是可以继续发展的方向，但不是所有使用场景的默认终点。**
-
-公共模板必须同时满足三点：
-
-1. 打开后可以直接用标题层级和导航窗格整理、记录或展开内容；
-2. 已经准备好作者信息、前言 / 摘要、目录、参考文献、页码等可选成稿能力；
-3. 这些可选成稿区块不能污染导航窗格的思考树。
-
-因此 `结构标题` 必须使用非大纲级别；`标题 1 / 2 / 3 / 4` 才是导航窗格里的主要结构。
-
-## 生成方式
-
-模板由 `python-docx + OOXML` 从代码生成。
-
-核心流程：
+模板由 `python-docx + OOXML` 从代码生成；维护时改生成器及后处理，不直接手改公共 `.dotx`。主链条包含：
 
 ```bash
-pip install -r requirements-dev.txt
+python -m pip install -r requirements-dev.txt
 python scripts/build_templates.py
 python scripts/thinking_support.py
 python scripts/reference_support.py
@@ -50,100 +21,33 @@ python scripts/thinking_check.py
 python scripts/manuscript_check.py
 python scripts/reference_check.py
 python scripts/stability_check.py
-python scripts/make_quickstart.py
+python scripts/web_editor_export_check.py
 ```
 
-`thinking_support.py` 在 v4 有两项职责：
+`thinking_support.py` 保持「标题层级 + 导航窗格」提示与可选成稿区块不进大纲，并将统一模板提升至公共短路径。`reference_support.py` 管理题注、脚注/尾注及参考文献样式。`thinking_check.py`、`manuscript_check.py`、`stability_check.py` 检查公共 12 模板；部分兼容性检查仍遍历历史内部产物，但不要因此把用户模板总数写成 24。
 
-- 加入“标题层级 + 导航窗格”的轻量思考提示，并确保可选结构标题不进入导航窗格；提示语应适用于日常记录和正式写作，不能预设用户已经进入“正文 / 成稿阶段”；
-- 将完整结构模板提升到稳定的短文件名，使用户只看到一个模板版本。
+公共模板的前言、目录、作者信息、摘要、附录和参考文献属于可选成稿能力，`结构标题` 等辅助内容必须使用非大纲级别；真正标题 1–4 才进入 Word 导航窗格。书籍分节符与罗马 / 阿拉伯页码、奇偶页页眉相连；删前置文字通常可行，大幅删除前置部分时应避免误删关键分节符。保留原生 Caption、Footnote Text / Reference、Endnote Text / Reference、Bibliography 等样式；不要在模板里改写 Zotero / EndNote 等第三方字段。
 
-`reference_support.py` 继续负责题注、脚注 / 尾注、Bibliography 与参考文献样式等 OOXML 配置。
+## 网页编辑器与数据边界
 
-## 自动检查
+`site/editor.js` 是共用的网页数据模型与 `.docx` 导出实现，`site/editor-copy.js` 提供中英文表达，`site/i18n.js` 负责页面语言切换；中英文编辑器页面共用功能代码。在线编辑器**默认全文可编辑**，左侧标题树与正文双向定位；专注模式可选，页面预览只读且不保证 Word 精确分页。
 
-`compatibility_check.py` 仍会检查生成器的全部内部产物，以防 v3 过渡构建链悄悄损坏。
+当前草稿 v3 由章节文本块、表格块和独立脚注对象组成。旧 v2 `body` 字符串应能迁移；改模型时必须验证旧 JSON 恢复、表格与脚注、文本引用和本地保存。当前草稿优先存于浏览器 IndexedDB，失败时尝试 localStorage：它不是云端同步或可靠的唯一备份。用户可下载 JSON 恢复项目，另导出 `.docx` 在 Word 中继续；**不承诺任意 Word 文件无损导入网页**。
 
-`thinking_check.py` 专门保护 v4 的**12 个公共模板**：
+导出读取与页面同源提供的 12 个 `.dotx` 骨架，保留 Word 样式、编号与布局等 OOXML 部件；导出中的 `w:tbl`、脚注关系和 `word/footnotes.xml` 应是真实部件。不能仅靠肉眼看网页像表格或脚注就宣称 Word 原生兼容。文稿不为导出而上传项目服务器；但 JSZip 的受完整性校验脚本目前从外部 CDN 获取，不能声称整站完全离线运行。详见 [在线编辑器说明](docs/在线编辑器.md)。
 
-- 必须包含标题层级 + 导航窗格思考提示；
-- 模板起始提示必须对“记录 / 整理”和“正式写作”都成立；
-- 书籍 / 文章的可选成稿结构必须存在；
-- `结构标题` 必须使用 outline level 9，不进入导航窗格。
+## 中英文、快捷键与测试
 
-`manuscript_check.py` 只以 12 个公共模板为产品对象，检查书籍分节、页码、打印设置、页眉页脚，以及文章元信息和页码。
+公共主页、编辑器、Word 使用说明和新用户指南按 [双语维护约定](docs/双语维护.md) 同步。中文产品语义为基准，英文可自然表达但不能漏掉警示与功能；**界面语言、文档语言、编号方案各自独立**。不要把「中文传统章节编号」译成含糊的 “Traditional Chinese”。历史中文内部维护文件并非全部已经双语，不能夸称仓库全面双语。
 
-`reference_check.py` 检查题注、交叉引用支持、脚注 / 尾注、Bibliography 和“参考文献条目”等样式。
+网页与 Word 共用标题 1–4、正文、表格、引用、脚注样式快捷键；网页独有的结构操作另列。改变快捷键须同时检查模板 customizations、网页键盘事件与两种语言说明。视图说明动态文案不得在 MutationObserver 回调中无条件重写自身；`node scripts/editor_copy_check.cjs` 检查中英文视图更新不会自触发循环。
 
-`stability_check.py` 保护 v4 的 12 个公共模板路径、两个稳定 `releases/latest` 下载地址、单模板原则、结构化思考原则，以及“成稿是可选延伸”的定位边界。
+CI 至少覆盖 `node --check`、上述视图回归、`scripts/web_editor_export_check.py` 的 12 模板 Word 包检查、双语入口契约和 Pages 静态站组装。用户矩阵与发布 ZIP 还有独立模板构建、PDF 布局冒烟和 release audit。**这些检查不等于真实浏览器交互，也不等于在 Microsoft Word 真机上完成验收**。对外报告必须分别说明哪些已跑、哪些未跑。真实反馈仅记录用户在公开 Issue 主动提供的信息，不索取个人信息或私人文稿。
 
-主构建会把 **12 个用户模板**转换为 PDF 做布局冒烟测试。用户 ZIP 每个平台只允许 6 个 `.dotx`；`release_audit.py` 会拒绝多余模板、宏模板、安装程序或意外文件。
+## 发布与版本约定
 
-这些自动检查**不会启动 Microsoft Word**。不要把它们描述成真实 Word 真机验证。
+从最新 `main` 创建分支再写入，检查 PR diff、CI 后才合并；不要写入 `main` 来探测分支。自动模板构建可能在合并后更新 `main`，下一次工作必须重新获取 SHA。根目录 `version.txt` 是模板发布版本唯一来源；编辑器或文案的小改动不应自动提升模板版本。
 
-## 书籍模板的删除安全
+4.x 补丁版本可修兼容性、文档、CI 和体验；兼容新增功能可考虑小版本；改变稳定文件名、编号、资产名或运行方式需要另行评估主版本。发布前核对 [STABILITY.md](STABILITY.md)、12 模板、Windows/macOS ZIP、真实行为表述与双语一致性。
 
-书籍模板包含书名页、前置部分和正文的 Word 分节，用于维持罗马页码、正文重新从 `1` 开始和不同页眉页脚。
-
-所以文档和提示应鼓励用户：
-
-- 暂时不用的前言 / 目录 / 附录 / 参考文献可以先保留；
-- 删除这些区块的文字通常安全；
-- 大幅删除前置部分时要避免误删正文前的分节符。
-
-不要为了“看起来更简洁”而把分节符等关键结构变成需要普通用户自己重新建立的东西。
-
-## Word 原生引用能力
-
-所有公共模板共享：
-
-- “图 / 表”题注标签；
-- 书籍按一级章编号，文章全文连续编号；
-- `Caption` 与“图表来源”样式；
-- `Footnote Text / Footnote Reference`；
-- `Endnote Text / Endnote Reference`；
-- `Bibliography` 与“参考文献条目”悬挂缩进样式。
-
-不要把 Zotero、EndNote 或其他引用管理器嵌入模板。第三方工具继续负责自己的字段、引用规范与刷新；模板只提供兼容的 Word 样式环境。
-
-## 真实 Word 反馈闭环
-
-真实使用反馈继续分两条路径：
-
-- `.github/ISSUE_TEMPLATE/word_quick_success.yml`：几十秒轻量正常反馈；
-- `.github/ISSUE_TEMPLATE/word_compatibility_report.yml`：3～5 分钟完整真机验证。
-
-维护公开兼容性记录时：
-
-1. 不要求用户提供个人信息或真实写作内容；
-2. 只记录公开 Issue 明确提供的信息；
-3. 不把轻量反馈写成完整验收；
-4. 不把自动结构检查写成 Microsoft Word 真机测试；
-5. 不使用“完全兼容所有 Word 版本”等无法证明的措辞。
-
-## v4 版本策略
-
-根目录 `version.txt` 是唯一发布版本号来源。
-
-4.x 采用以下约定：
-
-- **补丁版本**：修复兼容性、文档、CI、布局和小范围体验问题；
-- **小版本**：兼容地增强已有能力，但不能重新增加用户模板选择负担；
-- **主版本**：只有需要破坏稳定用户文件名、编号方案、Release 资产名或运行方式时才考虑。
-
-已经保存成 `.docx` 的文档不是模板的运行依赖，因此模板升级不要求给旧文档“重新套模板”。v3.0.1 Release 保留旧的双版本工作流，v4 不要求旧用户迁移。
-
-发布前至少确认：
-
-- `version.txt` 与 Release 目标一致；
-- `STABILITY.md` 没有被新功能违反；
-- PR 的 Windows / macOS / Linux 检查通过；
-- 合并后的 12 模板布局冒烟、release audit 和 Release 创建全部通过；
-- 对真实 Word 行为的表述仍然克制、可验证；
-- 首页、README、快速开始、模板内置提示和下载包没有重新把“最终成稿”写成所有用户的必然终点。
-
-## 普通用户入口边界
-
-本仓库的 GitHub Pages（`https://seekerthinker.github.io/word-writing-templates/`）是普通用户的模板选择与下载入口。`SeekerThinker/toolbox` 可以继续作为项目索引，但不应维护另一套独立的模板矩阵或产品文案。
-
-用户入口只暴露 v4 的 12 个公共模板，不再提供“直接开始版 / 带常用结构版”两个下载按钮。
+站点首页 `https://seekerthinker.github.io/word-writing-templates/` 为普通用户入口；其他项目可链接过来，但不应维护第二套独立模板矩阵或产品文案。**复杂性留在维护端，结构留在用户眼前。**

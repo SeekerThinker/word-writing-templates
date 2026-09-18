@@ -7,6 +7,8 @@ on:
       - 'site/**'
       - 'templates/**'
       - 'scripts/web_editor_export_check.py'
+      - 'scripts/editor_copy_check.cjs'
+      - 'scripts/documentation_contract_check.py'
       - 'docs/assets/previews/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
@@ -40,12 +42,17 @@ jobs:
       - name: Install Word export validation dependencies
         run: python -m pip install 'lxml>=5.0' 'python-docx>=1.1'
 
-      - name: Check editor JavaScript syntax
+      - name: Check editor JavaScript syntax and view-copy observer
         run: |
           node --check site/editor.js
+          node --check site/editor-copy.js
           node --check site/i18n.js
           node --check site/app.js
           node --check site/en/app.js
+          node scripts/editor_copy_check.cjs
+
+      - name: Check project documentation contract
+        run: python scripts/documentation_contract_check.py
 
       - name: Validate Word export packages
         run: python scripts/web_editor_export_check.py
