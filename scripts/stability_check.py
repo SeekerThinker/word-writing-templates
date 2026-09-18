@@ -21,6 +21,11 @@ def expected_public_templates() -> set[str]:
     return paths
 
 
+def has_any(text: str, alternatives: tuple[str, ...]) -> bool:
+    """Accept equivalent wording for a concept, not arbitrary exact hero copy."""
+    return any(phrase in text for phrase in alternatives)
+
+
 def main() -> None:
     errors: list[str] = []
 
@@ -43,17 +48,19 @@ def main() -> None:
             errors.append("unexpected stable public template paths: " + ", ".join(extra))
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    required_readme_fragments = [
+    for fragment in (
         "releases/latest/download/Word-Writing-Templates-Windows.zip",
         "releases/latest/download/Word-Writing-Templates-macOS.zip",
-        "6 种编号 × 2 个平台 = 12 个",
-        "整理和积累本身就是完整用途",
-        "成稿是可选延伸",
         "STABILITY.md",
-    ]
-    for fragment in required_readme_fragments:
+    ):
         if fragment not in readme:
             errors.append(f"README is missing stable public reference: {fragment}")
+    if not ("6 种编号" in readme and "12 个" in readme and "Windows" in readme and "macOS" in readme):
+        errors.append("README is missing the 6-numbering × 2-platform = 12-template baseline")
+    if not has_any(readme, ("整理和积累本身就是完整用途", "整理与积累本身就是完整用途")):
+        errors.append("README is missing open-ended notes and accumulation positioning")
+    if not has_any(readme, ("成稿是可选延伸", "文章、报告和书稿是可以继续发展的方向")):
+        errors.append("README is missing optional-manuscript positioning")
 
     stability = ROOT / "STABILITY.md"
     if not stability.exists():
@@ -62,9 +69,9 @@ def main() -> None:
         text = stability.read_text(encoding="utf-8")
         if "一个编号方案只对应一个用户模板" not in text:
             errors.append("STABILITY.md is missing the v4 single-template principle")
-        if "标题层级与导航窗格继续作为核心思考工作流" not in text:
-            errors.append("STABILITY.md is missing the structured-thinking principle")
-        if "成稿是可选延伸，不是必然终点" not in text:
+        if not all(phrase in text for phrase in ("标题层级", "导航窗格", "思考")):
+            errors.append("STABILITY.md is missing heading/Navigation Pane thinking principle")
+        if not has_any(text, ("成稿是可选延伸，不是必然终点", "正式成稿是可选延伸", "正式成稿不是默认终点")):
             errors.append("STABILITY.md is missing the open-ended use principle")
 
     if errors:
