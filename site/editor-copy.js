@@ -90,7 +90,10 @@
   const viewCopy = () => {
     const active = document.querySelector('.view-switch button[aria-pressed="true"]')?.id;
     if (!viewNote) return;
-    viewNote.textContent = active === "viewPages" ? text.pages : active === "viewFocus" ? text.focus : text.continuous;
+    const next = active === "viewPages" ? text.pages : active === "viewFocus" ? text.focus : text.continuous;
+    // The editor rewrites this note when switching modes. Do not rewrite our
+    // own identical text: that would retrigger the observer indefinitely.
+    if (viewNote.textContent !== next) viewNote.textContent = next;
   };
   if (viewNote) {
     const observer = new MutationObserver(viewCopy);
