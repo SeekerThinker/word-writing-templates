@@ -6,6 +6,7 @@ on:
       - 'site/**'
       - 'templates/**'
       - 'scripts/web_editor_export_check.py'
+      - 'scripts/editor_copy_check.cjs'
       - '.github/workflows/web-editor-check.yml'
   push:
     branches: [main]
@@ -13,6 +14,7 @@ on:
       - 'site/**'
       - 'templates/**'
       - 'scripts/web_editor_export_check.py'
+      - 'scripts/editor_copy_check.cjs'
       - '.github/workflows/web-editor-check.yml'
   workflow_dispatch:
 
@@ -36,13 +38,14 @@ jobs:
       - name: Install Open XML test dependencies
         run: python -m pip install 'lxml>=5.0' 'python-docx>=1.1'
 
-      - name: Check JavaScript syntax
+      - name: Check JavaScript syntax and view-copy observer
         run: |
           node --check site/editor.js
           node --check site/editor-copy.js
           node --check site/i18n.js
           node --check site/app.js
           node --check site/en/app.js
+          node scripts/editor_copy_check.cjs
 
       - name: Check bilingual editor contract
         shell: python
