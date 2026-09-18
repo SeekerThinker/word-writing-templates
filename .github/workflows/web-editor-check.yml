@@ -5,16 +5,30 @@ on:
     paths:
       - 'site/**'
       - 'templates/**'
+      - 'docs/**'
+      - 'README*'
+      - 'CONTRIBUTING*'
+      - 'AGENTS.md'
+      - 'MAINTAINERS.md'
+      - 'STABILITY.md'
       - 'scripts/web_editor_export_check.py'
       - 'scripts/editor_copy_check.cjs'
+      - 'scripts/documentation_contract_check.py'
       - '.github/workflows/web-editor-check.yml'
   push:
     branches: [main]
     paths:
       - 'site/**'
       - 'templates/**'
+      - 'docs/**'
+      - 'README*'
+      - 'CONTRIBUTING*'
+      - 'AGENTS.md'
+      - 'MAINTAINERS.md'
+      - 'STABILITY.md'
       - 'scripts/web_editor_export_check.py'
       - 'scripts/editor_copy_check.cjs'
+      - 'scripts/documentation_contract_check.py'
       - '.github/workflows/web-editor-check.yml'
   workflow_dispatch:
 
@@ -94,6 +108,9 @@ jobs:
                   raise SystemExit(f'missing refined editor copy concept: {phrase}')
 
           print('Bilingual web editor contract OK')
+
+      - name: Check project documentation and bilingual safety boundaries
+        run: python scripts/documentation_contract_check.py
 
       - name: Validate real Word template export packages
         run: python scripts/web_editor_export_check.py
