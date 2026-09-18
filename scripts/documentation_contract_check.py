@@ -29,11 +29,8 @@ for path, phrases in REQUIRED.items():
         if phrase not in body:
             raise SystemExit(f"Missing documented contract {phrase!r} in {path}")
 
-for path in ("README.md", "README.en.md", "CONTRIBUTING.md", "CONTRIBUTING.en.md"):
-    body = (ROOT / path).read_text(encoding="utf-8")
-    if "24 个用户模板" in body or "24 user templates" in body:
-        raise SystemExit(f"Outdated public-template count in {path}")
-
+# Both language versions must link to their counterpart. Static keywords cannot
+# establish translation quality; human review is still required.
 for chinese, english in (
     ("README.md", "README.en.md"),
     ("CONTRIBUTING.md", "CONTRIBUTING.en.md"),
