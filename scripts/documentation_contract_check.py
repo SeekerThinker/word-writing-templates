@@ -14,7 +14,7 @@ REQUIRED = {
     "docs/快速开始.md": ["在线开始", "Word", "备份 JSON"],
     "docs/quick-start.md": ["browser", "Word", "Backup JSON"],
     "docs/在线编辑器.md": ["v3", "v2", "IndexedDB", "JSON", "分页", "表格", "脚注"],
-    "docs/online-editor.md": ["v3", "v2", "IndexedDB", "JSON", "pagination", "tables", "footnotes"],
+    "docs/online-editor.md": ["v3", "v2", "IndexedDB", "JSON", "page breaks", "tables", "footnotes"],
     "docs/双语维护.md": ["语义", "编号", "README.en.md"],
     "docs/bilingual-maintenance.md": ["semantic", "numbering", "README.en.md"],
     "docs/项目决策.md": ["已确认", "待确定", "打赏"],
