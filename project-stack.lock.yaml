@@ -4,8 +4,4 @@ resolved:
   ahicp: 3e6c126741b557967ffb848b35b3538ba36e4bb1
   ppf: dd332c1a5afe133e063dd063c811ed82127c5ee1
   vault_interface: 0e3c646687f675223a4b0829e5b97159685c2ca5
-  starter: 55bb84fdaf3e66969c5fb060d8e50a19e1b435f4
-lock_policy:
-  fresh_read_upstream_before_upgrade: true
-  never_overwrite_project_owned_paths: true
-  content_changes_in_this_upgrade: false
+  starter: 4889739d448a9bf68bedb42ce3182315eda0caeb
