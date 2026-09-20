@@ -1,0 +1,47 @@
+schema: ppf/v0.1
+project:
+  id: seekerthinker-word-writing-templates
+  type: publishing-toolkit
+  title: "Word Writing Templates"
+source:
+  canonical: git
+  branch: main
+  visibility: public
+publication:
+  web:
+    format: html
+    mode: continuous
+    enabled: true
+    authorization_state: authorized
+    visibility: public
+    access: {mode: none, implementation: null, policy_ref: docs/continuous-web/ACCESS-POLICY.md}
+deployment:
+  web:
+    provider: github-pages
+    integration_mode: other
+    build_contract: cloudflare-builds.yaml
+    canonical_publish_gate: make web-publish-check
+    enabled: false
+    status: existing-github-pages-preserved
+    output_directory: _site
+    production_url: null
+    current_provider: github-pages
+    target_provider: null
+    canonical_identity: {type: null, url: null}
+    integration_state: REPOSITORY_VALIDATED
+    authorization_state: AUTHORIZED
+    cutover_state: BLOCKED
+release:
+  require_explicit_release: true
+  continuous_web_is_release: false
+archive:
+  preserve_source: true
+  preserve_release_artifacts: true
+framework:
+  source: ChongLiuPhil/Personal-Publishing-Framework
+  adopted_version: 0.1.1-draft
+  adopted_commit: dd332c1a5afe133e063dd063c811ed82127c5ee1
+  reference_implementation:
+    profile: project-native-continuous-web
+    adopted_version: 0.1.1-draft
+    adopted_commit: dd332c1a5afe133e063dd063c811ed82127c5ee1

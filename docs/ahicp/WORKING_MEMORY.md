@@ -1,8 +1,8 @@
 # Working Memory
 
-本文件只记录可恢复的项目工作状态，不替代项目正文，也不保存秘密。
-
-- Current focus: structural AHICP/PPF/Vault adoption
-- Last structural upgrade: 2026-09-20
-- Content changes in this upgrade: none
-- Next human checkpoint: review and merge this PR
+- Current focus: infrastructure-only upgrade to current AHICP / PPF / Vault / Starter baseline.
+- AHICP target: `research-full` via functional mapping.
+- PPF target: complete publication contract and repository-owned Continuous Web validation gate.
+- Existing public publication remains in place; this PR does not silently cut over providers/domains.
+- Project content changes: none.
+- Next human checkpoint: review and merge this infrastructure PR.

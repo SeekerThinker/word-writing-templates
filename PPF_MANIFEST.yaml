@@ -1,7 +1,7 @@
 schema: ppf/project-manifest/v1
 ppf:
   source: ChongLiuPhil/Personal-Publishing-Framework
-  source_commit: 962fcd6cadb3a9c6656d8c341e230655fe9dec33
+  source_commit: dd332c1a5afe133e063dd063c811ed82127c5ee1
   adoption_state: active
   profile: full-continuous-web
   canonical_source:
@@ -12,15 +12,15 @@ ppf:
       enabled: true
       mode: continuous
       format: html
-      provider: cloudflare-workers-static-assets
-      status: staged
+      provider: github-pages
+      status: repository-build-gate-ready
     edition_release:
       enabled: true
       requires_explicit_human_approval: true
   access:
     source_visibility: public
     published_visibility: public
+    mode: none
     policy_ref: docs/continuous-web/ACCESS-POLICY.md
   secrets:
     prohibited_in_repository: true
-    password_configured_outside_repository: true

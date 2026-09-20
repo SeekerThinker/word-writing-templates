@@ -1,8 +1,8 @@
 # Decision Log
 
-## 2026-09-20 — Adopt full publishing stack
+## 2026-09-20 — Full collaboration and publishing baseline upgrade
 
-- Decision: adopt AHICP, PPF, Vault Interface, and Inquiry-Publishing-Project-Starter.
-- Scope: governance, publication contract, stack lock, and deployment handoff only.
-- Explicit non-scope: project content, research claims, product behavior, and historical files.
-- Access: public publication may remain publicly readable.
+- Human direction: every SeekerThinker repository gets robust AHICP and full PPF.
+- Scope: governance adapters, version pins, publication contract, build validation, portable metadata.
+- Non-scope: project content, research/product substance, user-facing behavior, historical files.
+- Existing publication state is preserved; formal releases and provider/canonical-identity changes remain explicit human decisions.

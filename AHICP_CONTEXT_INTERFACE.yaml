@@ -3,11 +3,17 @@ source_manifest: AHICP_MANIFEST.yaml
 context:
   working_memory: docs/ahicp/WORKING_MEMORY.md
   decision_log: docs/ahicp/DECISION_LOG.md
+  content_core: docs/ahicp/CONTENT_CORE.md
+  form_core: docs/ahicp/FORM_CORE.md
+  argument_map: docs/ahicp/ARGUMENT_MAP.md
+  framework_status: docs/ahicp/FRAMEWORK_STATUS.md
   evidence: docs/ahicp/evidence/
   approved_framework: docs/ahicp/APPROVED_FRAMEWORK.md
 retrieval:
   mode: selective
-  freshness: read-pinned-upstream-before-governance-change
+  freshness: refetch-relevant-project-state-before-write
+  bootstrap: AHICP_START_HERE.zh-CN.md
 write_through:
   requires_human_approval: true
   preserve_project_owned_paths: true
+  content_changes_in_this_upgrade: false
