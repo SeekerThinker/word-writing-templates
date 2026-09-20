@@ -42,6 +42,14 @@ Preserve the stable template matrix and local-first Web editor while continuing 
 - Real Microsoft Word platform/version validation remains distinct from automated structural checks.
 - Any future change to the protected template matrix, filenames, download contracts, or publication provider must follow existing stability/release rules.
 
+## Upgrade completion record
+
+- Low-risk Stack control-plane maintenance merged via PR #41.
+- Merge commit: `c0cf94dcbeab117fa768bb577bee745b7a3e3a19`.
+- Pre-merge PR checks were green for the repository's existing PPF/structural gate and any project-specific checks triggered by the PR.
+- Starter control-plane pin, Stack v2 lock shape, downstream ecosystem revision, and this durable handoff are now on the default branch.
+- AHICP / PPF / Vault semantic adoption pins remain intentionally unchanged; no project-owned content, privacy boundary, publication authorization, provider actual state, or canonical identity was changed.
+
 ## Next step
 
-Run the repository's compatibility, release, Stack, and PPF checks for this branch; merge only after the maintenance PR is clean, then resume project work from existing release/stability sources.
+Resume maintenance from the existing stability/release sources; keep real Microsoft Word validation separate from automated OOXML/PDF checks and preserve the protected template/download contracts.
