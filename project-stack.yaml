@@ -1,26 +1,30 @@
 schema: inquiry-publishing-stack/v2
 project:
   id: seekerthinker-word-writing-templates
-  repository: SeekerThinker/word-writing-templates
-  visibility: public
 profile: full-research-publication
 components:
   governance:
     framework: ahicp
     source: ChongLiuPhil/AI-Assisted-Human-Inquiry-and-Creation-Protocol
-    template_source_commit: 9abf59ccb1584fcd29e6be4777289e3d95b5fb80
-    project_adopted_commit: 9abf59ccb1584fcd29e6be4777289e3d95b5fb80
+    adoption_state: active
+    profile: research-full
+    template_source_commit: 3e6c126741b557967ffb848b35b3538ba36e4bb1
+    project_adopted_commit: 3e6c126741b557967ffb848b35b3538ba36e4bb1
   publishing:
     framework: ppf
     source: ChongLiuPhil/Personal-Publishing-Framework
-    template_source_commit: 962fcd6cadb3a9c6656d8c341e230655fe9dec33
-    project_adopted_commit: 962fcd6cadb3a9c6656d8c341e230655fe9dec33
+    adoption_state: active
+    profile: full-continuous-web
+    template_source_commit: dd332c1a5afe133e063dd063c811ed82127c5ee1
+    project_adopted_commit: dd332c1a5afe133e063dd063c811ed82127c5ee1
   portfolio_interface:
     framework: vault-interface
     source: ChongLiuPhil/Vault-interface
-    template_source_commit: b50bb0d1a0df30ad24d85fad5e1ccb2dd95dd24e
-    project_adopted_commit: b50bb0d1a0df30ad24d85fad5e1ccb2dd95dd24e
+    adoption_state: active
+    version: 1.0.0-draft
+    template_source_commit: 0e3c646687f675223a4b0829e5b97159685c2ca5
+    project_adopted_commit: 0e3c646687f675223a4b0829e5b97159685c2ca5
 starter:
   source: ChongLiuPhil/Inquiry-Publishing-Project-Starter
   profile: full-research-publication
-  adopted_commit: a2550a4ca51bf1b43ddb91f4d148b9859d74a694
+  adopted_commit: 55bb84fdaf3e66969c5fb060d8e50a19e1b435f4

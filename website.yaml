@@ -1,0 +1,17 @@
+schema_version: 1
+publish: false
+project_id: seekerthinker-word-writing-templates
+language:
+  default: auto
+  fallback: en
+  supported: [zh, en]
+  detect_from_browser: true
+title:
+  zh: "Word Writing Templates"
+  en: "Word Writing Templates"
+status: {zh: "现有公开 Web 保持不变", en: "Existing public Web preserved"}
+summary: {zh: "PPF/Vault 基础设施元数据；不修改项目内容。", en: "PPF/Vault infrastructure metadata; project content unchanged."}
+areas: []
+featured: false
+links: []
+publication_notes: This file does not itself perform a provider cutover.

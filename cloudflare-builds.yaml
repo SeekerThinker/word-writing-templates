@@ -1,18 +1,16 @@
 schema: ppf/cloudflare-build-contract/v1
 project: seekerthinker-word-writing-templates
 provider: cloudflare
-integration: github-build
+integration: repository-build-contract
 source_branch: main
-status: ready-for-build-validation
+status: repository-build-gate-ready
 content_scope: existing-project-output-only
-build_command: (none; static site publish)
-output_directory: site
+build_command: python3 scripts/ppf_build_web.py
+output_directory: _site
 production_url: null
 access:
   mode: public
   password_in_repository: false
-  owner_configures_credentials: true
 verification:
   requires_deployed_url: true
-  requires_authenticated_browser_readback: false
   requires_unauthenticated_behavior_check: false

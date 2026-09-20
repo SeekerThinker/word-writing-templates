@@ -2,11 +2,24 @@ schema: ahicp/project-manifest/v1
 ahicp:
   repository_role: project-adoption
   adoption_state: active
+  profile: research-full
   source: ChongLiuPhil/AI-Assisted-Human-Inquiry-and-Creation-Protocol
-  source_commit: 9abf59ccb1584fcd29e6be4777289e3d95b5fb80
+  source_commit: 3e6c126741b557967ffb848b35b3538ba36e4bb1
+  canonical_language: zh-CN
   onboarding:
-    entrypoint: docs/ahicp/START_HERE.zh-CN.md
-    report_template: docs/ahicp/ONBOARDING_REPORT.md
+    entrypoint: AHICP_START_HERE.zh-CN.md
+    report_template: docs/ahicp/ONBOARDING_REPORT_TEMPLATE.md
+  role_bindings:
+    agent_contract: AGENTS.md
+    content_core: docs/ahicp/CONTENT_CORE.md
+    form_core: docs/ahicp/FORM_CORE.md
+    decision_log: docs/ahicp/DECISION_LOG.md
+    working_memory: docs/ahicp/WORKING_MEMORY.md
+    argument_map: docs/ahicp/ARGUMENT_MAP.md
+    framework_status: docs/ahicp/FRAMEWORK_STATUS.md
+    approved_framework_snapshots: docs/ahicp/frameworks/
+    evidence_layer: docs/ahicp/evidence/
+    final_artifact_approval: docs/ahicp/FINAL_ARTIFACT_APPROVAL.md
   human_approval_required: true
   content_changes_in_this_upgrade: false
   secret_policy: never-store-passwords-tokens-or-private-keys

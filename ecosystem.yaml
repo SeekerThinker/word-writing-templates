@@ -1,0 +1,21 @@
+schema_version: '1.0'
+ecosystem:
+  id: inquiry-publishing-stack
+  role: downstream-project
+  agent_entrypoint: AHICP_START_HERE.zh-CN.md
+  components:
+    ahicp:
+      revision: 3e6c126741b557967ffb848b35b3538ba36e4bb1
+      profile: research-full
+    ppf:
+      revision: dd332c1a5afe133e063dd063c811ed82127c5ee1
+      profile: full-continuous-web
+    vault_interface:
+      revision: 0e3c646687f675223a4b0829e5b97159685c2ca5
+    starter:
+      revision: 55bb84fdaf3e66969c5fb060d8e50a19e1b435f4
+  principles:
+    - project-content-remains-project-owned
+    - fresh-read-upstream-before-governance-upgrade
+    - preserve-existing-publication-state
+    - formal-editions-require-explicit-approval
