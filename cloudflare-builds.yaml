@@ -3,10 +3,10 @@ project: seekerthinker-word-writing-templates
 provider: cloudflare
 integration: github-build
 source_branch: main
-status: staged
+status: ready-for-build-validation
 content_scope: existing-project-output-only
-build_command: TBD-after-project-specific-build-audit
-output_directory: TBD-after-project-specific-build-audit
+build_command: (none; static site publish)
+output_directory: site
 production_url: null
 access:
   mode: public
