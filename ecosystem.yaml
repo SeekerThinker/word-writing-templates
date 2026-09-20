@@ -13,7 +13,7 @@ ecosystem:
     vault_interface:
       revision: 0e3c646687f675223a4b0829e5b97159685c2ca5
     starter:
-      revision: 55bb84fdaf3e66969c5fb060d8e50a19e1b435f4
+      revision: 4889739d448a9bf68bedb42ce3182315eda0caeb
   principles:
     - project-content-remains-project-owned
     - fresh-read-upstream-before-governance-upgrade
