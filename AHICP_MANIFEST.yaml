@@ -1,0 +1,16 @@
+schema: ahicp/project-manifest/v1
+ahicp:
+  repository_role: project-adoption
+  adoption_state: active
+  source: ChongLiuPhil/AI-Assisted-Human-Inquiry-and-Creation-Protocol
+  source_commit: 9abf59ccb1584fcd29e6be4777289e3d95b5fb80
+  onboarding:
+    entrypoint: docs/ahicp/START_HERE.zh-CN.md
+    report_template: docs/ahicp/ONBOARDING_REPORT.md
+  human_approval_required: true
+  content_changes_in_this_upgrade: false
+  secret_policy: never-store-passwords-tokens-or-private-keys
+project:
+  repository: SeekerThinker/word-writing-templates
+  visibility: public
+  authoritative_project_content_remains_in_place: true

@@ -1,0 +1,8 @@
+schema: vault-interface/project-metadata/v1
+project_id: seekerthinker-word-writing-templates
+repository: SeekerThinker/word-writing-templates
+visibility: public
+content_authority: existing-repository-content
+governance_manifest: AHICP_MANIFEST.yaml
+publication_manifest: PPF_MANIFEST.yaml
+stack_manifest: project-stack.yaml

@@ -1,0 +1,13 @@
+schema: ahicp/context-interface/v1
+source_manifest: AHICP_MANIFEST.yaml
+context:
+  working_memory: docs/ahicp/WORKING_MEMORY.md
+  decision_log: docs/ahicp/DECISION_LOG.md
+  evidence: docs/ahicp/evidence/
+  approved_framework: docs/ahicp/APPROVED_FRAMEWORK.md
+retrieval:
+  mode: selective
+  freshness: read-pinned-upstream-before-governance-change
+write_through:
+  requires_human_approval: true
+  preserve_project_owned_paths: true

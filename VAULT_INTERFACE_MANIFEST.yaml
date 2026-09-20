@@ -1,0 +1,10 @@
+schema: vault-interface/project-adoption/v1
+interface:
+  source: ChongLiuPhil/Vault-interface
+  source_commit: b50bb0d1a0df30ad24d85fad5e1ccb2dd95dd24e
+  adoption_state: active
+  compatibility: additive
+  project_content_is_unchanged: true
+contracts:
+  metadata: docs/vault/PROJECT-METADATA.yaml
+  handoff: docs/vault/HANDOFF.md

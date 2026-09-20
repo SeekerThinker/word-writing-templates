@@ -1,0 +1,11 @@
+schema: inquiry-publishing-stack-lock/v2
+generated: true
+resolved:
+  ahicp: 9abf59ccb1584fcd29e6be4777289e3d95b5fb80
+  ppf: 962fcd6cadb3a9c6656d8c341e230655fe9dec33
+  vault_interface: b50bb0d1a0df30ad24d85fad5e1ccb2dd95dd24e
+  starter: a2550a4ca51bf1b43ddb91f4d148b9859d74a694
+lock_policy:
+  fresh_read_upstream_before_upgrade: true
+  never_overwrite_project_owned_paths: true
+  content_changes_in_this_upgrade: false
